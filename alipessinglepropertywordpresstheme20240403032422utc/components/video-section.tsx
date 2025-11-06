@@ -47,14 +47,15 @@ export default function VideoSection() {
           </div>
 
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3 leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.25)]">
               Sobre a Donna Imobiliária
             </h2>
-            <p className="text-[#1a1410] p-4 mb-3 rounded-md bg-white/40 backdrop-blur-md border border-white/30 shadow-[0_10px_20px_rgba(0,0,0,0.08)]">
+            <div className="h-1.5 w-24 rounded-full bg-[#c89968]/80 mb-6" />
+            <p className="text-[#2b1f16] px-6 py-5 mb-4 rounded-xl bg-white/35 backdrop-blur-xl ring-1 ring-white/30 shadow-[0_10px_30px_rgba(0,0,0,0.10)] leading-7">
               Fundada com o propósito de transformar o modo de negociar imóveis, a Donna une
               experiência, tecnologia e atendimento humanizado.
             </p>
-            <p className="text-[#1a1410] p-4 mb-6 rounded-md bg-white/40 backdrop-blur-md border border-white/30 shadow-[0_10px_20px_rgba(0,0,0,0.08)]">
+            <p className="text-[#2b1f16] px-6 py-5 mb-7 rounded-xl bg-white/35 backdrop-blur-xl ring-1 ring-white/30 shadow-[0_10px_30px_rgba(0,0,0,0.10)] leading-7">
               Nosso objetivo é simplificar cada etapa da compra, venda ou locação, sempre com
               transparência e compromisso.
             </p>
@@ -64,12 +65,12 @@ export default function VideoSection() {
               {amenities.map((amenity, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 p-4 rounded-md bg-white/40 backdrop-blur-md border border-white/30 shadow-[0_10px_20px_rgba(0,0,0,0.08)] transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:bg-white/50 group"
+                  className="flex items-center gap-3 px-5 py-4 rounded-xl bg-white/35 backdrop-blur-xl ring-1 ring-white/25 shadow-[0_6px_20px_rgba(0,0,0,0.08)] transition-all duration-300 hover:shadow-[0_10px_28px_rgba(0,0,0,0.12)] hover:-translate-y-1 hover:bg-white/45 group"
                 >
                   <div className="w-6 h-6 rounded-full bg-[#c89968] flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
                     <Check className="w-4 h-4 text-white" />
                   </div>
-                  <span className="font-medium text-[#1a1410] transition-colors duration-300 group-hover:text-[#c89968]">
+                  <span className="font-medium text-[#2b1f16] transition-colors duration-300 group-hover:text-[#c89968]">
                     {amenity.name}
                   </span>
                 </div>
