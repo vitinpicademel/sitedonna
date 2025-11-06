@@ -33,9 +33,9 @@ export default function VideoSection() {
       </svg>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="relative w-full justify-self-center">
-            <div className="relative w-full max-w-[900px] overflow-hidden shadow-2xl rounded-sm mx-auto" style={{ aspectRatio: "16 / 9" }}>
+        <div className="grid lg:grid-cols-2 gap-12 items-stretch">
+          <div className="relative w-full h-full justify-self-center">
+            <div className="relative w-full h-full overflow-hidden shadow-2xl rounded-sm mx-auto">
               <iframe
                 className="absolute inset-0 w-full h-full"
                 src="https://www.youtube.com/embed/EzMZ05gp-TE?rel=0&modestbranding=1&playsinline=1"
