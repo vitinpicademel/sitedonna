@@ -7,12 +7,10 @@ export default function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false)
 
   const amenities = [
-    { name: "KAKA TEXTO", checked: true },
-    { name: "KAKA TEXTO", checked: true },
-    { name: "KAKA TEXTO", checked: true },
-    { name: "KAKA TEXTO", checked: true },
-    { name: "KAKA TEXTO", checked: true },
-    { name: "KAKA TEXTO", checked: true },
+    { name: "Atendimento personalizado", checked: true },
+    { name: "Equipe especialista no mercado local", checked: true },
+    { name: "Soluções digitais que facilitam sua jornada", checked: true },
+    { name: "Parcerias sólidas com construtoras e investidores", checked: true },
   ]
 
   return (
@@ -158,9 +156,18 @@ export default function VideoSection() {
 
           {/* Content Side */}
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
-              VIDEO DO DIOGAO APRESENTANDO A IMOB
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+              Sobre a Donna Imobiliária
             </h2>
+            <p className="text-[#1a1410]/90 bg-white/80 p-4 mb-3">
+              Fundada com o propósito de transformar o modo de negociar imóveis, a Donna une
+              experiência, tecnologia e atendimento humanizado.
+            </p>
+            <p className="text-[#1a1410]/90 bg-white/80 p-4 mb-6">
+              Nosso objetivo é simplificar cada etapa da compra, venda ou locação, sempre com
+              transparência e compromisso.
+            </p>
+            <h3 className="text-2xl font-semibold text-white mb-4">Por que escolher a Donna:</h3>
 
             <div className="grid sm:grid-cols-2 gap-4">
               {amenities.map((amenity, index) => (
