@@ -16,49 +16,39 @@ const navigation = [
 export function Footer() {
   return (
     <footer className="bg-black text-gray-300 relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 opacity-20">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 opacity-12"
           style={{
-            backgroundImage: "radial-gradient(circle, rgba(200,153,104,0.07) 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
-            animation: 'wave 22s linear infinite',
-            willChange: 'transform'
+            backgroundImage: "radial-gradient(circle, rgba(200,153,104,0.14) 1px, transparent 1px)",
+            backgroundSize: "26px 26px",
+            animation: "wave 24s linear infinite",
+            willChange: "transform"
           }}
         />
         <div
-          className="absolute -top-12 right-24 w-32 h-32 rounded-full border border-[#c89968]/15"
-          style={{ animation: 'float-3 14s ease-in-out infinite', willChange: 'transform' }}
+          className="absolute -left-56 bottom-[-140px] w-[580px] h-[580px] rounded-full bg-[#c89968]/18 blur-[140px]"
+          style={{ animation: "footer-orbit-left 32s ease-in-out infinite" }}
         />
         <div
-          className="absolute -bottom-24 left-12 w-48 h-48 rounded-full border border-[#c89968]/12"
-          style={{ animation: 'float 15s ease-in-out infinite', willChange: 'transform' }}
+          className="absolute right-[-160px] bottom-[-120px] w-[520px] h-[520px] rounded-full bg-[#c89968]/14 blur-[140px]"
+          style={{ animation: "footer-orbit-right 28s ease-in-out infinite" }}
         />
         <div
-          className="absolute bottom-20 right-16 w-36 h-36 rounded-full border border-[#c89968]/18"
-          style={{ animation: 'float-2 12s ease-in-out infinite', willChange: 'transform' }}
+          className="absolute inset-x-[-15%] bottom-0 h-48 bg-gradient-to-t from-[#c89968]/20 via-[#c89968]/8 to-transparent"
+          style={{ animation: "footer-sweep 18s ease-in-out infinite" }}
         />
-        <div className="absolute inset-x-0 bottom-0 flex justify-between px-24">
-          <span
-            className="block w-20 h-20 rounded-full border border-[#c89968]/15"
-            style={{ animation: 'float-4 11s ease-in-out infinite', willChange: 'transform' }}
-          ></span>
-          <span
-            className="block w-14 h-14 rounded-full border border-[#c89968]/12"
-            style={{ animation: 'float-5 9s ease-in-out infinite', willChange: 'transform' }}
-          ></span>
-          <span
-            className="block w-24 h-24 rounded-full border border-[#c89968]/18"
-            style={{ animation: 'float 13s ease-in-out infinite reverse', willChange: 'transform' }}
-          ></span>
-        </div>
         <div
-          className="absolute inset-x-0 bottom-0 h-40"
-          style={{
-            backgroundImage: "linear-gradient(90deg, rgba(200,153,104,0.22), transparent 45%, rgba(200,153,104,0.15))",
-            animation: 'wave 26s linear infinite reverse',
-            willChange: 'transform'
-          }}
+          className="absolute inset-x-0 top-1/3 h-px bg-gradient-to-r from-transparent via-[#c89968]/25 to-transparent"
+          style={{ animation: "footer-sweep 20s ease-in-out infinite reverse" }}
+        />
+        <div
+          className="absolute left-1/3 bottom-10 w-20 h-20 rounded-full border border-[#c89968]/30"
+          style={{ animation: "float-3 12s ease-in-out infinite", willChange: "transform" }}
+        />
+        <div
+          className="absolute right-1/4 bottom-24 w-16 h-16 rounded-full border border-[#c89968]/25"
+          style={{ animation: "float-4 10s ease-in-out infinite", willChange: "transform" }}
         />
       </div>
       <div className="container mx-auto px-6 py-16 relative z-10">
