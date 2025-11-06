@@ -18,11 +18,11 @@ export default function VideoSection() {
       </div>
 
       <div className="absolute top-20 right-10 w-32 h-32 rounded-full bg-[#3d2f28] opacity-60 animate-float-slow" />
-      <div className="absolute top-40 right-32 w-24 h-24 rounded-full bg-[#2a1f15] opacity-50 animate-float-slower" />
-      <div className="absolute bottom-32 right-20 w-40 h-40 rounded-full bg-[#3d2f28] opacity-40 animate-float" />
-      <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-[#3d2f28] opacity-60 animate-float-slow" />
-      <div className="absolute top-40 left-32 w-24 h-24 rounded-full bg-[#2a1f15] opacity-50 animate-float-slower" />
-      <div className="absolute bottom-32 left-20 w-40 h-40 rounded-full bg-[#3d2f28] opacity-40 animate-float" />
+      <div className="absolute top-40 right-32 w-24 h-24 rounded-full bg-[#2a1f15] opacity-50 animate-float-2" />
+      <div className="absolute bottom-32 right-20 w-40 h-40 rounded-full bg-[#3d2f28] opacity-40 animate-pulse-slow" />
+      <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-[#3d2f28] opacity-60 animate-float-3" />
+      <div className="absolute top-40 left-32 w-24 h-24 rounded-full bg-[#2a1f15] opacity-50 animate-float-4" />
+      <div className="absolute bottom-32 left-20 w-40 h-40 rounded-full bg-[#3d2f28] opacity-40 animate-float-5" />
 
       {/* Ondas animadas de fundo */}
       <svg className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
@@ -31,6 +31,21 @@ export default function VideoSection() {
         <path d="M 0 140 Q 250 90, 500 140 T 1000 140 T 1500 140" stroke="#c89968" strokeWidth="0.9" fill="none" className="animate-wave" strokeOpacity="0.35" />
         <path d="M 0 240 Q 250 190, 500 240 T 1000 240 T 1500 240" stroke="#c89968" strokeWidth="0.9" fill="none" className="animate-wave-slow" strokeOpacity="0.3" />
       </svg>
+
+      {/* Diagonais animadas no lado direito */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/2 opacity-35">
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <g className="animate-wave" style={{ willChange: "transform" }}>
+            <path d="M 10 0 L 110 50" stroke="#c89968" strokeWidth="0.9" fill="none" strokeOpacity="0.45" strokeDasharray="6 10" />
+            <path d="M 0 10 L 100 60" stroke="#c89968" strokeWidth="0.7" fill="none" strokeOpacity="0.35" strokeDasharray="6 10" />
+            <path d="M -10 25 L 90 75" stroke="#c89968" strokeWidth="0.6" fill="none" strokeOpacity="0.3" strokeDasharray="6 10" />
+          </g>
+          <g className="animate-wave-slow" style={{ willChange: "transform" }}>
+            <path d="M -5 35 Q 20 25, 45 35 T 95 35" stroke="#c89968" strokeWidth="0.8" fill="none" strokeOpacity="0.35" />
+            <path d="M -5 20 Q 20 10, 45 20 T 95 20" stroke="#c89968" strokeWidth="0.9" fill="none" strokeOpacity="0.28" />
+          </g>
+        </svg>
+      </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-stretch">
