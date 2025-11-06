@@ -34,6 +34,14 @@ export function Footer() {
           className="absolute -bottom-16 left-20 w-40 h-40 rounded-full border border-[#c89968]/10"
           style={{ animation: 'float 16s ease-in-out infinite', willChange: 'transform' }}
         />
+        <div
+          className="absolute inset-x-0 bottom-0 h-40"
+          style={{
+            backgroundImage: "linear-gradient(90deg, rgba(200,153,104,0.2), transparent 45%, rgba(200,153,104,0.18))",
+            animation: 'wave 24s linear infinite reverse',
+            willChange: 'transform'
+          }}
+        />
       </div>
       <div className="container mx-auto px-6 py-16 relative z-10">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
