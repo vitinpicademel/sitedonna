@@ -94,6 +94,17 @@ export default function VideoSection() {
           </div>
         </div>
       </div>
+
+      {/* Garantia de keyframes globais em produção (evita renomeações do minificador) */}
+      <style jsx global>{`
+        @keyframes float { 0%,100% { transform: translate(0,0) rotate(0deg);} 25% { transform: translate(10px,-10px) rotate(5deg);} 50% { transform: translate(0,-20px) rotate(0deg);} 75% { transform: translate(-10px,-10px) rotate(-5deg);} }
+        @keyframes float-2 { 0%,100% { transform: translate(0,0) scale(1);} 33% { transform: translate(-12px,10px) scale(1.03);} 66% { transform: translate(8px,-8px) scale(0.98);} }
+        @keyframes float-3 { 0%,100% { transform: translate(0,0) scale(1);} 33% { transform: translate(15px,12px) scale(0.97);} 66% { transform: translate(-10px,-5px) scale(1.04);} }
+        @keyframes float-4 { 0%,100% { transform: translate(0,0) scale(1);} 33% { transform: translate(-8px,-12px) scale(1.02);} 66% { transform: translate(12px,8px) scale(0.99);} }
+        @keyframes float-5 { 0%,100% { transform: translate(0,0) scale(1);} 33% { transform: translate(10px,15px) scale(0.99);} 66% { transform: translate(-15px,-10px) scale(1.01);} }
+        @keyframes pulse-slow { 0%,100% { opacity: .3; transform: scale(1);} 50% { opacity:.5; transform: scale(1.05);} }
+        @keyframes wave { 0% { transform: translateX(0);} 100% { transform: translateX(-400px);} }
+      `}</style>
     </section>
   )
 }
