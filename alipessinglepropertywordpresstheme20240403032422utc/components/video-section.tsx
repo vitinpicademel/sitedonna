@@ -24,13 +24,21 @@ export default function VideoSection() {
       <div className="absolute top-40 left-32 w-24 h-24 rounded-full bg-[#2a1f15] opacity-50 animate-float-slower" />
       <div className="absolute bottom-32 left-20 w-40 h-40 rounded-full bg-[#3d2f28] opacity-40 animate-float" />
 
+      {/* Ondas animadas de fundo */}
+      <svg className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+        <path d="M 0 100 Q 200 50, 400 100 T 800 100 T 1200 100 T 1600 100" stroke="#c89968" strokeWidth="2" fill="none" className="animate-wave" />
+        <path d="M 0 200 Q 250 150, 500 200 T 1000 200 T 1500 200" stroke="#c89968" strokeWidth="2" fill="none" className="animate-wave-slow" />
+        <path d="M 0 140 Q 250 90, 500 140 T 1000 140 T 1500 140" stroke="#c89968" strokeWidth="0.9" fill="none" className="animate-wave" strokeOpacity="0.35" />
+        <path d="M 0 240 Q 250 190, 500 240 T 1000 240 T 1500 240" stroke="#c89968" strokeWidth="0.9" fill="none" className="animate-wave-slow" strokeOpacity="0.3" />
+      </svg>
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="relative">
             <div className="relative overflow-hidden shadow-2xl rounded-sm" style={{ aspectRatio: "16 / 9" }}>
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/4pw19pRht0I?rel=0&modestbranding=1&playsinline=1"
+                src="https://www.youtube.com/embed/EzMZ05gp-TE?rel=0&modestbranding=1&playsinline=1"
                 title="Donna Imobiliária - Vídeo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
