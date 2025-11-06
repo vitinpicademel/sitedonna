@@ -315,23 +315,23 @@ html {
 }
 
 .animate-float-1 {
-  animation: float-1 8s ease-in-out infinite;
+  animation: float-1 8s ease-in-out infinite !important;
 }
 
 .animate-float-2 {
-  animation: float-2 7s ease-in-out infinite;
+  animation: float-2 7s ease-in-out infinite !important;
 }
 
 .animate-float-3 {
-  animation: float-3 9s ease-in-out infinite;
+  animation: float-3 9s ease-in-out infinite !important;
 }
 
 .animate-float-4 {
-  animation: float-4 6.5s ease-in-out infinite;
+  animation: float-4 6.5s ease-in-out infinite !important;
 }
 
 .animate-float-5 {
-  animation: float-5 7.5s ease-in-out infinite;
+  animation: float-5 7.5s ease-in-out infinite !important;
 }
 
 /* Animação de fade in para conteúdo do testimonial */
@@ -558,4 +558,30 @@ html {
 
 .animate-loading-dots {
   animation: loading-dots 1.4s infinite linear !important;
+}
+
+/* Reveal animations controlado pelo RevealProvider */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  filter: blur(6px);
+  transition: opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.reveal[data-reveal-speed="slow"] {
+  transition-duration: 1.2s;
+}
+
+.reveal[data-reveal-speed="fast"] {
+  transition-duration: 0.45s;
+}
+
+.reveal[data-reveal-delay] {
+  transition-delay: var(--reveal-delay, 0s);
 }
