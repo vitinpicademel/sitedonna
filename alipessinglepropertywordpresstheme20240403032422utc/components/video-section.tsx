@@ -12,7 +12,19 @@ export default function VideoSection() {
 
   return (
     <section className="relative py-20 overflow-hidden">
-      <div className="container mx-auto px-4">
+      <div className="absolute inset-0 grid lg:grid-cols-2">
+        <div className="bg-[#d4a574]" />
+        <div className="bg-[#d4a574]" />
+      </div>
+
+      <div className="absolute top-20 right-10 w-32 h-32 rounded-full bg-[#3d2f28] opacity-60 animate-float-slow" />
+      <div className="absolute top-40 right-32 w-24 h-24 rounded-full bg-[#2a1f15] opacity-50 animate-float-slower" />
+      <div className="absolute bottom-32 right-20 w-40 h-40 rounded-full bg-[#3d2f28] opacity-40 animate-float" />
+      <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-[#3d2f28] opacity-60 animate-float-slow" />
+      <div className="absolute top-40 left-32 w-24 h-24 rounded-full bg-[#2a1f15] opacity-50 animate-float-slower" />
+      <div className="absolute bottom-32 left-20 w-40 h-40 rounded-full bg-[#3d2f28] opacity-40 animate-float" />
+
+      <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="relative">
             <div className="relative overflow-hidden shadow-2xl rounded-sm" style={{ aspectRatio: "16 / 9" }}>

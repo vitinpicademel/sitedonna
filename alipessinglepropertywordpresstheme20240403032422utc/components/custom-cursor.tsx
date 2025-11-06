@@ -10,6 +10,8 @@ export function CustomCursor() {
   useEffect(() => {
     const updatePosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY })
+      // Garante visibilidade no primeiro movimento (SSR/hidratação ou overlays)
+      if (!isVisible) setIsVisible(true)
 
       // Check if hovering over clickable element
       const target = e.target as HTMLElement
