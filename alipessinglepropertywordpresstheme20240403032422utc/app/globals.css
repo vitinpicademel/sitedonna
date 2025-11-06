@@ -146,15 +146,15 @@ html {
 }
 
 .animate-float {
-  animation: float 6s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite !important;
 }
 
 .animate-float-slow {
-  animation: float 8s ease-in-out infinite;
+  animation: float 8s ease-in-out infinite !important;
 }
 
 .animate-float-slower {
-  animation: float 10s ease-in-out infinite;
+  animation: float 10s ease-in-out infinite !important;
 }
 
 /* Animação da seta decorativa */
@@ -169,7 +169,7 @@ html {
 }
 
 .animate-bounce-arrow {
-  animation: bounce-arrow 2s ease-in-out infinite;
+  animation: bounce-arrow 2s ease-in-out infinite !important;
 }
 
 /* Animação de pulso/brilho para a moldura do vídeo */
@@ -186,7 +186,7 @@ html {
 }
 
 .animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+  animation: pulse-glow 2s ease-in-out infinite !important;
 }
 
 /* Animações para linhas onduladas decorativas */
@@ -200,19 +200,19 @@ html {
 }
 
 .animate-wave {
-  animation: wave 10s linear infinite;
+  animation: wave 10s linear infinite !important;
 }
 
 .animate-wave-slow {
-  animation: wave 15s linear infinite;
+  animation: wave 15s linear infinite !important;
 }
 
 .animate-wave-medium {
-  animation: wave 12s linear infinite;
+  animation: wave 12s linear infinite !important;
 }
 
 .animate-wave-fast {
-  animation: wave 8s linear infinite;
+  animation: wave 8s linear infinite !important;
 }
 
 /* Adicionando animação de pulso lento para círculos decorativos */
@@ -229,7 +229,7 @@ html {
 }
 
 .animate-pulse-slow {
-  animation: pulse-slow 3s ease-in-out infinite;
+  animation: pulse-slow 3s ease-in-out infinite !important;
 }
 
 /* Adicionando animação de fade in/out para transições de texto */
@@ -245,7 +245,7 @@ html {
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
+  animation: fade-in-up 0.8s ease-out forwards !important;
 }
 
 /* Animações para fotos flutuantes ao redor do card de testimonial */
@@ -347,7 +347,7 @@ html {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
+  animation: fade-in 0.6s ease-out forwards !important;
 }
 
 /* Animação de slide in para o card de testimonial */
@@ -363,7 +363,7 @@ html {
 }
 
 .animate-slide-in-right {
-  animation: slide-in-right 0.8s ease-out forwards;
+  animation: slide-in-right 0.8s ease-out forwards !important;
 }
 
 /* Custom Cursor Styles */
@@ -443,7 +443,7 @@ html {
 .animate-shimmer {
   background: linear-gradient(90deg, transparent, rgba(200, 153, 104, 0.4), transparent);
   background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+  animation: shimmer 2s infinite !important;
 }
 
 @keyframes glow-pulse {
@@ -456,7 +456,7 @@ html {
 }
 
 .animate-glow-pulse {
-  animation: glow-pulse 2s ease-in-out infinite;
+  animation: glow-pulse 2s ease-in-out infinite !important;
 }
 
 @keyframes slide-up-fade {
@@ -471,7 +471,7 @@ html {
 }
 
 .animate-slide-up-fade {
-  animation: slide-up-fade 0.6s ease-out forwards;
+  animation: slide-up-fade 0.6s ease-out forwards !important;
 }
 
 @keyframes scale-in {
@@ -486,7 +486,7 @@ html {
 }
 
 .animate-scale-in {
-  animation: scale-in 0.5s ease-out forwards;
+  animation: scale-in 0.5s ease-out forwards !important;
 }
 
 @keyframes wiggle {
@@ -514,7 +514,7 @@ html {
 }
 
 .animate-wiggle {
-  animation: wiggle 1s ease-in-out;
+  animation: wiggle 1s ease-in-out !important;
 }
 
 /* Efeito de glassmorphism */
@@ -557,5 +557,5 @@ html {
 }
 
 .animate-loading-dots {
-  animation: loading-dots 1.4s infinite linear;
+  animation: loading-dots 1.4s infinite linear !important;
 }
