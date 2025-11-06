@@ -50,11 +50,11 @@ export default function VideoSection() {
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
               Sobre a Donna Imobiliária
             </h2>
-            <p className="text-[#1a1410]/90 bg-white/80 p-4 mb-3">
+            <p className="text-[#1a1410] glass-effect p-4 mb-3">
               Fundada com o propósito de transformar o modo de negociar imóveis, a Donna une
               experiência, tecnologia e atendimento humanizado.
             </p>
-            <p className="text-[#1a1410]/90 bg-white/80 p-4 mb-6">
+            <p className="text-[#1a1410] glass-effect p-4 mb-6">
               Nosso objetivo é simplificar cada etapa da compra, venda ou locação, sempre com
               transparência e compromisso.
             </p>
@@ -64,7 +64,7 @@ export default function VideoSection() {
               {amenities.map((amenity, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 bg-white p-4 rounded-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:bg-[#f8f8f8] group"
+                  className="flex items-center gap-3 glass-effect p-4 rounded-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:bg-white/20 group"
                 >
                   <div className="w-6 h-6 rounded-full bg-[#c89968] flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
                     <Check className="w-4 h-4 text-white" />
