@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "slug": "condominio-park-residence",
+    "title": "Park Residence",
+    "areaRange": { "min": 120, "max": 280 },
+    "priceFrom": 380000,
+    "media": [{ "url": "/placeholder.svg?height=400&width=600", "alt": "Park Residence" }]
+  },
+  {
+    "id": "2",
+    "slug": "condominio-green-valley",
+    "title": "Green Valley",
+    "areaRange": { "min": 200, "max": 450 },
+    "priceFrom": 650000,
+    "media": [{ "url": "/placeholder.svg?height=400&width=600", "alt": "Green Valley" }]
+  }
+]

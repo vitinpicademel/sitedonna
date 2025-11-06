@@ -1,0 +1,27 @@
+[
+  {
+    "id": "1",
+    "slug": "jardins-jockey",
+    "title": "Jardins Jockey",
+    "address": "Jockey Park, Uberaba/MG",
+    "areaRange": { "min": 264, "max": 494 },
+    "priceFrom": 239976,
+    "description": "Tranquilidade, conforto e sofisticação no ponto mais valorizado da cidade",
+    "highlights": ["Localização privilegiada", "Área de lazer completa", "Segurança 24h", "Acabamentos premium"],
+    "media": [
+      { "url": "/placeholder.svg?height=400&width=600", "alt": "Fachada do empreendimento" },
+      { "url": "/placeholder.svg?height=400&width=600", "alt": "Área de lazer" }
+    ]
+  },
+  {
+    "id": "2",
+    "slug": "residencial-villa-toscana",
+    "title": "Residencial Villa Toscana",
+    "address": "Estados Unidos, Uberaba/MG",
+    "areaRange": { "min": 180, "max": 320 },
+    "priceFrom": 485000,
+    "description": "Elegância e sofisticação inspiradas na arquitetura italiana",
+    "highlights": ["Arquitetura diferenciada", "Paisagismo exclusivo", "Clube privativo", "Localização nobre"],
+    "media": [{ "url": "/placeholder.svg?height=400&width=600", "alt": "Fachada Villa Toscana" }]
+  }
+]
