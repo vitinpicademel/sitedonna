@@ -105,40 +105,16 @@ export default function VideoSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Video Side */}
           <div className="relative">
-            <div className="relative p-8">
-              <div className="absolute inset-0 border-4 border-[#c89968] animate-pulse-glow" />
-
-              {isPlaying ? (
-                <div className="relative h-[400px] overflow-hidden shadow-2xl">
-                  <iframe
-                    className="absolute inset-0 w-full h-full"
-                    src="https://www.youtube.com/embed/4pw19pRht0I?autoplay=1&rel=0&modestbranding=1&playsinline=1"
-                    title="Donna Imobiliária - Vídeo"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-              ) : (
-                <div
-                  className="relative h-[400px] bg-cover bg-center overflow-hidden shadow-2xl"
-                  style={{
-                    backgroundImage:
-                      "url(/placeholder.svg?height=400&width=600&query=modern+apartment+interior+living+room)",
-                  }}
-                >
-                  <div className="absolute inset-0 bg-black/30" />
-
-                  {/* Play Button */}
-                  <button
-                    aria-label="Reproduzir vídeo"
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-[#1a1410] hover:bg-[#c89968] transition-all duration-300 flex items-center justify-center group hover:scale-110"
-                    onClick={() => setIsPlaying(true)}
-                  >
-                    <Play className="w-8 h-8 text-white fill-white" />
-                  </button>
-                </div>
-              )}
+            <div className="relative overflow-hidden shadow-2xl rounded-sm" style={{ aspectRatio: "16 / 9" }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/4pw19pRht0I?rel=0&modestbranding=1&playsinline=1"
+                title="Donna Imobiliária - Vídeo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
             </div>
+          </div>
 
             <svg
               className="pointer-events-none absolute -bottom-6 left-1/2 -translate-x-1/2 text-[#c89968] animate-bounce-arrow"
