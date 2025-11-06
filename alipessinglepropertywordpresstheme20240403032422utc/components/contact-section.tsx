@@ -52,15 +52,36 @@ export default function ContactSection() {
     <section ref={sectionRef} className="py-8 md:py-12 bg-[#f5f5f0] relative overflow-hidden">
       {/* Background decorative elements com animações */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-8 w-24 h-24 border-2 border-[#c89968]/20 rounded-full animate-pulse-slow"></div>
-        <div className="absolute top-20 right-12 w-20 h-20 border-2 border-[#c89968]/15 rounded-full animate-float-slow"></div>
-        <div className="absolute bottom-20 left-1/4 w-12 h-12 border-2 border-[#c89968]/25 rounded-full animate-pulse-slow"></div>
-        <div className="absolute bottom-12 right-1/3 w-16 h-16 border-2 border-[#c89968]/20 rounded-full animate-float-slower"></div>
+        <div
+          className="absolute top-10 left-8 w-24 h-24 border-2 border-[#c89968]/20 rounded-full animate-pulse-slow"
+          style={{ animation: 'pulse-slow 4s ease-in-out infinite', willChange: 'transform, opacity' }}
+        ></div>
+        <div
+          className="absolute top-20 right-12 w-20 h-20 border-2 border-[#c89968]/15 rounded-full animate-float-slow"
+          style={{ animation: 'float 9s ease-in-out infinite', willChange: 'transform' }}
+        ></div>
+        <div
+          className="absolute bottom-20 left-1/4 w-12 h-12 border-2 border-[#c89968]/25 rounded-full animate-pulse-slow"
+          style={{ animation: 'pulse-slow 5s ease-in-out infinite', willChange: 'transform, opacity' }}
+        ></div>
+        <div
+          className="absolute bottom-12 right-1/3 w-16 h-16 border-2 border-[#c89968]/20 rounded-full animate-float-slower"
+          style={{ animation: 'float-2 11s ease-in-out infinite', willChange: 'transform' }}
+        ></div>
         
         {/* Elementos decorativos adicionais */}
-        <div className="absolute top-1/3 left-1/3 w-6 h-6 bg-[#c89968]/10 rounded-full animate-float"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-8 h-8 bg-[#c89968]/15 rounded-full animate-float-slow"></div>
-        <div className="absolute top-1/2 right-1/3 w-4 h-4 bg-[#c89968]/20 rounded-full animate-float-slower"></div>
+        <div
+          className="absolute top-1/3 left-1/3 w-6 h-6 bg-[#c89968]/10 rounded-full animate-float"
+          style={{ animation: 'float-3 8s ease-in-out infinite', willChange: 'transform' }}
+        ></div>
+        <div
+          className="absolute bottom-1/3 right-1/4 w-8 h-8 bg-[#c89968]/15 rounded-full animate-float-slow"
+          style={{ animation: 'float 10s ease-in-out infinite', willChange: 'transform' }}
+        ></div>
+        <div
+          className="absolute top-1/2 right-1/3 w-4 h-4 bg-[#c89968]/20 rounded-full animate-float-slower"
+          style={{ animation: 'float-4 12s ease-in-out infinite', willChange: 'transform' }}
+        ></div>
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
@@ -68,7 +89,10 @@ export default function ContactSection() {
           {/* Left Side - Request Visit */}
           <div className={`relative ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}>
             {/* Decorative border com animação */}
-            <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-[#c89968] to-[#b8956a] animate-pulse-glow"></div>
+            <div
+              className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-[#c89968] to-[#b8956a] animate-pulse-glow"
+              style={{ animation: 'glow-pulse 2.5s ease-in-out infinite', willChange: 'opacity' }}
+            ></div>
             
             {/* Título com animação - compacto */}
             <div className="mb-4">
@@ -88,7 +112,10 @@ export default function ContactSection() {
                   alt="Logo Donna" 
                   className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 z-10 relative" 
                 />
-                <div className="absolute inset-0 border-2 border-[#c89968]/20 rounded-full animate-float-slow"></div>
+                <div
+                  className="absolute inset-0 border-2 border-[#c89968]/20 rounded-full animate-float-slow"
+                  style={{ animation: 'float-2 9s ease-in-out infinite', willChange: 'transform' }}
+                ></div>
               </div>
             </div>
 
@@ -161,7 +188,10 @@ export default function ContactSection() {
             {/* Map com efeitos visuais - super compacto */}
             <div className="w-full h-48 bg-gray-300 relative overflow-hidden rounded-xl shadow-2xl group hover:shadow-3xl transition-all duration-500">
               {/* Overlay decorativo */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#c89968]/5 to-transparent z-10 pointer-events-none"></div>
+              <div
+                className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#b8956a]/5 pointer-events-none"
+                style={{ animation: 'wave 16s linear infinite', willChange: 'transform' }}
+              ></div>
               
               {/* Elementos decorativos no mapa */}
               <div className="absolute top-3 left-3 z-20">
@@ -192,7 +222,7 @@ export default function ContactSection() {
               
               {/* Botão de ação no mapa */}
               <div className="absolute bottom-3 left-3 z-20">
-                <button className="bg-[#c89968] hover:bg-[#b8956a] text-white px-3 py-1.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-1">
+                <button className="bg-[#c89968] hover:bg-[#b8956a] text-white px-3 py-1.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-1 animate-fade-in-up">
                   <MapPin className="text-sm" />
                   <span className="text-xs font-semibold">Ver no Google Maps</span>
                 </button>

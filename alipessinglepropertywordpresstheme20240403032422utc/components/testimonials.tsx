@@ -165,23 +165,40 @@ export default function Testimonials() {
 
         {/* Padrão de pontos decorativos com animação */}
         <div className="absolute inset-0 opacity-20">
-          <div
-            className="absolute right-0 top-0 w-1/2 h-full animate-wave"
-            style={{
-              backgroundImage: "radial-gradient(circle, #2a1f15 1px, transparent 1px)",
-              backgroundSize: "20px 20px",
-            }}
-          />
-        </div>
-
-        {/* Círculos decorativos grandes com animações */}
-        <div className="absolute left-10 top-20 w-32 h-32 rounded-full border-[30px] border-[#2a1f15]/10 animate-float-slow" />
-        <div className="absolute right-20 bottom-20 w-48 h-48 rounded-full border-[40px] border-[#2a1f15]/10 animate-float" />
-        
+           <div
+             className="absolute right-0 top-0 w-1/2 h-full animate-wave"
+             style={{
+               backgroundImage: "radial-gradient(circle, #2a1f15 1px, transparent 1px)",
+               backgroundSize: "20px 20px",
+               animation: 'wave 18s linear infinite',
+               willChange: 'transform'
+             }}
+           />
+         </div>
+ 
+         {/* Círculos decorativos grandes com animações */}
+        <div
+          className="absolute left-10 top-20 w-32 h-32 rounded-full border-[30px] border-[#2a1f15]/10 animate-float-slow"
+          style={{ animation: 'float 10s ease-in-out infinite', willChange: 'transform' }}
+        />
+        <div
+          className="absolute right-20 bottom-20 w-48 h-48 rounded-full border-[40px] border-[#2a1f15]/10 animate-float"
+          style={{ animation: 'float-2 11s ease-in-out infinite', willChange: 'transform' }}
+        />
+ 
         {/* Elementos decorativos adicionais */}
-        <div className="absolute top-1/3 left-1/4 w-16 h-16 bg-white/5 rounded-full animate-pulse-slow"></div>
-        <div className="absolute bottom-1/3 right-1/3 w-12 h-12 bg-white/10 rounded-full animate-float-slower"></div>
-        <div className="absolute top-1/2 right-1/4 w-8 h-8 bg-white/15 rounded-full animate-pulse"></div>
+        <div
+          className="absolute top-1/3 left-1/4 w-16 h-16 bg-white/5 rounded-full animate-pulse-slow"
+          style={{ animation: 'pulse-slow 4s ease-in-out infinite', willChange: 'transform, opacity' }}
+        ></div>
+        <div
+          className="absolute bottom-1/3 right-1/3 w-12 h-12 bg-white/10 rounded-full animate-float-slower"
+          style={{ animation: 'float-3 12s ease-in-out infinite', willChange: 'transform' }}
+        ></div>
+        <div
+          className="absolute top-1/2 right-1/4 w-8 h-8 bg-white/15 rounded-full animate-pulse"
+          style={{ animation: 'pulse-slow 3s ease-in-out infinite', willChange: 'transform, opacity' }}
+        ></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">

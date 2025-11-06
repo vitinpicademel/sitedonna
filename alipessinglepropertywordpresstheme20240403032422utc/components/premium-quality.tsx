@@ -82,9 +82,22 @@ export default function PremiumQuality() {
 
   return (
     <section className="py-24 bg-[#3d2f28] relative overflow-hidden">
-      <div className="absolute right-0 top-20 w-64 h-64 opacity-10">
+      <div
+        className="absolute right-0 top-20 w-64 h-64 opacity-10"
+        style={{ animation: 'wave 18s linear infinite', willChange: 'transform' }}
+      >
         <div className="grid grid-cols-8 gap-2">
           {Array.from({ length: 64 }).map((_, i) => (
+            <div key={i} className="w-2 h-2 rounded-full bg-[#c89968]" />
+          ))}
+        </div>
+      </div>
+      <div
+        className="absolute left-[-80px] bottom-10 w-52 h-52 opacity-10"
+        style={{ animation: 'wave 22s linear infinite reverse', willChange: 'transform' }}
+      >
+        <div className="grid grid-cols-6 gap-2">
+          {Array.from({ length: 36 }).map((_, i) => (
             <div key={i} className="w-2 h-2 rounded-full bg-[#c89968]" />
           ))}
         </div>
@@ -94,10 +107,20 @@ export default function PremiumQuality() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="relative">
           <div className={`relative block w-full max-w-xl md:max-w-2xl ml-auto fade-swap ${isAnimating ? "is-out" : ""}`}>
-              <div className="absolute -top-8 -right-8 w-32 h-32 border-4 border-[#c89968] animate-float z-10" />
+              <div
+                className="absolute -top-8 -right-8 w-32 h-32 border-4 border-[#c89968] animate-float z-10"
+                style={{ animation: 'float 9s ease-in-out infinite', willChange: 'transform' }}
+              />
+              <div
+                className="absolute -bottom-10 -left-12 w-24 h-24 border-2 border-[#c89968]/50 rounded-full"
+                style={{ animation: 'float-3 11s ease-in-out infinite', willChange: 'transform' }}
+              />
 
               {/* Moldura externa bronze */}
-              <div className="absolute -inset-4 border-4 border-[#c89968] pointer-events-none" />
+              <div
+                className="absolute -inset-4 border-4 border-[#c89968] pointer-events-none"
+                style={{ animation: 'float-2 14s ease-in-out infinite', willChange: 'transform' }}
+              />
 
               {/* Imagem mais horizontal (4:3), um pouco mais larga */}
               <div className="relative w-full bg-gray-800" style={{ aspectRatio: '4 / 3' }}>

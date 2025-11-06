@@ -15,8 +15,27 @@ const navigation = [
 
 export function Footer() {
   return (
-    <footer className="bg-black text-gray-300">
-      <div className="container mx-auto px-6 py-16">
+    <footer className="bg-black text-gray-300 relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 opacity-20">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: "radial-gradient(circle, rgba(200,153,104,0.08) 1px, transparent 1px)",
+            backgroundSize: "26px 26px",
+            animation: "wave 18s linear infinite",
+            willChange: "transform"
+          }}
+        />
+        <div
+          className="absolute -top-12 right-24 w-32 h-32 rounded-full border border-[#c89968]/15"
+          style={{ animation: 'float-3 14s ease-in-out infinite', willChange: 'transform' }}
+        />
+        <div
+          className="absolute -bottom-16 left-20 w-40 h-40 rounded-full border border-[#c89968]/10"
+          style={{ animation: 'float 16s ease-in-out infinite', willChange: 'transform' }}
+        />
+      </div>
+      <div className="container mx-auto px-6 py-16 relative z-10">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:border-l lg:border-white/5 lg:pl-8 first:lg:border-none first:lg:pl-0">

@@ -85,10 +85,22 @@ export default function ApartmentsPlans() {
     <section ref={sectionRef} className="py-20 bg-gradient-to-br from-[#2a1f15] to-[#1a1410] relative overflow-hidden">
       {/* Elementos decorativos de fundo */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-32 h-32 border border-[#b8956a]/10 rounded-full animate-float-slow"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 border border-[#b8956a]/15 rounded-full animate-float"></div>
-        <div className="absolute bottom-32 left-1/4 w-16 h-16 border border-[#b8956a]/20 rounded-full animate-float-slower"></div>
-        <div className="absolute bottom-20 right-1/3 w-20 h-20 border border-[#b8956a]/10 rounded-full animate-pulse-slow"></div>
+        <div
+          className="absolute top-20 left-10 w-32 h-32 border border-[#b8956a]/10 rounded-full animate-float-slow"
+          style={{ animation: 'float 9s ease-in-out infinite', willChange: 'transform' }}
+        ></div>
+        <div
+          className="absolute top-40 right-20 w-24 h-24 border border-[#b8956a]/15 rounded-full animate-float"
+          style={{ animation: 'float-2 8s ease-in-out infinite', willChange: 'transform' }}
+        ></div>
+        <div
+          className="absolute bottom-32 left-1/4 w-16 h-16 border border-[#b8956a]/20 rounded-full animate-float-slower"
+          style={{ animation: 'float-3 10s ease-in-out infinite', willChange: 'transform' }}
+        ></div>
+        <div
+          className="absolute bottom-20 right-1/3 w-20 h-20 border border-[#b8956a]/10 rounded-full animate-pulse-slow"
+          style={{ animation: 'pulse-slow 4s ease-in-out infinite', willChange: 'transform, opacity' }}
+        ></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
