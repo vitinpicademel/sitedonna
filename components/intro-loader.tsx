@@ -70,14 +70,28 @@ export function IntroLoader({
       {videoSrc ? (
         <video
           className="intro-video"
-          src={videoSrc}
           autoPlay
           muted
           playsInline
-          // Não fazer loop: queremos que o site apareça quando o vídeo terminar
+          preload="auto"
           loop={false}
           onEnded={() => setEventDone(true)}
-        />
+        >
+          {/* Prioriza MP4 para compatibilidade; mantém src original como fallback */}
+          {videoSrc.endsWith(".mov") ? (
+            <>
+              <source src={videoSrc.replace(/\\.mov$/i, \".mp4\")} type="video/mp4" />
+              <source src={videoSrc} type="video/quicktime" />
+            </>
+          ) : videoSrc.endsWith(".mp4") ? (
+            <>
+              <source src={videoSrc} type="video/mp4" />
+              <source src={videoSrc.replace(/\\.mp4$/i, \".mov\")} type="video/quicktime" />
+            </>
+          ) : (
+            <source src={videoSrc} />
+          )}
+        </video>
       ) : null}
       {!hideUi ? (
         <div className="intro-card">
