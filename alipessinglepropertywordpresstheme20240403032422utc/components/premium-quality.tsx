@@ -158,11 +158,6 @@ const FEATURED = [
   },
 ]
 
-function normalizeCodeStr(value?: string | number | null) {
-  if (value == null) return ""
-  return String(value).toUpperCase().replace(/[^A-Z0-9]/g, "").trim()
-}
-
 function formatBRL(n?: number) {
   return typeof n === "number"
     ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n)
