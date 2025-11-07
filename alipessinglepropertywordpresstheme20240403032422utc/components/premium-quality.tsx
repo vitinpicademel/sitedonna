@@ -208,45 +208,16 @@ export default function PremiumQuality() {
 
               {/* Imagem mais horizontal (4:3), um pouco mais larga */}
               <div className="relative w-full bg-gray-800" style={{ aspectRatio: '4 / 3' }}>
-                {/* Ordem de prioridade: LOCAL (/uploads/launches) -> PROXY -> RAW -> PLACEHOLDER */}
                 {(() => {
-                  const nameCandidates: string[] = []
-                  if (current?.slug) nameCandidates.push(current.slug)
-                  // alguns CRMs usam código como identificador
-                  if (current?.slug && /\d/.test(current.slug)) nameCandidates.push(current.slug.replace(/\D/g, ''))
-                  const localCandidates = nameCandidates.flatMap((base) => [
-                    `/uploads/launches/${base}.webp`,
-                    `/uploads/launches/${base}.jpg`,
-                    `/uploads/launches/${base}.jpeg`,
-                    `/uploads/launches/${base}.png`,
-                  ])
-
-                  // função que rotaciona entre as fontes no erro
+                  const src = current?.image || '/placeholder.svg?height=600&width=800'
                   function handleError(e: React.SyntheticEvent<HTMLImageElement, Event>) {
                     const el = e.currentTarget
-                    const tried = el.getAttribute('data-tried')?.split('|') ?? []
-                  const chain = [
-                    current?.image,
-                    ...localCandidates,
-                    '/placeholder.svg?height=600&width=800',
-                  ].filter(Boolean) as string[]
-                    const next = chain.find((u) => !tried.includes(u))
-                    if (next) {
-                      el.setAttribute('data-tried', [...tried, next].join('|'))
-                      el.src = next
-                    }
+                    if (el.src.endsWith('placeholder.svg?height=600&width=800')) return
+                    el.src = '/placeholder.svg?height=600&width=800'
                   }
-
-                  const first = [
-                    current?.image,
-                    ...localCandidates,
-                    '/placeholder.svg?height=600&width=800',
-                  ].filter(Boolean)[0] as string
-
                   return (
                     <img
-                      src={first}
-                      data-tried={first}
+                      src={src}
                       alt={current?.alt || 'Imagem do lançamento'}
                       className="absolute inset-0 w-full h-full object-cover"
                       onError={handleError}
