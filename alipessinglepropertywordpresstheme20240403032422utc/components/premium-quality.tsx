@@ -131,6 +131,12 @@ async function fetchImoviewByCodeStrict(code: string): Promise<Property | undefi
   return undefined
 }
 
+function mapImageUrl(url?: string): string | undefined {
+  if (!url) return undefined
+  if (/^https?:\/\//i.test(url)) return `/api/imoview/image?url=${encodeURIComponent(url)}`
+  return url
+}
+
 const FEATURED = [
   {
     code: "6931",
@@ -173,7 +179,11 @@ export default function PremiumQuality() {
   useEffect(() => {
     let cancelled = false
 
-    const base: Item[] = FEATURED.map((entry) => ({ ...entry.fallback, code: entry.code }))
+    const base: Item[] = FEATURED.map((entry) => ({
+      ...entry.fallback,
+      image: mapImageUrl(entry.fallback.image) || entry.fallback.image,
+      code: entry.code,
+    }))
 
     setItems(base)
     window.dispatchEvent(new Event("launches-ready"))
@@ -191,7 +201,8 @@ export default function PremiumQuality() {
               .join(", ")
             const area = prop.areaPrivativa ?? prop.areaTotal
             const price = prop.status === "Venda" ? prop.priceSale : prop.priceRent
-            const image = prop.media?.[0]?.url || entry.fallback.image
+            const image =
+              mapImageUrl(prop.media?.[0]?.url) || mapImageUrl(entry.fallback.image) || entry.fallback.image
             return {
               title: prop.title || entry.fallback.title,
               address: address || entry.fallback.address,
