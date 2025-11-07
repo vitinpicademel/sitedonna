@@ -13,6 +13,7 @@ import { mapImoviewToProperty } from "@/lib/map-imoview"
 import { Button } from "@nv/components/ui/button"
 import { formatCurrency } from "@/lib/utils/currency"
 import { PageLoader } from "@/components/ui/page-loader"
+import { useRef } from "react"
 
 type CardData = {
   id: string
@@ -192,6 +193,7 @@ export default function PropertiesPage() {
   const [apiTotal, setApiTotal] = useState<number | null>(null)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [isBootLoading, setIsBootLoading] = useState(true)
+  const sentReadyRef = useRef(false)
 
   // Try to load first page from IMOVIEW API; keep local JSON as fallback
   useEffect(() => {
@@ -225,6 +227,16 @@ export default function PropertiesPage() {
       cancelled = true
     }
   }, [])
+
+  // Emite evento global para o IntroLoader assim que terminar o boot
+  useEffect(() => {
+    if (!isBootLoading && !sentReadyRef.current) {
+      sentReadyRef.current = true
+      try {
+        window.dispatchEvent(new Event("app-ready"))
+      } catch {}
+    }
+  }, [isBootLoading])
 
   // Safety: nunca deixe o loader travado em tela
   useEffect(() => {

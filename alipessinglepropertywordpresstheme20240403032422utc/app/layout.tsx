@@ -36,7 +36,7 @@ export default function RootLayout({
         <script defer src="/alipes/assets/js/alipes-theme.js"></script>
       </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <IntroLoader oncePerSession={false} minDurationMs={1600} videoSrc="/intro.mp4" />
+        <IntroLoader oncePerSession={false} minDurationMs={1600} videoSrc="/intro.mp4" hideOnEvent="app-ready" />
         <Suspense fallback={<PageLoader label="Carregando lançamentos..." />}>
           <CustomCursor />
           <RevealProvider />
