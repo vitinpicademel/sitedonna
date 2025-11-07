@@ -19,13 +19,26 @@ export function RevealProvider() {
           }
         })
       },
-      { threshold: 0.2, rootMargin: "0px 0px -5% 0px" }
+      { threshold: 0.05, rootMargin: "0px 0px -10% 0px" }
     )
     nodes.forEach((el, i) => {
       // aplica um pequeno incremento de delay em sequência para efeito cascata
       el.style.transitionDelay = el.style.transitionDelay || `${Math.min(i * 40, 240)}ms`
       io.observe(el)
     })
+
+    // Garante que elementos já visíveis no carregamento recebam 'show'
+    const markInitialInView = () => {
+      const vh = window.innerHeight || document.documentElement.clientHeight
+      nodes.forEach((el) => {
+        const rect = el.getBoundingClientRect()
+        const inView = rect.top < vh * 0.95 && rect.bottom > 0
+        if (inView) el.classList.add("show")
+      })
+    }
+    // roda após a pintura inicial
+    requestAnimationFrame(() => markInitialInView())
+
     return () => io.disconnect()
   }, [])
 
