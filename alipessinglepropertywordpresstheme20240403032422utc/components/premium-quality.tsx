@@ -38,6 +38,19 @@ export default function PremiumQuality() {
       return url
     }
 
+    // Extrai array de itens de diferentes formatos de resposta (igual imoveis)
+    function extractList(json: any): any[] {
+      if (Array.isArray(json)) return json
+      if (Array.isArray(json?.data)) return json.data
+      if (Array.isArray(json?.lista)) return json.lista
+      if (Array.isArray(json?.items)) return json.items
+      if (Array.isArray(json?.result)) return json.result
+      if (Array.isArray((json as any)?.imoveis)) return (json as any).imoveis
+      if (Array.isArray((json as any)?.ListaImoveis)) return (json as any).ListaImoveis
+      if (Array.isArray((json as any)?.Dados)) return (json as any).Dados
+      return []
+    }
+
     // 1) Base curada com códigos fixos para Lançamentos
     const base: Item[] = [
       {
@@ -79,7 +92,10 @@ export default function PremiumQuality() {
           })
           if (!resp.ok) continue
           const json = await resp.json()
-          const prop = mapImoviewToProperty(json) as unknown as Property
+          // Quando a API retorna lista, pegue o primeiro; quando retorna objeto, use o próprio
+          const list = extractList(json)
+          const raw = list.length ? list[0] : json
+          const prop = mapImoviewToProperty(raw) as unknown as Property
           const url = proxyImage(prop?.media?.[0]?.url)
           if (!cancelled && url) {
             setItems((prev) => prev.map((p) => (p.code === code ? { ...p, image: url } : p)))
