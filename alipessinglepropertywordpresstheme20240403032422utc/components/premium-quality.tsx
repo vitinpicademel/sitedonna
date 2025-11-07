@@ -14,6 +14,7 @@ type Item = {
   image: string
   alt: string
   slug: string
+  code?: string
 }
 
 function formatBRL(n?: number) {
@@ -37,82 +38,57 @@ export default function PremiumQuality() {
       return url
     }
 
-    function mapPropertyToItem(p: Property): Item {
-      const address = `${p.address.neighborhood}, ${p.address.city}-${p.address.state}`
-      const area = p.areaPrivativa ?? p.areaTotal
-      const price = p.status === "Venda" ? p.priceSale : p.priceRent
-      const image = proxyImage(p.media?.[0]?.url) || "/placeholder.jpg"
-      return {
-        title: p.title,
-        address,
-        area: area ? `${area} m²` : undefined,
-        price: price ?? undefined,
-        image,
-        alt: p.title,
-        slug: p.slug || p.code,
-      }
-    }
+    // 1) Carrega a grade base (curadoria) e exibe imediatamente
+    const base: Item[] = [
+      {
+        title: "Casa de Luxo no Jockey Park",
+        address: "Jockey Park, Uberaba/MG",
+        area: "350 m²",
+        price: 1850000,
+        image: "/uploads/launches/6931.jpg",
+        alt: "Casa de luxo no Jockey Park",
+        slug: "casa-luxo-jockey-park-6931",
+        code: "6931",
+      },
+      {
+        title: "Apartamento Moderno com Vista Panorâmica",
+        address: "Centro, Uberaba/MG",
+        area: "120 m²",
+        price: 450000,
+        image: "/uploads/launches/3585.jpg",
+        alt: "Apartamento moderno com vista panorâmica",
+        slug: "apartamento-moderno-centro-3585",
+        code: "3585",
+      },
+    ]
+    setItems(base)
+    window.dispatchEvent(new Event("launches-ready"))
 
-    async function loadFromApi() {
-      try {
-        const resp = await fetch(`/api/imoview/properties`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ numeroPagina: 1, numeroRegistros: 8 }),
-          cache: "no-store",
-        })
-        if (resp.ok) {
+    // 2) Enriquecer apenas as IMAGENS de cada item usando o respectivo código
+    async function enrichImagesByCode() {
+      for (const it of base) {
+        const code = it.code || it.slug?.replace(/\D/g, "")
+        if (!code) continue
+        try {
+          const resp = await fetch(`/api/imoview/properties`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ codigo: code }),
+            cache: "no-store",
+          })
+          if (!resp.ok) continue
           const json = await resp.json()
-          const list: any[] = Array.isArray(json)
-            ? json
-            : Array.isArray(json?.data)
-            ? json.data
-            : Array.isArray(json?.lista)
-            ? json.lista
-            : Array.isArray(json?.items)
-            ? json.items
-            : Array.isArray(json?.result)
-            ? json.result
-            : Array.isArray((json as any)?.imoveis)
-            ? (json as any).imoveis
-            : []
-          const properties = list.map((dto) => mapImoviewToProperty(dto)) as unknown as Property[]
-          const mapped = properties.map(mapPropertyToItem).filter(Boolean)
-          if (!cancelled && mapped.length) {
-            setItems(mapped)
-            window.dispatchEvent(new Event("launches-ready"))
-            return
+          const prop = mapImoviewToProperty(json) as unknown as Property
+          const url = proxyImage(prop?.media?.[0]?.url)
+          if (!cancelled && url) {
+            setItems((prev) => prev.map((p) => (p.code === code ? { ...p, image: url } : p)))
           }
-        }
-      } catch {}
-      // Fallback local
-      if (!cancelled) {
-        const fallbackData: Item[] = [
-          {
-            title: "Casa de Luxo no Jockey Park",
-            address: "Jockey Park, Uberaba/MG",
-            area: "350 m²",
-            price: 1850000,
-            image: "/uploads/launches/6931.jpg",
-            alt: "Casa de luxo no Jockey Park",
-            slug: "casa-luxo-jockey-park-6931",
-          },
-          {
-            title: "Apartamento Moderno com Vista Panorâmica",
-            address: "Centro, Uberaba/MG",
-            area: "120 m²",
-            price: 450000,
-            image: "/uploads/launches/3585.jpg",
-            alt: "Apartamento moderno com vista panorâmica",
-            slug: "apartamento-moderno-centro-3585",
-          },
-        ]
-        setItems(fallbackData)
-        window.dispatchEvent(new Event("launches-ready"))
+        } catch {}
       }
     }
 
-    loadFromApi()
+    enrichImagesByCode()
+
     return () => {
       cancelled = true
     }
