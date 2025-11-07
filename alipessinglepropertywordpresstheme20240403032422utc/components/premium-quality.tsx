@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import type { Property } from "@/lib/types"
+import { mapImoviewToProperty } from "@/lib/map-imoview"
 
 type Item = {
   title: string
@@ -28,36 +30,89 @@ export default function PremiumQuality() {
 
   useEffect(() => {
     let cancelled = false
-    async function load() {
-      // Dados locais que estavam funcionando
-      const fallbackData = [
-        {
-          title: "Casa de Luxo no Jockey Park",
-          address: "Jockey Park, Uberaba/MG",
-          area: "350 m²",
-          price: 1850000,
-          image: "/uploads/launches/6931.jpg",
-          alt: "Casa de luxo no Jockey Park",
-          slug: "casa-luxo-jockey-park-6931",
-        },
-        {
-          title: "Apartamento Moderno com Vista Panorâmica",
-          address: "Centro, Uberaba/MG",
-          area: "120 m²",
-          price: 450000,
-          image: "/uploads/launches/3585.jpg",
-          alt: "Apartamento moderno com vista panorâmica",
-          slug: "apartamento-moderno-centro-3585",
-        }
-      ]
 
-      if (!cancelled && fallbackData.length > 0) {
+    function proxyImage(url?: string): string | undefined {
+      if (!url) return undefined
+      if (/^https?:\/\//i.test(url)) return `/api/imoview/image?url=${encodeURIComponent(url)}`
+      return url
+    }
+
+    function mapPropertyToItem(p: Property): Item {
+      const address = `${p.address.neighborhood}, ${p.address.city}-${p.address.state}`
+      const area = p.areaPrivativa ?? p.areaTotal
+      const price = p.status === "Venda" ? p.priceSale : p.priceRent
+      const image = proxyImage(p.media?.[0]?.url) || "/placeholder.jpg"
+      return {
+        title: p.title,
+        address,
+        area: area ? `${area} m²` : undefined,
+        price: price ?? undefined,
+        image,
+        alt: p.title,
+        slug: p.slug || p.code,
+      }
+    }
+
+    async function loadFromApi() {
+      try {
+        const resp = await fetch(`/api/imoview/properties`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ numeroPagina: 1, numeroRegistros: 8 }),
+          cache: "no-store",
+        })
+        if (resp.ok) {
+          const json = await resp.json()
+          const list: any[] = Array.isArray(json)
+            ? json
+            : Array.isArray(json?.data)
+            ? json.data
+            : Array.isArray(json?.lista)
+            ? json.lista
+            : Array.isArray(json?.items)
+            ? json.items
+            : Array.isArray(json?.result)
+            ? json.result
+            : Array.isArray((json as any)?.imoveis)
+            ? (json as any).imoveis
+            : []
+          const properties = list.map((dto) => mapImoviewToProperty(dto)) as unknown as Property[]
+          const mapped = properties.map(mapPropertyToItem).filter(Boolean)
+          if (!cancelled && mapped.length) {
+            setItems(mapped)
+            window.dispatchEvent(new Event("launches-ready"))
+            return
+          }
+        }
+      } catch {}
+      // Fallback local
+      if (!cancelled) {
+        const fallbackData: Item[] = [
+          {
+            title: "Casa de Luxo no Jockey Park",
+            address: "Jockey Park, Uberaba/MG",
+            area: "350 m²",
+            price: 1850000,
+            image: "/uploads/launches/6931.jpg",
+            alt: "Casa de luxo no Jockey Park",
+            slug: "casa-luxo-jockey-park-6931",
+          },
+          {
+            title: "Apartamento Moderno com Vista Panorâmica",
+            address: "Centro, Uberaba/MG",
+            area: "120 m²",
+            price: 450000,
+            image: "/uploads/launches/3585.jpg",
+            alt: "Apartamento moderno com vista panorâmica",
+            slug: "apartamento-moderno-centro-3585",
+          },
+        ]
         setItems(fallbackData)
-        // Dispara evento para a intro encerrar imediatamente quando os dados chegaram
         window.dispatchEvent(new Event("launches-ready"))
       }
     }
-    load()
+
+    loadFromApi()
     return () => {
       cancelled = true
     }
