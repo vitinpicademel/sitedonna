@@ -38,7 +38,7 @@ export default function PremiumQuality() {
       return url
     }
 
-    // 1) Carrega a grade base (curadoria) e exibe imediatamente
+    // 1) Base curada com códigos fixos para Lançamentos
     const base: Item[] = [
       {
         title: "Casa de Luxo no Jockey Park",
@@ -61,10 +61,11 @@ export default function PremiumQuality() {
         code: "3585",
       },
     ]
+
     setItems(base)
     window.dispatchEvent(new Event("launches-ready"))
 
-    // 2) Enriquecer apenas as IMAGENS de cada item usando o respectivo código
+    // 2) Enriquecer SOMENTE a imagem usando o respectivo código
     async function enrichImagesByCode() {
       for (const it of base) {
         const code = it.code || it.slug?.replace(/\D/g, "")
@@ -173,8 +174,8 @@ export default function PremiumQuality() {
                     const el = e.currentTarget
                     const tried = el.getAttribute('data-tried')?.split('|') ?? []
                   const chain = [
-                    ...localCandidates,
                     current?.image,
+                    ...localCandidates,
                     '/placeholder.svg?height=600&width=800',
                   ].filter(Boolean) as string[]
                     const next = chain.find((u) => !tried.includes(u))
@@ -185,8 +186,8 @@ export default function PremiumQuality() {
                   }
 
                   const first = [
-                    ...localCandidates,
                     current?.image,
+                    ...localCandidates,
                     '/placeholder.svg?height=600&width=800',
                   ].filter(Boolean)[0] as string
 
