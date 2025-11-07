@@ -17,6 +17,152 @@ type Item = {
   code?: string
 }
 
+function normalizeCodeStr(value: string | number | undefined | null): string {
+  if (value == null) return ""
+  return String(value).toUpperCase().replace(/[^A-Z0-9]/g, "").trim()
+}
+
+function extractListAndTotal(json: any): { list: any[]; total?: number } {
+  if (Array.isArray(json)) return { list: json, total: json.length }
+  const totalCandidates = (o: any) => o?.quantidade ?? o?.quantidadeTotal ?? o?.total ?? o?.count ?? o?.Total
+  if (Array.isArray(json?.lista)) return { list: json.lista, total: totalCandidates(json) }
+  if (Array.isArray(json?.data)) return { list: json.data, total: totalCandidates(json) }
+  if (Array.isArray(json?.data?.lista)) return { list: json.data.lista, total: totalCandidates(json?.data) }
+  if (Array.isArray(json?.items)) return { list: json.items, total: totalCandidates(json) }
+  if (Array.isArray(json?.result)) return { list: json.result, total: totalCandidates(json) }
+  if (Array.isArray((json as any)?.imoveis)) return { list: (json as any).imoveis, total: totalCandidates(json) }
+  if (Array.isArray((json as any)?.Imoveis)) return { list: (json as any).Imoveis, total: totalCandidates(json) }
+  if (Array.isArray((json as any)?.listaImoveis)) return { list: (json as any).listaImoveis, total: totalCandidates(json) }
+  if (Array.isArray((json as any)?.ListaImoveis)) return { list: (json as any).ListaImoveis, total: totalCandidates(json) }
+  if (Array.isArray((json as any)?.Dados)) return { list: (json as any).Dados, total: totalCandidates(json) }
+  if (json && typeof json === "object") {
+    for (const [, v] of Object.entries(json)) {
+      if (Array.isArray(v) && v.length) {
+        const first = v[0] as any
+        if (first && typeof first === "object" && ("codigo" in first || "id" in first || "titulo" in first)) {
+          return { list: v as any[], total: totalCandidates(json) }
+        }
+      }
+    }
+  }
+  return { list: [], total: 0 }
+}
+
+async function fetchImoview({
+  page,
+  perPage,
+  finalidade,
+}: {
+  page: number
+  perPage: number
+  finalidade?: number
+}): Promise<{ list: Property[]; total?: number }> {
+  try {
+    const payload: Record<string, any> = { numeroPagina: page, numeroRegistros: perPage }
+    if (finalidade === 1 || finalidade === 2) payload.finalidade = finalidade
+    const resp = await fetch(`/api/imoview/properties`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    })
+    if (resp.ok) {
+      const json = await resp.json()
+      const { list, total } = extractListAndTotal(json)
+      const mapped = list.map((dto) => mapImoviewToProperty(dto)) as unknown as Property[]
+      return { list: mapped, total }
+    }
+  } catch {}
+  return { list: [], total: 0 }
+}
+
+async function fetchImoviewByCodeStrict(code: string): Promise<Property | undefined> {
+  const candidates = [
+    "/Imovel/RetornarImovelPorCodigo",
+    "/Imovel/RetornarImovel",
+    "/Imovel/Detalhes",
+    "/imovel/retornarimovelporcodigo",
+    "/imovel/retornarimovel",
+    "/imovel/detalhes",
+    "/imoveis/listar",
+    "/imoveis/paginado",
+    "/imoveis/v2",
+    "/imoveis/consulta",
+  ]
+
+  for (const path of candidates) {
+    try {
+      const url = new URL(`/api/imoview/properties`, window.location.origin)
+      url.searchParams.set("path", path)
+      url.searchParams.set("codigo", code)
+      url.searchParams.set("numeroPagina", "1")
+      url.searchParams.set("numeroRegistros", "1")
+      const resp = await fetch(url.toString(), { cache: "no-store" })
+      if (!resp.ok) continue
+      const json = await resp.json()
+      const { list } = extractListAndTotal(json)
+      if (list.length) {
+        const prop = mapImoviewToProperty(list[0]) as unknown as Property
+        return prop
+      }
+      if (json && !Array.isArray(json) && !Array.isArray(json?.data) && json?.codigo) {
+        const prop = mapImoviewToProperty(json) as unknown as Property
+        return prop
+      }
+    } catch {}
+  }
+
+  // Fallback: varrer páginas gerais e encontrar pelo código normalizado
+  try {
+    const target = normalizeCodeStr(code)
+    const perPage = 20
+    let page = 1
+    let total = Infinity
+    while (page <= 50 && page <= Math.ceil((total as number) / perPage)) {
+      const { list, total: reported } = await fetchImoview({ page, perPage })
+      if (typeof reported === "number") total = reported
+      const match = list.find((p) => normalizeCodeStr(p.code) === target)
+      if (match) return match
+      if (list.length < perPage) break
+      page += 1
+    }
+  } catch {}
+
+  return undefined
+}
+
+const FEATURED = [
+  {
+    code: "6931",
+    fallback: {
+      title: "Casa de Luxo no Jockey Park",
+      address: "Jockey Park, Uberaba/MG",
+      area: "350 m²",
+      price: 1850000,
+      image: "/uploads/launches/6931.jpg",
+      alt: "Casa de luxo no Jockey Park",
+      slug: "casa-luxo-jockey-park-6931",
+    },
+  },
+  {
+    code: "3585",
+    fallback: {
+      title: "Apartamento Moderno com Vista Panorâmica",
+      address: "Centro, Uberaba/MG",
+      area: "120 m²",
+      price: 450000,
+      image: "/uploads/launches/3585.jpg",
+      alt: "Apartamento moderno com vista panorâmica",
+      slug: "apartamento-moderno-centro-3585",
+    },
+  },
+]
+
+function normalizeCodeStr(value?: string | number | null) {
+  if (value == null) return ""
+  return String(value).toUpperCase().replace(/[^A-Z0-9]/g, "").trim()
+}
+
 function formatBRL(n?: number) {
   return typeof n === "number"
     ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n)
@@ -32,115 +178,45 @@ export default function PremiumQuality() {
   useEffect(() => {
     let cancelled = false
 
-    function proxyImage(url?: string): string | undefined {
-      if (!url) return undefined
-      if (/^https?:\/\//i.test(url)) return `/api/imoview/image?url=${encodeURIComponent(url)}`
-      return url
-    }
-
-    // Extrai array de itens de diferentes formatos de resposta (igual imoveis)
-    function extractList(json: any): any[] {
-      if (Array.isArray(json)) return json
-      if (Array.isArray(json?.data)) return json.data
-      if (Array.isArray(json?.lista)) return json.lista
-      if (Array.isArray(json?.items)) return json.items
-      if (Array.isArray(json?.result)) return json.result
-      if (Array.isArray((json as any)?.imoveis)) return (json as any).imoveis
-      if (Array.isArray((json as any)?.ListaImoveis)) return (json as any).ListaImoveis
-      if (Array.isArray((json as any)?.Dados)) return (json as any).Dados
-      return []
-    }
-
-    // 1) Base curada com códigos fixos para Lançamentos
-    const base: Item[] = [
-      {
-        title: "Casa de Luxo no Jockey Park",
-        address: "Jockey Park, Uberaba/MG",
-        area: "350 m²",
-        price: 1850000,
-        image: "/uploads/launches/6931.jpg",
-        alt: "Casa de luxo no Jockey Park",
-        slug: "casa-luxo-jockey-park-6931",
-        code: "6931",
-      },
-      {
-        title: "Apartamento Moderno com Vista Panorâmica",
-        address: "Centro, Uberaba/MG",
-        area: "120 m²",
-        price: 450000,
-        image: "/uploads/launches/3585.jpg",
-        alt: "Apartamento moderno com vista panorâmica",
-        slug: "apartamento-moderno-centro-3585",
-        code: "3585",
-      },
-    ]
+    const base: Item[] = FEATURED.map((entry) => ({ ...entry.fallback, code: entry.code }))
 
     setItems(base)
     window.dispatchEvent(new Event("launches-ready"))
 
-    // 2) Enriquecer SOMENTE a imagem usando o respectivo código
-    async function fetchByCode(code: string): Promise<Property | undefined> {
-      // 1) Tenta via POST direto (endpoint dedicado no backend)
+    async function loadFeatured() {
       try {
-        const resp = await fetch(`/api/imoview/properties`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ codigo: code }),
-          cache: "no-store",
-        })
-        if (resp.ok) {
-          const json = await resp.json()
-          const list = extractList(json)
-          const raw = list.length ? list[0] : json
-          return mapImoviewToProperty(raw) as unknown as Property
+        const enriched = await Promise.all(
+          FEATURED.map(async (entry) => {
+            const prop = entry.code ? await fetchImoviewByCodeStrict(entry.code) : undefined
+            if (!prop) {
+              return { ...entry.fallback, code: entry.code }
+            }
+            const address = [prop.address.neighborhood, `${prop.address.city}-${prop.address.state}`]
+              .filter(Boolean)
+              .join(", ")
+            const area = prop.areaPrivativa ?? prop.areaTotal
+            const price = prop.status === "Venda" ? prop.priceSale : prop.priceRent
+            const image = prop.media?.[0]?.url || entry.fallback.image
+            return {
+              title: prop.title || entry.fallback.title,
+              address: address || entry.fallback.address,
+              area: area ? `${area} m²` : entry.fallback.area,
+              price: price ?? entry.fallback.price,
+              image,
+              alt: prop.title || entry.fallback.alt,
+              slug: prop.slug || prop.code || entry.fallback.slug,
+              code: entry.code,
+            }
+          })
+        )
+
+        if (!cancelled) {
+          setItems(enriched)
         }
       } catch {}
-
-      // 2) Fallback via GET em possíveis paths
-      const paths = [
-        "/Imovel/RetornarImovelPorCodigo",
-        "/Imovel/RetornarImovel",
-        "/Imovel/Detalhes",
-        "/imovel/retornarimovelporcodigo",
-        "/imovel/retornarimovel",
-        "/imovel/detalhes",
-        "/imoveis/listar",
-        "/imoveis/paginado",
-        "/imoveis/v2",
-        "/imoveis/consulta",
-      ]
-      for (const path of paths) {
-        try {
-          const url = new URL(`/api/imoview/properties`, window.location.origin)
-          url.searchParams.set("path", path)
-          url.searchParams.set("codigo", code)
-          url.searchParams.set("numeroPagina", "1")
-          url.searchParams.set("numeroRegistros", "1")
-          const resp = await fetch(url.toString(), { cache: "no-store" })
-          if (!resp.ok) continue
-          const json = await resp.json()
-          const list = extractList(json)
-          const raw = list.length ? list[0] : json
-          if (raw) return mapImoviewToProperty(raw) as unknown as Property
-        } catch {}
-      }
-      return undefined
     }
 
-    async function enrichImagesByCode() {
-      const promises = base.map(async (it) => {
-        const code = it.code || it.slug?.replace(/\D/g, "")
-        if (!code) return
-        const prop = await fetchByCode(code)
-        const url = proxyImage(prop?.media?.[0]?.url)
-        if (!cancelled && url) {
-          setItems((prev) => prev.map((p) => (p.code === code ? { ...p, image: url } : p)))
-        }
-      })
-      await Promise.all(promises)
-    }
-
-    enrichImagesByCode()
+    loadFeatured()
 
     return () => {
       cancelled = true
