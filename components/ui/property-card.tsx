@@ -18,11 +18,26 @@ export function PropertyCard({ property }: PropertyCardProps) {
   const price = property.status === "Venda" ? property.priceSale : property.priceRent
   const priceLabel = property.status === "Venda" ? "" : "/mês"
 
+  function resolveImageSrc(input?: string): string {
+    const fallback = "/placeholder.svg?height=200&width=300"
+    if (!input) return fallback
+    try {
+      // Se for uma URL absoluta externa, usa o proxy para adicionar headers/cors
+      if (/^https?:\/\//i.test(input)) {
+        return `/api/imoview/image?url=${encodeURIComponent(input)}`
+      }
+      // Se vier relativo, mantém como está
+      return input
+    } catch {
+      return fallback
+    }
+  }
+
   return (
     <Card className="overflow-hidden transition-all duration-300 rounded-[12px] card-elegant hover:scale-[1.02]">
       <div className="relative group overflow-hidden">
         <Image
-          src={property.media[0]?.url || "/placeholder.svg?height=200&width=300"}
+          src={resolveImageSrc(property.media[0]?.url)}
           alt={property.media[0]?.alt || property.title}
           width={300}
           height={200}
