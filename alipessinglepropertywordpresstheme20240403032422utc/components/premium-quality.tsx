@@ -133,8 +133,9 @@ async function fetchImoviewByCodeStrict(code: string): Promise<Property | undefi
 
 function mapImageUrl(url?: string): string | undefined {
   if (!url) return undefined
-  if (/^https?:\/\//i.test(url)) return `/api/imoview/image?url=${encodeURIComponent(url)}`
-  return url
+  // Sempre usar o proxy para resolver caminho relativo/absoluto
+  // O handler /api/imoview/image completa a URL com IMOVIEW_BASE_URL quando necessário
+  return `/api/imoview/image?url=${encodeURIComponent(url)}`
 }
 
 const FEATURED = [
