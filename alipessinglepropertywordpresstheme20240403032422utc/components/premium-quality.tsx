@@ -79,29 +79,65 @@ export default function PremiumQuality() {
     window.dispatchEvent(new Event("launches-ready"))
 
     // 2) Enriquecer SOMENTE a imagem usando o respectivo código
-    async function enrichImagesByCode() {
-      for (const it of base) {
-        const code = it.code || it.slug?.replace(/\D/g, "")
-        if (!code) continue
-        try {
-          const resp = await fetch(`/api/imoview/properties`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ codigo: code }),
-            cache: "no-store",
-          })
-          if (!resp.ok) continue
+    async function fetchByCode(code: string): Promise<Property | undefined> {
+      // 1) Tenta via POST direto (endpoint dedicado no backend)
+      try {
+        const resp = await fetch(`/api/imoview/properties`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ codigo: code }),
+          cache: "no-store",
+        })
+        if (resp.ok) {
           const json = await resp.json()
-          // Quando a API retorna lista, pegue o primeiro; quando retorna objeto, use o próprio
           const list = extractList(json)
           const raw = list.length ? list[0] : json
-          const prop = mapImoviewToProperty(raw) as unknown as Property
-          const url = proxyImage(prop?.media?.[0]?.url)
-          if (!cancelled && url) {
-            setItems((prev) => prev.map((p) => (p.code === code ? { ...p, image: url } : p)))
-          }
+          return mapImoviewToProperty(raw) as unknown as Property
+        }
+      } catch {}
+
+      // 2) Fallback via GET em possíveis paths
+      const paths = [
+        "/Imovel/RetornarImovelPorCodigo",
+        "/Imovel/RetornarImovel",
+        "/Imovel/Detalhes",
+        "/imovel/retornarimovelporcodigo",
+        "/imovel/retornarimovel",
+        "/imovel/detalhes",
+        "/imoveis/listar",
+        "/imoveis/paginado",
+        "/imoveis/v2",
+        "/imoveis/consulta",
+      ]
+      for (const path of paths) {
+        try {
+          const url = new URL(`/api/imoview/properties`, window.location.origin)
+          url.searchParams.set("path", path)
+          url.searchParams.set("codigo", code)
+          url.searchParams.set("numeroPagina", "1")
+          url.searchParams.set("numeroRegistros", "1")
+          const resp = await fetch(url.toString(), { cache: "no-store" })
+          if (!resp.ok) continue
+          const json = await resp.json()
+          const list = extractList(json)
+          const raw = list.length ? list[0] : json
+          if (raw) return mapImoviewToProperty(raw) as unknown as Property
         } catch {}
       }
+      return undefined
+    }
+
+    async function enrichImagesByCode() {
+      const promises = base.map(async (it) => {
+        const code = it.code || it.slug?.replace(/\D/g, "")
+        if (!code) return
+        const prop = await fetchByCode(code)
+        const url = proxyImage(prop?.media?.[0]?.url)
+        if (!cancelled && url) {
+          setItems((prev) => prev.map((p) => (p.code === code ? { ...p, image: url } : p)))
+        }
+      })
+      await Promise.all(promises)
     }
 
     enrichImagesByCode()
