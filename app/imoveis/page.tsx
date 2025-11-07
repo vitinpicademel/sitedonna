@@ -429,9 +429,11 @@ export default function PropertiesPage() {
     }
   }, [filtered, sortBy])
 
-  // Enriquecimento: se o card não tiver área, tenta buscar o item pelo código e preencher
+  // Enriquecimento: se o card não tiver área ou imagem, busca pelo código e preenche
   useEffect(() => {
-    const missing = cards.filter((c) => (!c.area || c.area <= 0) && c.code)
+    const missing = cards.filter((c) => ((!
+      c.area || c.area <= 0) || (typeof c.image === 'string' && c.image.includes('placeholder'))
+    ) && c.code)
     if (missing.length === 0) return
     let cancelled = false
     async function enrich() {
@@ -441,7 +443,11 @@ export default function PropertiesPage() {
           if (!dto) return c
           const prop = mapImoviewToProperty(dto) as unknown as Property
           const betterArea = prop.areaPrivativa ?? prop.areaTotal ?? c.area
-          return betterArea && betterArea > 0 ? { ...c, area: betterArea } : c
+          const betterImage = prop.media?.[0]?.url
+          const next: any = { ...c }
+          if (betterArea && betterArea > 0) next.area = betterArea
+          if (betterImage && typeof betterImage === 'string') next.image = betterImage
+          return next
         })
       )
       if (!cancelled && updated.some((u, i) => u.area !== missing[i].area)) {
