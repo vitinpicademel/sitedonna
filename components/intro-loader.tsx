@@ -7,9 +7,16 @@ type IntroLoaderProps = {
   oncePerSession?: boolean
   videoSrc?: string
   hideOnEvent?: string // nome do evento de DOM que indica que o conteúdo principal está pronto
+  hideUi?: boolean // quando true, mostra somente o vídeo (sem logo, sem texto, sem barra)
 }
 
-export function IntroLoader({ minDurationMs = 1800, oncePerSession = false, videoSrc, hideOnEvent = "launches-ready" }: IntroLoaderProps) {
+export function IntroLoader({
+  minDurationMs = 1800,
+  oncePerSession = false,
+  videoSrc,
+  hideOnEvent = "launches-ready",
+  hideUi = false,
+}: IntroLoaderProps) {
   const [visible, setVisible] = useState(true)
   const [hiding, setHiding] = useState(false)
   const [timerDone, setTimerDone] = useState(false)
@@ -59,16 +66,19 @@ export function IntroLoader({ minDurationMs = 1800, oncePerSession = false, vide
           autoPlay
           muted
           playsInline
+          loop
           onEnded={() => setEventDone(true)}
         />
       ) : null}
-      <div className="intro-card">
-        <img src="/logoprincipal.png" alt="Donna Imobiliária" className="intro-logo" />
-        <div className="intro-bar">
-          <div className="intro-bar__progress" />
+      {!hideUi ? (
+        <div className="intro-card">
+          <img src="/logoprincipal.png" alt="Donna Imobiliária" className="intro-logo" />
+          <div className="intro-bar">
+            <div className="intro-bar__progress" />
+          </div>
+          <p className="intro-hint">Carregando experiência...</p>
         </div>
-        <p className="intro-hint">Carregando experiência...</p>
-      </div>
+      ) : null}
     </div>
   )
 }
