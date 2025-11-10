@@ -42,9 +42,9 @@ export function HeroSearch({
 
   if (variant === "minimal") {
     return (
-      <section className="relative">
+      <section className="relative z-[200]">
         <div className="container mx-auto px-4 pt-4 pb-0">
-          <div className="rounded-3xl p-6 md:p-7 max-w-5xl mx-auto elegant-shadow overflow-visible relative z-10 glass-warm">
+          <div className="rounded-3xl p-6 md:p-7 max-w-5xl mx-auto elegant-shadow overflow-visible relative z-[300] glass-warm search-elevated search-refined">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end overflow-visible">
               {/* Search Code */}
               <div className="space-y-3">
@@ -99,7 +99,7 @@ export function HeroSearch({
               </div>
 
               {/* Property Type Dropdown */}
-              <div className="space-y-3 relative overflow-visible z-50">
+              <div className="space-y-3 relative overflow-visible z-[400]">
                 <Label className="text-[#3A3A3A] font-medium text-sm block text-left">Tipo de Imóvel</Label>
                 <div className="relative">
                   <Button
@@ -112,7 +112,7 @@ export function HeroSearch({
                   </Button>
 
                   {showPropertyTypes && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white/80 border border-white/40 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto backdrop-blur-xl">
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white/80 border border-white/40 rounded-xl shadow-lg z-[9999] max-h-60 overflow-y-auto backdrop-blur-xl">
                       {propertyTypeOptions.map((type) => (
                         <button
                           key={type}
