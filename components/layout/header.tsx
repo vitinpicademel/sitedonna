@@ -31,7 +31,7 @@ export function Header({ appearance = "light" }: HeaderProps) {
     <>
       {/* Header transparente com blur; variação clara/escura */}
       <div className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md ${
-        isDark ? 'bg-black/30 supports-[backdrop-filter]:bg-black/20' : 'bg-white/60 supports-[backdrop-filter]:bg-white/40'
+        isDark ? 'bg-black/35 supports-[backdrop-filter]:bg-black/25 border-b border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.25)]' : 'bg-white/70 supports-[backdrop-filter]:bg-white/50 border-b border-black/5 shadow-[0_8px_16px_rgba(0,0,0,.08)]'
       }`}>
         <div className="container mx-auto px-4">
           <div className="flex h-24 items-center justify-center">

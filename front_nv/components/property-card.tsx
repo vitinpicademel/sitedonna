@@ -35,7 +35,7 @@ export function PropertyCard({
 }: PropertyCardProps) {
   const router = useRouter()
   return (
-    <Card className="overflow-hidden hover-lift card-shadow bg-white rounded-3xl border-0 group relative flex flex-col h-full">
+    <Card className="overflow-hidden card-noble group relative flex flex-col h-full">
       <div className="relative overflow-hidden">
         <img
           src={image || "/placeholder.svg?height=280&width=400&query=luxury house exterior"}

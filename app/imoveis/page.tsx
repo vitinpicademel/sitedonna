@@ -478,9 +478,9 @@ export default function PropertiesPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen imoveis-page">
       {isBootLoading && <PageLoader />}
-      <Header />
+      <Header appearance="dark" />
 
       <HeroSearch onSearch={handleHeroSearch} variant="minimal" />
 
