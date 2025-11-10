@@ -17,7 +17,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen">
       <RevealProvider />
-      <Header />
+      <Header appearance="dark" />
       <main>
         <div className="reveal">
           <AboutHero />
