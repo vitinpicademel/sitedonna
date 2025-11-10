@@ -38,18 +38,18 @@ const teamMembers = [
 
 export function TeamSection() {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-[#1a1410]">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-donna-navy font-serif mb-4">Nossa Equipe</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold text-white font-serif mb-4">Nossa Equipe</h2>
+          <p className="text-[#e9e4df] max-w-2xl mx-auto">
             Profissionais qualificados e apaixonados pelo que fazem, prontos para transformar seus sonhos em realidade.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {teamMembers.map((member) => (
-            <Card key={member.id} className="text-center hover:shadow-lg transition-shadow">
+            <Card key={member.id} className="text-center hover:shadow-lg transition-shadow bg-white/95 border border-[#e8e6e2]">
               <CardContent className="p-6">
                 <div className="relative w-24 h-24 mx-auto mb-4">
                   <Image
@@ -59,9 +59,9 @@ export function TeamSection() {
                     className="rounded-full object-cover"
                   />
                 </div>
-                <h3 className="text-lg font-bold text-donna-navy mb-1">{member.name}</h3>
-                <p className="text-donna-gold font-medium mb-3">{member.role}</p>
-                <p className="text-sm text-gray-600">{member.description}</p>
+                <h3 className="text-lg font-bold text-[#2b1f16] mb-1">{member.name}</h3>
+                <p className="font-medium mb-3" style={{ color: "#c89968" }}>{member.role}</p>
+                <p className="text-sm text-[#3A3A3A]">{member.description}</p>
               </CardContent>
             </Card>
           ))}
