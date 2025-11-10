@@ -4,7 +4,6 @@ import { Inter, Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { RevealProvider } from "@/components/reveal-provider"
-import { IntroLoader } from "@/components/intro-loader"
 import "./globals.css"
 
 const inter = Inter({
@@ -47,7 +46,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${inter.variable} ${playfair.variable}`}>
       <body className="font-sans antialiased">
-        <IntroLoader oncePerSession={false} minDurationMs={1600} videoSrc="/alipes/animacao.mp4" hideOnEvent="app-ready" hideUi />
         <RevealProvider />
         <Suspense fallback={null}>{children}</Suspense>
         <Analytics />

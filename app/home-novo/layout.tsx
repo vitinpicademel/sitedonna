@@ -5,7 +5,6 @@ import "@alipes/app/globals.css"
 import { CustomCursor } from "@alipes/components/custom-cursor"
 import { RevealProvider } from "@/components/reveal-provider"
 import { PageLoader } from "@/components/ui/page-loader"
-import { IntroLoader } from "@/components/intro-loader"
 
 export const metadata: Metadata = {
   title: "Nova Home (Alipes)",
@@ -17,7 +16,6 @@ export default function HomeNovoLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <IntroLoader oncePerSession={false} minDurationMs={1600} videoSrc="/intro.mp4" />
       <Suspense fallback={<PageLoader label="Carregando lançamentos..." />}>
         <CustomCursor />
         <RevealProvider />
