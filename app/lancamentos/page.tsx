@@ -15,12 +15,14 @@ export default function LaunchesPage() {
 
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header appearance="dark" />
       <main className="py-8">
         <div className="container mx-auto px-4">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-donna-navy font-serif mb-2">Lançamentos</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold font-serif mb-2" style={{ color: "#D4A574" }}>
+              Lançamentos
+            </h1>
+            <p className="text-lg" style={{ color: "#F1E8E0" }}>
               Encante-se com nossa seleção de lançamentos selecionados com carinho e cuidado pra vocês.
             </p>
           </div>
