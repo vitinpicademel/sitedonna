@@ -123,3 +123,101 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ===== Donna Luxury Additions (A Imobiliária) ===== */
+@layer utilities {
+  :root {
+    --lux-brown: #3d2f28;
+    --lux-brown-2: #4b362e;
+    --lux-brown-3: #4b382e;
+    --lux-gold: #d4a574;
+    --lux-beige: #c89968;
+    --lux-offwhite: #f8f5f1;
+    --lux-brown-gray: #4a3f36;
+  }
+
+  /* Gradients and backgrounds */
+  .bg-lux-hero {
+    background: linear-gradient(145deg, var(--lux-brown) 0%, #4b362e 50%, var(--lux-beige) 100%);
+  }
+  .bg-lux-radial {
+    background: radial-gradient(1200px 600px at 50% 0%, var(--lux-brown) 0%, var(--lux-brown-3) 40%, #1a1410 100%);
+  }
+
+  /* Premium cards */
+  .card-lux {
+    background: var(--lux-offwhite);
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    transition: all .4s ease-in-out;
+  }
+  .card-lux:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(212,165,116,0.3);
+  }
+
+  /* Buttons */
+  .btn-lux {
+    background: linear-gradient(90deg, var(--lux-gold) 0%, var(--lux-beige) 100%);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    transition: all .35s ease-in-out;
+  }
+  .btn-lux:hover {
+    filter: brightness(1.05);
+    transform: scale(1.03);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.28), 0 10px 24px rgba(212,165,116,0.35);
+  }
+
+  /* Headings and underlines */
+  .title-gold { color: var(--lux-gold); }
+  .text-offwhite { color: var(--lux-offwhite); }
+  .text-brown { color: var(--lux-brown); }
+  .text-brown-gray { color: var(--lux-brown-gray); }
+  .underline-gold {
+    position: relative;
+    display: inline-block;
+  }
+  .underline-gold:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(212,165,116,0.85), transparent);
+    animation: underline-sweep 2.4s ease-in-out infinite;
+  }
+
+  .divider-gold {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212,165,116,0.25), transparent);
+    box-shadow: 0 0 12px rgba(212,165,116,0.15);
+  }
+
+  /* Animations */
+  @keyframes underline-sweep {
+    0% { opacity: .4; transform: translateX(-10%); }
+    50% { opacity: 1; transform: translateX(0%); }
+    100% { opacity: .4; transform: translateX(10%); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .animate-fade-up { animation: fade-up .8s ease forwards; will-change: transform, opacity; }
+  .animate-fade-in { animation: fade-in .8s ease forwards; will-change: opacity; }
+  .animate-delay-1 { animation-delay: .12s; }
+  .animate-delay-2 { animation-delay: .24s; }
+  .animate-delay-3 { animation-delay: .36s; }
+
+  /* Icon glow on hover */
+  .icon-gold { color: var(--lux-gold); transition: filter .35s ease; }
+  .icon-gold:hover { filter: drop-shadow(0 0 8px rgba(212,165,116,.35)); }
+}

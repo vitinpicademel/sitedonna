@@ -3,26 +3,31 @@ import { Card, CardContent } from "@/components/ui/card"
 
 export function MissionSection() {
   return (
-    <section className="pt-8 pb-16 md:pt-10 bg-[#1a1410]">
+    <section className="pt-10 pb-16 md:pt-12 bg-lux-radial">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white font-serif mb-4">Nossa Essência</h2>
-            <p className="text-[#e9e4df] max-w-2xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-white font-serif mb-6 underline-gold animate-fade-up">
+              Nossa Essência
+            </h2>
+            <p className="text-[#e6d6c8] max-w-2xl mx-auto leading-8 animate-fade-in animate-delay-1">
               Construímos relacionamentos duradouros baseados na confiança, transparência e no compromisso de realizar
               sonhos.
             </p>
+            <div className="w-full max-w-2xl mx-auto mt-6 opacity-80 animate-fade-in animate-delay-2">
+              <div className="divider-gold" />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Missão */}
-            <Card className="text-center reveal reveal-slow reveal-delay-1 bg-white/95 border border-[#e8e6e2] shadow-[0_14px_28px_rgba(169,151,119,.18)]">
+            <Card className="text-center card-lux animate-fade-up">
               <CardContent className="p-8">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#c89968' }}>
-                  <Target className="h-8 w-8 text-white" />
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'var(--lux-gold)' }}>
+                  <Target className="h-8 w-8 text-white icon-gold" />
                 </div>
-                <h3 className="text-xl font-bold text-[#2b1f16] mb-4">Missão</h3>
-                <p className="text-[#3A3A3A]">
+                <h3 className="text-xl font-semibold text-brown mb-4">Missão</h3>
+                <p className="text-brown-gray">
                   Oferecer soluções imobiliárias personalizadas, conectando pessoas aos seus lares ideais com
                   transparência, agilidade e excelência no atendimento.
                 </p>
@@ -30,13 +35,13 @@ export function MissionSection() {
             </Card>
 
             {/* Visão */}
-            <Card className="text-center reveal reveal-slow reveal-delay-2 bg-white/95 border border-[#e8e6e2] shadow-[0_14px_28px_rgba(169,151,119,.18)]">
+            <Card className="text-center card-lux animate-fade-up animate-delay-1">
               <CardContent className="p-8">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#c89968' }}>
-                  <Eye className="h-8 w-8 text-white" />
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'var(--lux-gold)' }}>
+                  <Eye className="h-8 w-8 text-white icon-gold" />
                 </div>
-                <h3 className="text-xl font-bold text-[#2b1f16] mb-4">Visão</h3>
-                <p className="text-[#3A3A3A]">
+                <h3 className="text-xl font-semibold text-brown mb-4">Visão</h3>
+                <p className="text-brown-gray">
                   Ser reconhecida como a imobiliária de referência em Uberaba, inovando constantemente e superando
                   expectativas dos nossos clientes.
                 </p>
@@ -44,13 +49,13 @@ export function MissionSection() {
             </Card>
 
             {/* Valores */}
-            <Card className="text-center reveal reveal-slow reveal-delay-3 bg-white/95 border border-[#e8e6e2] shadow-[0_14px_28px_rgba(169,151,119,.18)]">
+            <Card className="text-center card-lux animate-fade-up animate-delay-2">
               <CardContent className="p-8">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#c89968' }}>
-                  <Heart className="h-8 w-8 text-white" />
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'var(--lux-gold)' }}>
+                  <Heart className="h-8 w-8 text-white icon-gold" />
                 </div>
-                <h3 className="text-xl font-bold text-[#2b1f16] mb-4">Valores</h3>
-                <p className="text-[#3A3A3A]">
+                <h3 className="text-xl font-semibold text-brown mb-4">Valores</h3>
+                <p className="text-brown-gray">
                   Transparência, ética, compromisso, inovação e relacionamento humano são os pilares que guiam todas as
                   nossas ações.
                 </p>
@@ -59,10 +64,10 @@ export function MissionSection() {
           </div>
 
           {/* História */}
-          <div className="mt-16 rounded-lg p-8 reveal reveal-slower reveal-delay-2 bg-white/90 border border-[#e8e6e2] shadow-[0_10px_24px_rgba(0,0,0,.06)]">
+          <div className="mt-16 rounded-lg p-8 bg-white/90 border border-[#e8e6e2] shadow-[0_10px_24px_rgba(0,0,0,.06)] animate-fade-up">
             <div className="max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-[#2b1f16] font-serif mb-6 text-center">Nossa História</h3>
-              <div className="space-y-4 text-[#3A3A3A]">
+              <h3 className="text-2xl font-bold text-brown font-serif mb-6 text-center underline-gold">Nossa História</h3>
+              <div className="space-y-4 text-brown-gray leading-8">
                 <p>
                   A Donna Negociações Imobiliárias nasceu para transformar sonhos em conquistas, com base em confiança,
                   profissionalismo e excelência. Fundada em 2023 por especialistas com mais de 12 anos de experiência,
