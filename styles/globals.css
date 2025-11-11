@@ -143,6 +143,7 @@
   .bg-lux-radial {
     background: radial-gradient(1200px 600px at 50% 0%, #3d2f28 0%, #4b382e 100%);
   }
+  .bg-lux-solid { background-color: #3d2f28; }
 
   /* Premium cards */
   .card-lux {
