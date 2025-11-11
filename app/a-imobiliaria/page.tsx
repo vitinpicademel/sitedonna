@@ -15,7 +15,7 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-lux-solid">
+    <div className="min-h-screen">
       <RevealProvider />
       <Header appearance="dark" />
       <main>

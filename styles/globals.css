@@ -156,6 +156,40 @@
     transform: translateY(-6px);
     box-shadow: 0 8px 20px rgba(212,165,116,0.3);
   }
+  .card-gold {
+    background: var(--lux-gold) !important;
+    color: #3d2f28;
+    border: none;
+  }
+
+  /* Elegant section: subtle marbled depth on primary palette */
+  .section-marbled {
+    background:
+      radial-gradient(120% 160% at 50% 0%, #4d3a2f 0%, #3d2f28 55%),
+      linear-gradient(180deg, #3d2f28 0%, #32261f 100%);
+    border: 1px solid #816347;
+    box-shadow:
+      inset 0 0 0 1px rgba(129, 99, 71, .18),
+      0 18px 40px rgba(0,0,0,.35);
+    border-radius: 20px;
+  }
+
+  /* Gold card with soft gradient + subtle glow */
+  .card-gold-elevated {
+    background: linear-gradient(180deg, #d4a574 0%, #cfa069 60%, #d4a574 100%);
+    border: 1px solid #816347;
+    border-radius: 16px;
+    box-shadow:
+      0 12px 28px rgba(0,0,0,.25),
+      0 0 14px rgba(212,165,116,.25);
+  }
+
+  .border-tertiary { border-color: #816347; }
+  .radius-soft { border-radius: 16px; }
+  .title-serif { font-family: var(--font-playfair); letter-spacing: .02em; }
+  .body-cream { color: #f1e8e0; }
+  .text-primary-brown { color: #3d2f28; }
+  .text-gold { color: #d4a574; }
 
   /* Buttons */
   .btn-lux {

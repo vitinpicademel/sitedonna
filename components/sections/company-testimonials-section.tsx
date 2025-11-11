@@ -29,7 +29,7 @@ const companyTestimonials = [
 
 export function CompanyTestimonialsSection() {
   return (
-    <section className="py-16 bg-lux-radial">
+    <section className="py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-white font-serif mb-4 underline-gold">Depoimentos</h2>
@@ -40,7 +40,7 @@ export function CompanyTestimonialsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {companyTestimonials.map((testimonial) => (
-            <Card key={testimonial.id} className="card-lux animate-fade-up">
+            <Card key={testimonial.id} className="card-lux animate-fade-up" style={{ backgroundColor: '#d4a574', color: '#3d2f28', border: '4px solid #816347' }}>
               <CardContent className="p-6">
                 <div className="flex justify-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (

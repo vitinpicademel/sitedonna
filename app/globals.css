@@ -136,7 +136,7 @@
   }
   body {
     @apply text-foreground;
-    background-color: #3d2f28;
+    background: linear-gradient(145deg, #3d2f28 0%, #4d3a2f 60%, #c89968 100%);
     font-family: 'Poppins', 'Inter', 'Nunito Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
   }
 }

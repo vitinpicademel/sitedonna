@@ -38,7 +38,7 @@ const teamMembers = [
 
 export function TeamSection() {
   return (
-    <section className="py-16 bg-lux-radial">
+    <section className="py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-white font-serif mb-4 underline-gold">Nossa Equipe</h2>
@@ -49,7 +49,7 @@ export function TeamSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {teamMembers.map((member) => (
-            <Card key={member.id} className="text-center card-lux animate-fade-up">
+            <Card key={member.id} className="text-center card-lux animate-fade-up" style={{ backgroundColor: '#d4a574', color: '#3d2f28', border: '4px solid #816347' }}>
               <CardContent className="p-6">
                 <div className="relative w-24 h-24 mx-auto mb-4">
                   <Image

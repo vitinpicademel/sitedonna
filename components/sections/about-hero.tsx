@@ -5,7 +5,7 @@ export function AboutHero() {
         <div className="max-w-5xl mx-auto text-center space-y-6">
           <h1 className="text-4xl md:text-6xl font-bold font-serif animate-fade-up">
             <span className="text-offwhite">Sobre a</span>{' '}
-            <span className="title-gold">Donna Negociações Imobiliárias</span>
+            <span style={{ color: '#D4A574' }}>Donna Negociações Imobiliárias</span>
           </h1>
           <p className="text-lg md:text-2xl text-[#f1e8e0] leading-9 animate-fade-in animate-delay-1">
             Realizamos sonhos e construímos histórias com transparência, dedicação e experiência no que fazemos.

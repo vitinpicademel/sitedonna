@@ -43,6 +43,7 @@ export function Header({ appearance = "light" }: HeaderProps) {
                   <li key={item.name}>
                     <Link
                       href={item.href}
+                      prefetch={false}
                       className={`text-base xl:text-lg font-medium transition-colors duration-300 tracking-wide ${
                         isDark ? 'text-white hover:text-chave-dourado' : 'text-chave-azul hover:text-chave-dourado'
                       }`}
@@ -74,6 +75,7 @@ export function Header({ appearance = "light" }: HeaderProps) {
                   <li key={item.name}>
                     <Link
                       href={item.href}
+                      prefetch={false}
                       target={item.external ? "_blank" : undefined}
                       rel={item.external ? "noopener noreferrer" : undefined}
                       className={`text-base xl:text-lg font-medium transition-colors duration-300 tracking-wide ${
@@ -112,6 +114,7 @@ export function Header({ appearance = "light" }: HeaderProps) {
               <Link
                 key={item.name}
                 href={item.href}
+                prefetch={false}
                 target={item.external ? "_blank" : undefined}
                 rel={item.external ? "noopener noreferrer" : undefined}
                 className="text-2xl font-light text-chave-branco hover:text-chave-dourado transition-colors duration-300 tracking-wide"
