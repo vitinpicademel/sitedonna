@@ -248,11 +248,7 @@ export default function PremiumQuality() {
   }, [items.length])
 
   const current = items[index] || items[0]
-  const priceText = formatBRL(current?.price) ?? "-"
-
-  if (!current) {
-    return null
-  }
+  const priceText = formatBRL(current?.price) || "-"
 
   return (
     <section className="py-24 bg-[#3d2f28] relative overflow-hidden">
