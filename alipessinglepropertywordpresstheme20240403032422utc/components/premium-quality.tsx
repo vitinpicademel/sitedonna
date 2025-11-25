@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
@@ -362,8 +363,8 @@ export default function PremiumQuality() {
                     }}
                     aria-label={`Ir para slide ${i + 1}`}
                     className={`h-1.5 rounded-full transition-all ${i === index ? "bg-[#c89968] w-8" : "bg-white/30 w-3"}`}
-                  />)
-                )}
+                  />
+                ))}
               </div>
             )}
           </div>
@@ -389,7 +390,7 @@ export default function PremiumQuality() {
               <div className="relative w-full bg-gray-800 rounded-2xl overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
                 {(() => {
                   const src = current?.image || '/placeholder.svg?height=600&width=800'
-                  function handleError(e: React.SyntheticEvent<HTMLImageElement, Event>) {
+                  function handleError(e: any) {
                     const el = e.currentTarget
                     if (el.src.endsWith('placeholder.svg?height=600&width=800')) return
                     el.src = '/placeholder.svg?height=600&width=800'
