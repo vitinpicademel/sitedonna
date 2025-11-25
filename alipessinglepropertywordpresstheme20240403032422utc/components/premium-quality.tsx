@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { Fragment } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
@@ -235,27 +235,25 @@ export default function PremiumQuality() {
     if (items.length <= 1) {
       return
     }
-    timerRef.current = window.setInterval(() => {
+    const intervalId = window.setInterval(() => {
       setIsAnimating(true)
       window.setTimeout(() => {
         setIndex((i) => (i + 1) % items.length)
         setIsAnimating(false)
       }, 220) // metade do tempo do fade para saída
     }, 6000)
+    timerRef.current = intervalId
     return () => {
-      if (timerRef.current) window.clearInterval(timerRef.current)
+      if (intervalId) window.clearInterval(intervalId)
     }
   }, [items.length])
 
   const current = items[index] || items[0]
-  const priceText = formatBRL(current?.price) ?? "-"
+  const priceText = formatBRL(current?.price) || "-"
 
-  if (!current) {
-    return null
-  }
-
-  return (
-    <section className="py-24 bg-[#3d2f28] relative overflow-hidden">
+  function renderContent() {
+    return (
+      <section className="py-24 bg-[#3d2f28] relative overflow-hidden">
       <div
         className="absolute right-0 top-20 w-64 h-64 opacity-10"
         style={{ animation: 'wave 18s linear infinite', willChange: 'transform' }}
@@ -414,5 +412,8 @@ export default function PremiumQuality() {
         </div>
       </div>
     </section>
-  )
+    )
+  }
+
+  return renderContent()
 }
