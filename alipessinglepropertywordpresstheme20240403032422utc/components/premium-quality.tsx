@@ -1,6 +1,5 @@
 "use client"
 
-import React, { Fragment } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
@@ -251,9 +250,8 @@ export default function PremiumQuality() {
   const current = items[index] || items[0]
   const priceText = formatBRL(current?.price) || "-"
 
-  function renderContent() {
-    return (
-      <section className="py-24 bg-[#3d2f28] relative overflow-hidden">
+  return (
+    <section className="py-24 bg-[#3d2f28] relative overflow-hidden">
       <div
         className="absolute right-0 top-20 w-64 h-64 opacity-10"
         style={{ animation: 'wave 18s linear infinite', willChange: 'transform' }}
@@ -412,8 +410,5 @@ export default function PremiumQuality() {
         </div>
       </div>
     </section>
-    )
-  }
-
-  return renderContent()
+  )
 }
