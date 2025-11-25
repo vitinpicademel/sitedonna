@@ -129,6 +129,34 @@ export async function POST(req: Request) {
       } catch (e: any) {
         attempts.push({ url: `${base}/Imovel/RetornarImovelPorCodigo`, status: 500, snippet: String(e?.message || e) })
       }
+      // Tenta outras variantes conhecidas que aceitam código
+      const byCodeCandidates = [
+        "/Imovel/Detalhes",
+        "/Imovel/RetornarImovel",
+        "/Imovel/BuscarPorCodigo",
+      ]
+      for (const path of byCodeCandidates) {
+        try {
+          const resp = await fetch(`${base}${path}`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              chave: key,
+            },
+            body: JSON.stringify({ codigo: payload.codigo, numeroPagina: 1, numeroRegistros: 1 }),
+            cache: "no-store",
+          })
+          const text = await resp.text().catch(() => "")
+          attempts.push({ url: `${base}${path}`, status: resp.status, snippet: text.slice(0, 160) })
+          try {
+            const json = JSON.parse(text)
+            if (resp.ok) return NextResponse.json(json, { status: 200 })
+          } catch {}
+        } catch (e: any) {
+          attempts.push({ url: `${base}${path}`, status: 500, snippet: String(e?.message || e) })
+        }
+      }
     }
   }
   for (const base of bases) {

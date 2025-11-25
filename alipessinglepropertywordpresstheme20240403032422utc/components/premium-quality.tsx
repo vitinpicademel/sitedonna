@@ -272,46 +272,7 @@ export default function PremiumQuality() {
 
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="relative">
-          <div className={`relative block w-full max-w-xl md:max-w-2xl ml-auto fade-swap ${isAnimating ? "is-out" : ""}`}>
-              <div
-                className="absolute -top-8 -right-8 w-32 h-32 border-4 border-[#c89968] animate-float z-10"
-                style={{ animation: 'float 9s ease-in-out infinite', willChange: 'transform' }}
-              />
-              <div
-                className="absolute -bottom-10 -left-12 w-24 h-24 border-2 border-[#c89968]/50 rounded-full"
-                style={{ animation: 'float-3 11s ease-in-out infinite', willChange: 'transform' }}
-              />
-
-              {/* Moldura externa bronze */}
-              <div
-                className="absolute -inset-4 border-4 border-[#c89968] pointer-events-none"
-                style={{ animation: 'float-2 14s ease-in-out infinite', willChange: 'transform' }}
-              />
-
-              {/* Imagem mais horizontal (4:3), um pouco mais larga */}
-              <div className="relative w-full bg-gray-800" style={{ aspectRatio: '4 / 3' }}>
-                {(() => {
-                  const src = current?.image || '/placeholder.svg?height=600&width=800'
-                  function handleError(e: React.SyntheticEvent<HTMLImageElement, Event>) {
-                    const el = e.currentTarget
-                    if (el.src.endsWith('placeholder.svg?height=600&width=800')) return
-                    el.src = '/placeholder.svg?height=600&width=800'
-                  }
-                  return (
-                    <img
-                      src={src}
-                      alt={current?.alt || 'Imagem do lançamento'}
-                      className="absolute inset-0 w-full h-full object-cover"
-                      onError={handleError}
-                    />
-                  )
-                })()}
-              </div>
-            </div>
-          </div>
-
-          {/* Content Side */}
+          {/* Text content before image */}
           <div className={`fade-swap ${isAnimating ? "is-out" : ""}`}>
             <p className="inline-block bg-[#c89968] text-black uppercase text-sm md:text-base font-extrabold tracking-widest px-3 py-1 rounded-full mb-5">LANÇAMENTOS</p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white/95 mb-4 leading-tight">
@@ -319,6 +280,44 @@ export default function PremiumQuality() {
               <br />
               selecionados com carinho e cuidado pra vocês.
             </h2>
+
+            {/* Image card for mobile, hidden on large screens */}
+            <div className={`relative block w-full max-w-lg mx-auto my-8 fade-swap lg:hidden ${isAnimating ? "is-out" : ""}`}>
+                <div
+                  className="absolute -top-8 -right-8 w-32 h-32 border-4 border-[#c89968] animate-float z-10"
+                  style={{ animation: 'float 9s ease-in-out infinite', willChange: 'transform' }}
+                />
+                <div
+                  className="absolute -bottom-10 -left-12 w-24 h-24 border-2 border-[#c89968]/50 rounded-full"
+                  style={{ animation: 'float-3 11s ease-in-out infinite', willChange: 'transform' }}
+                />
+
+                {/* Moldura externa bronze */}
+                <div
+                  className="absolute -inset-2 border-2 border-[#c89968] rounded-2xl pointer-events-none"
+                  style={{ animation: 'float-2 14s ease-in-out infinite', willChange: 'transform' }}
+                />
+
+                {/* Imagem mais horizontal (16:9) */}
+                <div className="relative w-full bg-gray-800 rounded-2xl overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
+                  {(() => {
+                    const src = current?.image || '/placeholder.svg?height=600&width=800'
+                    function handleError(e: React.SyntheticEvent<HTMLImageElement, Event>) {
+                      const el = e.currentTarget
+                      if (el.src.endsWith('placeholder.svg?height=600&width=800')) return
+                      el.src = '/placeholder.svg?height=600&width=800'
+                    }
+                    return (
+                      <img
+                        src={src}
+                        alt={current?.alt || 'Imagem do lançamento'}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        onError={handleError}
+                      />
+                    )
+                  })()}
+                </div>
+              </div>
             <p className="text-[#c89968] text-lg mb-2 font-semibold">Destaque do mês</p>
             {current ? (
               <>
@@ -365,6 +364,45 @@ export default function PremiumQuality() {
                 )}
               </div>
             )}
+          </div>
+
+          {/* Image card for desktop, hidden on small screens */}
+          <div className={`relative hidden lg:block w-full max-w-lg md:max-w-2xl ml-auto fade-swap ${isAnimating ? "is-out" : ""}`}>
+              <div
+                className="absolute -top-8 -right-8 w-32 h-32 border-4 border-[#c89968] animate-float z-10"
+                style={{ animation: 'float 9s ease-in-out infinite', willChange: 'transform' }}
+              />
+              <div
+                className="absolute -bottom-10 -left-12 w-24 h-24 border-2 border-[#c89968]/50 rounded-full"
+                style={{ animation: 'float-3 11s ease-in-out infinite', willChange: 'transform' }}
+              />
+
+              {/* Moldura externa bronze */}
+              <div
+                className="absolute -inset-2 border-2 border-[#c89968] rounded-2xl pointer-events-none"
+                style={{ animation: 'float-2 14s ease-in-out infinite', willChange: 'transform' }}
+              />
+
+              {/* Imagem mais horizontal (16:9), um pouco mais larga */}
+              <div className="relative w-full bg-gray-800 rounded-2xl overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
+                {(() => {
+                  const src = current?.image || '/placeholder.svg?height=600&width=800'
+                  function handleError(e: React.SyntheticEvent<HTMLImageElement, Event>) {
+                    const el = e.currentTarget
+                    if (el.src.endsWith('placeholder.svg?height=600&width=800')) return
+                    el.src = '/placeholder.svg?height=600&width=800'
+                  }
+                  return (
+                    <img
+                      src={src}
+                      alt={current?.alt || 'Imagem do lançamento'}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={handleError}
+                    />
+                  )
+                })()}
+              </div>
+            </div>
           </div>
         </div>
       </div>

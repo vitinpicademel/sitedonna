@@ -232,14 +232,14 @@ export default function ApartmentsPlans() {
               {/* Botões de navegação */}
               <div className="mt-6">
                 {/* Linha com nome do apartamento, pontos e botão próximo */}
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2 bg-[#b8956a]/10 backdrop-blur-sm px-3 py-2 rounded-lg">
+                <div className="flex flex-col gap-4 lg:flex-row justify-between items-center">
+                  <div className="flex items-center gap-2 bg-[#b8956a]/10 backdrop-blur-sm px-3 py-2 rounded-lg w-full lg:w-auto justify-center">
                     <Star className="text-[#b8956a] text-lg animate-bounce" />
                     <span className="text-sm font-semibold text-white">{active.name}</span>
                   </div>
                   
                   {/* Pontos de navegação centralizados */}
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 justify-center">
                     {planOptions.map((_, index) => (
                       <button
                         key={index}
@@ -255,7 +255,7 @@ export default function ApartmentsPlans() {
                   
                   <Button
                     onClick={() => handlePlanChange(activeIndex < planOptions.length - 1 ? activeIndex + 1 : 0)}
-                    className="bg-[#3d2f1f] hover:bg-[#4d3f2f] text-white px-4 py-2 transition-all duration-300 hover:scale-105"
+                    className="bg-[#3d2f1f] hover:bg-[#4d3f2f] text-white px-4 py-2 transition-all duration-300 hover:scale-105 w-full lg:w-auto"
                   >
                     Próximo →
                   </Button>

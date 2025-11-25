@@ -1,7 +1,14 @@
 "use client"
-import { useState, useEffect } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { ChevronLeft, ChevronRight, ArrowDown } from "lucide-react"
 import PropertyFilter from "./property-filter"
+import { Playfair_Display } from "next/font/google"
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+})
 
 const slides = [
   { id: 1, image: "/modern-luxury-apartment-building-night-exterior-da.jpg" },
@@ -10,14 +17,21 @@ const slides = [
 ]
 
 const phrases = [
-  "Transformando cada chave em novas possibilidades",
-  "Com a Donna, o seu próximo capítulo começa aqui",
+  {
+    lead: "Abrindo portas para",
+    highlight: "negócios extraordinários",
+  },
+  {
+    lead: "Transformando cada chave em",
+    highlight: "novas possibilidades",
+  },
 ]
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [phraseIndex, setPhraseIndex] = useState(0)
+  const filterRef = useRef<HTMLDivElement | null>(null)
 
   const changeSlide = (direction: "next" | "prev") => {
     if (isAnimating) return
@@ -43,19 +57,26 @@ export default function Hero() {
   }, [])
 
   const slide = slides[currentSlide]
+  const scrollToFilter = () => {
+    if (filterRef.current) {
+      filterRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }
 
   return (
-    <section className="relative h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-[100dvh] flex items-start lg:items-center overflow-hidden pt-20 pb-12 lg:pt-16 lg:pb-10">
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
         style={{
           backgroundImage: `url(${slide.image})`,
         }}
       >
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-[#3d2f28]/60 lg:bg-black/50" />
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#3d2f28]/95 via-[#3d2f28]/50 to-transparent pointer-events-none" />
       </div>
 
-      <div className="absolute right-20 top-1/2 -translate-y-1/2 z-10">
+      {/* Elementos decorativos - apenas desktop */}
+      <div className="hidden lg:block absolute right-20 top-1/2 -translate-y-1/2 z-10">
         <div className="w-32 h-32 rounded-full border border-white/20 animate-pulse-slow" />
         <div
           className="w-24 h-24 rounded-full border border-white/20 absolute top-20 -right-10 animate-pulse-slow"
@@ -64,24 +85,40 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 lg:px-16">
-        <div className="flex justify-center mb-16">
-          <h1
-            className={`text-5xl md:text-7xl lg:text-8xl font-bold text-white tracking-wider leading-tight text-center transition-all duration-800 ${
-              isAnimating ? "opacity-0 translate-y-10" : "opacity-100 translate-y-0"
-            }`}
-          >
-            {phrases[phraseIndex]}
-          </h1>
+        {/* Tipografia com duas linhas e maior respiro */}
+        <div
+          className={`flex flex-col items-center text-center gap-2 mb-10 md:mb-12 lg:mb-16 transition-all duration-700 px-4 ${
+            isAnimating ? "opacity-0 translate-y-8" : "opacity-100 translate-y-0"
+          }`}
+        >
+          <p className="text-white text-xl font-light tracking-[0.0625em]">
+            {phrases[phraseIndex].lead}
+          </p>
+          <p className={`${playfair.className} text-[2rem] italic text-[#c89968] leading-tight`}>
+            {phrases[phraseIndex].highlight}
+          </p>
         </div>
 
-        <div className="flex justify-center mt-24 md:mt-36 lg:mt-48">
-          <div className="w-full max-w-6xl">
+        {/* Mobile: filtro aparece parcialmente para incentivar a rolagem */}
+        <div className="flex justify-center mt-16 md:mt-20 lg:mt-48">
+          <div ref={filterRef} className="w-full max-w-6xl px-2 lg:px-0">
             <PropertyFilter />
           </div>
         </div>
       </div>
 
-      <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
+      {/* Botão de orientação - apenas mobile */}
+      <button
+        type="button"
+        onClick={scrollToFilter}
+        aria-label="Ver mais filtros"
+        className="lg:hidden absolute bottom-5 right-5 z-30 h-12 w-12 rounded-full bg-[#c89968] text-[#3d2f28] shadow-2xl flex items-center justify-center border border-[#86674a]/50"
+      >
+        <ArrowDown className="w-5 h-5" />
+      </button>
+
+      {/* Botões de navegação - apenas desktop */}
+      <div className="hidden lg:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col gap-4 z-20">
         <button
           onClick={() => changeSlide("prev")}
           className="w-12 h-12 rounded-full border-2 border-white/30 flex items-center justify-center text-white hover:bg-white/10 hover:border-white transition-all disabled:opacity-50"

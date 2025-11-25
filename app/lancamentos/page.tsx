@@ -6,7 +6,6 @@ import { PropertyCard } from "@/components/ui/property-card"
 import type { Launch, Property } from "@/lib/types"
 import launchesData from "@/data/launches.json"
 import propertiesData from "@/data/properties.json"
-import { getImoviewProperty } from "@/lib/imoview"
 import { mapImoviewToProperty } from "@/lib/map-imoview"
 
 export const metadata = {
@@ -27,10 +26,22 @@ export default async function LaunchesPage({ searchParams }: PageProps) {
     (typeof searchParams?.codigos === "string" ? searchParams?.codigos : Array.isArray(searchParams?.codigos) ? searchParams?.codigos[0] : undefined) ??
     (typeof searchParams?.codes === "string" ? searchParams?.codes : Array.isArray(searchParams?.codes) ? searchParams?.codes[0] : undefined)
 
-  const selectedCodes = (codesParam ? String(codesParam) : "")
+  // Códigos vindos por querystring (?codigos=123,456)
+  let selectedCodes = (codesParam ? String(codesParam) : "")
     .split(",")
     .map((s) => s.trim().toUpperCase())
     .filter(Boolean)
+
+  // Se nenhum código foi passado na URL, usa os padrões da aplicação.
+  // Você pode sobrescrever via .env.local: NEXT_PUBLIC_DEFAULT_LAUNCH_CODES=3622,1234
+  if (!selectedCodes.length) {
+    const defaultsRaw = process.env.NEXT_PUBLIC_DEFAULT_LAUNCH_CODES ?? "3622"
+    const defaults = String(defaultsRaw)
+      .split(",")
+      .map((s) => s.trim().toUpperCase())
+      .filter(Boolean)
+    selectedCodes = defaults
+  }
 
   const selectedSet = new Set(selectedCodes)
   let selectedProperties: Property[] = []
@@ -39,24 +50,53 @@ export default async function LaunchesPage({ searchParams }: PageProps) {
     const local = allProperties.filter((p) => p.code && selectedSet.has(String(p.code).toUpperCase()))
     selectedProperties.push(...local)
     const missing = selectedCodes.filter((c) => !local.some((p) => String(p.code).toUpperCase() === c))
-    // busca faltantes via IMOVIEW e mapeia
+    // busca faltantes via IMOVIEW e mapeia, garantindo aderência AO CÓDIGO EXATO
     for (const code of missing) {
       try {
-        const raw = await getImoviewProperty(code)
-        const arr =
-          Array.isArray(raw)
-            ? raw
-            : (raw?.data ?? raw?.lista ?? raw?.items ?? raw?.result ?? raw?.imoveis ?? raw?.listaImoveis ?? (raw ? [raw] : []))
-        const first = Array.isArray(arr) && arr.length ? arr[0] : raw
-        if (first) {
-          const mapped = mapImoviewToProperty(first)
-          if (mapped?.code) {
-            selectedProperties.push(mapped as Property)
+        // Consulta nossa API interna, que tenta múltiplos endpoints do Imoview
+        const base =
+          process.env.NEXT_PUBLIC_SITE_URL ||
+          process.env.SITE_URL ||
+          (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
+        const resp = await fetch(`${base}/api/imoview/properties`, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          cache: "no-store",
+          body: JSON.stringify({ codigo: code, numeroPagina: 1, numeroRegistros: 10 }),
+        })
+        if (!resp.ok) throw new Error(`IMOVIEW ${resp.status}`)
+        const raw = await resp.json().catch(() => ({} as any))
+        const arr = Array.isArray(raw)
+          ? raw
+          : (raw?.data ?? raw?.lista ?? raw?.items ?? raw?.result ?? raw?.imoveis ?? raw?.listaImoveis ?? (raw ? [raw] : []))
+
+        // mapeia todos e procura somente o código exato solicitado
+        const upperCode = String(code).toUpperCase()
+        let exact: Property | undefined
+        if (Array.isArray(arr)) {
+          for (const dto of arr) {
+            const p = mapImoviewToProperty(dto) as Property
+            if (p?.code && String(p.code).toUpperCase() === upperCode) {
+              exact = p
+              break
+            }
+          }
+        } else if (raw) {
+          const p = mapImoviewToProperty(raw) as Property
+          if (p?.code && String(p.code).toUpperCase() === upperCode) {
+            exact = p
           }
         }
+
+        if (exact) {
+          selectedProperties.push(exact)
+        } // se não achou o código exato, não adiciona nada para evitar mostrar imóvel incorreto
       } catch (e) {
         // silencia falhas individuais para não quebrar a página
         console.error("Erro ao buscar código", code, e)
+        // Fallback opcional (desativado para garantir apenas código exato):
+        // Se preferir ver um placeholder quando a API falhar, descomente abaixo.
+        // selectedProperties.push({ ... })
       }
     }
   }

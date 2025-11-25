@@ -20,124 +20,75 @@ export default function PropertyFilter() {
     // Aqui você pode adicionar a lógica de busca
   }
 
+  const fields = [
+    { label: "Finalidade", type: "select", key: "finalidade", placeholder: "Selecione", options: ["Venda", "Aluguel", "Temporada"] },
+    { label: "Tipo", type: "select", key: "tipo", placeholder: "Selecione", options: ["Apartamento", "Casa", "Cobertura", "Studio", "Penthouse"] },
+    { label: "Bairro", type: "input", key: "bairro", placeholder: "Digite o Bairro" },
+    { label: "Valor De", type: "input", key: "valorDe", placeholder: "R$ --" },
+    { label: "Valor Até", type: "input", key: "valorAte", placeholder: "R$ --" },
+    { label: "Código", type: "input", key: "codigo", placeholder: "Ex: 3027" },
+  ]
+
   return (
-    <div className="w-full relative">
-      <div className="absolute inset-0 bg-gradient-to-r from-[#2a1f15]/95 via-[#3d2f28]/90 to-[#2a1f15]/95 backdrop-blur-md rounded-2xl border border-[#c89968]/30 shadow-2xl" />
+    <div className="relative w-full">
+      {/* Fundo desktop clássico */}
+      <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-[#2a1f15]/95 via-[#3d2f28]/90 to-[#2a1f15]/95 rounded-2xl border border-[#c89968]/30 shadow-2xl" />
+      <div className="hidden lg:block absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c89968] to-transparent" />
+      <div className="hidden lg:block absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c89968] to-transparent" />
 
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#c89968] to-transparent" />
+      <div className="relative w-[95%] max-w-xl mx-auto rounded-xl border border-[#86674a] shadow-[0_25px_65px_rgba(3,13,27,0.65)] lg:w-full lg:max-w-none lg:bg-transparent lg:border-none lg:shadow-none lg:rounded-2xl" style={{ backgroundColor: "#3d2f28" }}>
+        <div className="relative rounded-xl p-6 pb-20 lg:rounded-2xl lg:p-6 lg:pb-6">
+          <div className="grid grid-cols-1 gap-5 items-end lg:grid-cols-7 lg:gap-4">
+            {fields.map((field) => (
+              <div key={field.key} className="flex flex-col gap-2">
+                <label className="text-white text-[11px] uppercase tracking-[0.1em] font-semibold lg:text-[#c89968] lg:text-[11px] lg:tracking-wide">
+                  {field.label}
+                </label>
+                {field.type === "select" ? (
+                  <Select
+                    value={(filters as any)[field.key]}
+                    onValueChange={(value) => setFilters({ ...filters, [field.key]: value })}
+                  >
+                    <SelectTrigger className="w-full h-[60px] rounded-[6px] border border-[#86674a] bg-transparent text-white text-[16px] font-medium px-4 data-[placeholder]:text-[#cccccc] hover:bg-white/5 hover:border-white/40 transition-all focus:ring-2 focus:ring-white/20 focus:ring-offset-0 lg:border-[#c89968]/30 lg:text-sm lg:h-11 lg:rounded-lg [&_svg]:text-[#86674a]">
+                      <SelectValue placeholder={field.placeholder} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#3d2f28] border-[#86674a] text-white">
+                      {field.options?.map((option) => (
+                        <SelectItem
+                          key={option}
+                          value={option.toLowerCase()}
+                          className="data-[highlighted]:bg-[#86674a]/20 data-[state=checked]:bg-[#86674a]/20 text-white"
+                        >
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input
+                    type="text"
+                    placeholder={field.placeholder}
+                    value={(filters as any)[field.key]}
+                    onChange={(e) => setFilters({ ...filters, [field.key]: e.target.value })}
+                    className="w-full h-[60px] rounded-[6px] border border-[#86674a] bg-transparent text-white placeholder:text-[#cccccc] text-[16px] px-4 hover:bg-white/5 hover:border-white/40 transition-all focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-0 lg:border-[#c89968]/30 lg:text-sm lg:h-11 lg:rounded-lg"
+                  />
+                )}
+              </div>
+            ))}
 
-      <div className="relative py-6 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 items-end">
-          {/* FINALIDADE */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[#c89968] text-xs font-semibold tracking-widest uppercase">Finalidade</label>
-            <Select value={filters.finalidade} onValueChange={(value) => setFilters({ ...filters, finalidade: value })}>
-              <SelectTrigger className="bg-white/5 border border-[#c89968]/30 text-white h-11 text-sm hover:border-[#c89968]/60 hover:bg-white/10 transition-all focus:ring-1 focus:ring-[#c89968]/50 focus:ring-offset-0 backdrop-blur-sm">
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent className="bg-[#2a1f15] border-[#c89968]/30">
-                <SelectItem value="venda" className="text-white hover:bg-[#c89968]/20">
-                  Venda
-                </SelectItem>
-                <SelectItem value="aluguel" className="text-white hover:bg-[#c89968]/20">
-                  Aluguel
-                </SelectItem>
-                <SelectItem value="temporada" className="text-white hover:bg-[#c89968]/20">
-                  Temporada
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* TIPO */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[#c89968] text-xs font-semibold tracking-widest uppercase">Tipo</label>
-            <Select value={filters.tipo} onValueChange={(value) => setFilters({ ...filters, tipo: value })}>
-              <SelectTrigger className="bg-white/5 border border-[#c89968]/30 text-white h-11 text-sm hover:border-[#c89968]/60 hover:bg-white/10 transition-all focus:ring-1 focus:ring-[#c89968]/50 focus:ring-offset-0 backdrop-blur-sm">
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent className="bg-[#2a1f15] border-[#c89968]/30">
-                <SelectItem value="apartamento" className="text-white hover:bg-[#c89968]/20">
-                  Apartamento
-                </SelectItem>
-                <SelectItem value="casa" className="text-white hover:bg-[#c89968]/20">
-                  Casa
-                </SelectItem>
-                <SelectItem value="cobertura" className="text-white hover:bg-[#c89968]/20">
-                  Cobertura
-                </SelectItem>
-                <SelectItem value="studio" className="text-white hover:bg-[#c89968]/20">
-                  Studio
-                </SelectItem>
-                <SelectItem value="penthouse" className="text-white hover:bg-[#c89968]/20">
-                  Penthouse
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* BAIRRO */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[#c89968] text-xs font-semibold tracking-widest uppercase">Bairro</label>
-            <Input
-              type="text"
-              placeholder="Digite o Bairro"
-              value={filters.bairro}
-              onChange={(e) => setFilters({ ...filters, bairro: e.target.value })}
-              className="bg-white/5 border border-[#c89968]/30 text-white placeholder:text-white/40 h-11 text-sm hover:border-[#c89968]/60 hover:bg-white/10 transition-all focus-visible:ring-1 focus-visible:ring-[#c89968]/50 focus-visible:ring-offset-0 backdrop-blur-sm"
-            />
-          </div>
-
-          {/* VALOR DE */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[#c89968] text-xs font-semibold tracking-widest uppercase">Valor De</label>
-            <Input
-              type="text"
-              placeholder="R$ --"
-              value={filters.valorDe}
-              onChange={(e) => setFilters({ ...filters, valorDe: e.target.value })}
-              className="bg-white/5 border border-[#c89968]/30 text-white placeholder:text-white/40 h-11 text-sm hover:border-[#c89968]/60 hover:bg-white/10 transition-all focus-visible:ring-1 focus-visible:ring-[#c89968]/50 focus-visible:ring-offset-0 backdrop-blur-sm"
-            />
-          </div>
-
-          {/* VALOR ATÉ */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[#c89968] text-xs font-semibold tracking-widest uppercase">Valor Até</label>
-            <Input
-              type="text"
-              placeholder="R$ --"
-              value={filters.valorAte}
-              onChange={(e) => setFilters({ ...filters, valorAte: e.target.value })}
-              className="bg-white/5 border border-[#c89968]/30 text-white placeholder:text-white/40 h-11 text-sm hover:border-[#c89968]/60 hover:bg-white/10 transition-all focus-visible:ring-1 focus-visible:ring-[#c89968]/50 focus-visible:ring-offset-0 backdrop-blur-sm"
-            />
-          </div>
-
-          {/* CÓDIGO */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[#c89968] text-xs font-semibold tracking-widest uppercase">Código</label>
-            <Input
-              type="text"
-              placeholder="Ex: 3027"
-              value={filters.codigo}
-              onChange={(e) => setFilters({ ...filters, codigo: e.target.value })}
-              className="bg-white/5 border border-[#c89968]/30 text-white placeholder:text-white/40 h-11 text-sm hover:border-[#c89968]/60 hover:bg-white/10 transition-all focus-visible:ring-1 focus-visible:ring-[#c89968]/50 focus-visible:ring-offset-0 backdrop-blur-sm"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label className="text-transparent text-xs font-semibold tracking-widest uppercase select-none">.</label>
-            <Button
-              onClick={handleSearch}
-              className="bg-gradient-to-r from-[#c89968] to-[#b8956a] hover:from-[#b8956a] hover:to-[#a88559] text-white font-bold h-11 text-sm tracking-widest transition-all shadow-lg hover:shadow-xl hover:shadow-[#c89968]/20 border border-[#c89968]/50"
-            >
-              <Search className="w-4 h-4 mr-2" />
-              BUSCAR
-            </Button>
+            <div className="flex flex-col gap-2 lg:mt-0">
+              <label className="text-transparent text-[11px] uppercase select-none">.</label>
+              <Button
+                onClick={handleSearch}
+                className="h-[60px] rounded-[6px] bg-[#c89968] text-[#3d2f28] font-semibold text-[16px] tracking-normal border border-[#c89968]/60 shadow-[0_15px_35px_rgba(0,0,0,0.35)] hover:bg-[#d4af37] transition-all w-full lg:w-auto lg:h-11 lg:rounded-lg"
+              >
+                <Search className="w-4 h-4 mr-2" />
+                Buscar
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#c89968] to-transparent" />
     </div>
   )
 }

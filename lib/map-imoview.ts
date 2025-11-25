@@ -35,6 +35,31 @@ function classifyType(raw?: string, title?: string): Property["type"] {
 
 // Ajustar campos conforme documentação oficial do IMOVIEW
 export function mapImoviewToProperty(dto: any): Property {
+  function pickFirst<T = any>(obj: any, keys: string[]): T | undefined {
+    for (const k of keys) {
+      if (k in (obj || {})) return (obj as any)[k] as T
+    }
+    return undefined
+  }
+  function getCode(dtoAny: any): string {
+    const raw =
+      pickFirst<any>(dtoAny, [
+        // variações comuns
+        "codigo",
+        "codigoImovel",
+        "codigo_imovel",
+        "codigodoimovel",
+        "codImovel",
+        "CodImovel",
+        "Codigo",
+        "CodigoImovel",
+        "cod",
+        "id_imovel",
+        "idImovel",
+        "id",
+      ])
+    return String(raw ?? "")
+  }
   function normalizeUrl(u?: string): string | undefined {
     if (!u) return undefined
     const s = String(u).trim()
@@ -262,15 +287,15 @@ export function mapImoviewToProperty(dto: any): Property {
   const areaFromDims = (!areaTot && width && depth) ? Math.round(width * depth) : parseDimensionsToArea(dto.dimensoes ?? dto.dimensao ?? dto.medidas)
 
   return {
-    id: String(dto.id ?? dto.codigo ?? crypto.randomUUID()),
-    slug: String(dto.slug ?? dto.codigo ?? dto.id ?? "imovel"),
+    id: String(dto.id ?? (getCode(dto) || crypto.randomUUID())),
+    slug: String(dto.slug ?? (getCode(dto) || dto.id) ?? "imovel"),
     status:
       dto.finalidade === 1 || dto.finalidade === "Aluguel" || dto.finalidade === "ALUGUEL"
         ? "Aluguel"
         : "Venda",
     type: classifyType(dto.tipo ?? dto.destinacao ?? "", dto.titulo ?? dto.nome ?? ""),
     title: dto.titulo ?? dto.nome ?? "Imóvel",
-    code: String(dto.codigo ?? dto.id ?? ""),
+    code: getCode(dto),
     address: {
       street: dto.endereco?.logradouro ?? dto.endereco ?? dto.logradouro ?? "",
       number: dto.endereco?.numero ?? dto.numero ?? "",
