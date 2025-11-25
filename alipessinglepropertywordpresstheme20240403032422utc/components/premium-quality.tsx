@@ -231,7 +231,9 @@ export default function PremiumQuality() {
   }, [])
 
   useEffect(() => {
-    if (items.length <= 1) return
+    if (items.length <= 1) {
+      return
+    }
     timerRef.current = window.setInterval(() => {
       setIsAnimating(true)
       window.setTimeout(() => {
@@ -244,8 +246,8 @@ export default function PremiumQuality() {
     }
   }, [items.length])
 
-  const current = items[index]
-  const priceText = formatBRL(current?.price) ?? "—"
+  const current = items[index] || items[0]
+  const priceText = formatBRL(current?.price) || "-"
 
   return (
     <section className="py-24 bg-[#3d2f28] relative overflow-hidden">
@@ -302,7 +304,7 @@ export default function PremiumQuality() {
                 <div className="relative w-full bg-gray-800 rounded-2xl overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
                   {(() => {
                     const src = current?.image || '/placeholder.svg?height=600&width=800'
-                    function handleError(e: React.SyntheticEvent<HTMLImageElement, Event>) {
+                    function handleError(e: any) {
                       const el = e.currentTarget
                       if (el.src.endsWith('placeholder.svg?height=600&width=800')) return
                       el.src = '/placeholder.svg?height=600&width=800'
