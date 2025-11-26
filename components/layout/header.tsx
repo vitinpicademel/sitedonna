@@ -30,7 +30,7 @@ export function Header({ appearance = "light" }: HeaderProps) {
   return (
     <>
       {/* Header transparente com blur; variação clara/escura */}
-      <div className={`fixed top-0 left-0 right-0 z-50 ${
+      <div className={`fixed top-0 left-0 right-0 z-[1000] ${
         // Desktop: mantém blur
         'lg:backdrop-blur-md' 
       } ${

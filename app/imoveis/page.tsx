@@ -204,6 +204,9 @@ export default function PropertiesPage() {
   const [purpose, setPurpose] = useState<"comprar" | "alugar" | "">("")
   const [typeFilter, setTypeFilter] = useState<string>("")
   const [codeFilter, setCodeFilter] = useState<string>("")
+  const [bairroFilter, setBairroFilter] = useState<string>("")
+  const [valorMinFilter, setValorMinFilter] = useState<number | null>(null)
+  const [valorMaxFilter, setValorMaxFilter] = useState<number | null>(null)
   // Força uma nova busca mesmo quando valores não mudam
   const [searchNonce, setSearchNonce] = useState(0)
 
@@ -212,7 +215,9 @@ export default function PropertiesPage() {
   const [apiTotal, setApiTotal] = useState<number | null>(null)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [isBootLoading, setIsBootLoading] = useState(true) // Ativa loader ao carregar a página
+  const [notification, setNotification] = useState<{ message: string; type: 'error' | 'success' } | null>(null)
   const sentReadyRef = useRef(false)
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   
   // Controla o loader: aparece no início e some após máximo 3 segundos OU quando dados carregarem
   useEffect(() => {
@@ -358,43 +363,56 @@ export default function PropertiesPage() {
     if (finalidade) setPurpose(finalidade.toLowerCase() === "alugar" ? "alugar" : "comprar")
     if (tipo) setTypeFilter(tipo)
     if (codigo) setCodeFilter(codigo)
-    // Nota: bairro e valores são aplicados apenas quando conectarmos o filtro lateral; por ora filtramos por tipo/finalidade/código
+    if (bairro) setBairroFilter(bairro)
+    if (valorMin) {
+      const min = Number(valorMin)
+      if (!isNaN(min) && min > 0) setValorMinFilter(min)
+    } else {
+      setValorMinFilter(null)
+    }
+    if (valorMax) {
+      const max = Number(valorMax)
+      if (!isNaN(max) && max > 0) setValorMaxFilter(max)
+    } else {
+      setValorMaxFilter(null)
+    }
   }, [searchParams])
 
   // When filters are active (from URL or hero), fetch a broader slice from API, then filter locally
   useEffect(() => {
-    const hasActive = Boolean(purpose || typeFilter || codeFilter)
+    const hasActive = Boolean(purpose || typeFilter || codeFilter || bairroFilter || valorMinFilter !== null || valorMaxFilter !== null)
     // Se houver código, deixamos o efeito específico de código cuidar
     if (codeFilter) return
     if (!hasActive) {
       // Usuário clicou em buscar sem filtros: recarrega listagem padrão
       if (searchNonce === 0) return
-      let cancelled = false
-      async function loadDefault() {
-        try {
-          // Loader DESATIVADO - não ativa blur
-          const perPage = 20
-          const page = 1
-          const { list, total } = await fetchImoview({ page, perPage })
-          const mapped = list.map((dto) => mapImoviewToProperty(dto)) as unknown as Property[]
-          if (!cancelled) {
-            setCards(mapped.map(mapPropertyToCardData))
-            setApiPage(1)
-            if (typeof total === "number") setApiTotal(total)
-          }
-        } catch (e) {
-          console.log('Erro ao carregar:', e)
+    let cancelled = false
+    async function loadDefault() {
+      try {
+        // Loader já está ativo quando usuário clica em buscar
+        const perPage = 20
+        const page = 1
+        const { list, total } = await fetchImoview({ page, perPage })
+        const mapped = list.map((dto) => mapImoviewToProperty(dto)) as unknown as Property[]
+        if (!cancelled) {
+          setCards(mapped.map(mapPropertyToCardData))
+          setApiPage(1)
+          if (typeof total === "number") setApiTotal(total)
         }
-        // Garante que loader está desativado
+      } catch (e) {
+        console.log('Erro ao carregar:', e)
+      } finally {
+        // Esconde loader quando busca terminar
         if (!cancelled) setIsBootLoading(false)
       }
+    }
       loadDefault()
       return () => { cancelled = true }
     }
     let cancelled = false
     async function fetchAllForFilters() {
       try {
-        // Loader DESATIVADO - não ativa blur durante busca
+        // Loader já está ativo quando usuário clica em buscar
         const perPage = 20
         let page = 1
         let total = Infinity
@@ -414,18 +432,49 @@ export default function PropertiesPage() {
           if (list.length < perPage) break
           page += 1
         }
-        if (!cancelled && aggregated.length > 0) {
-          setCards(aggregated.map(mapPropertyToCardData))
-        setApiPage(page - 1)
-        setApiTotal(aggregated.length)
+        if (!cancelled) {
+          if (aggregated.length > 0) {
+            setCards(aggregated.map(mapPropertyToCardData))
+            setApiPage(page - 1)
+            setApiTotal(aggregated.length)
+          } else {
+            // Nenhum imóvel encontrado com os filtros
+            setCards([])
+            setApiPage(0)
+            setApiTotal(0)
+            setNotification({ message: "Nenhum imóvel encontrado com os filtros selecionados. Por favor, tente outros filtros.", type: 'error' })
+            setTimeout(() => setNotification(null), 5000)
+          }
         }
       } catch (e) {
         console.log('Erro ao buscar filtros:', e)
         // keep current cards
       } finally {
-        // GARANTE que o blur sempre seja removido, mesmo se der erro ou timeout
+        // Esconde loader quando busca terminar
         if (!cancelled) {
+          // Limpa timeout de segurança se busca terminou antes
+          if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current)
+            searchTimeoutRef.current = null
+          }
           setIsBootLoading(false)
+          // Remove blur quando loader sumir
+          requestAnimationFrame(() => {
+            const allElements = document.querySelectorAll('.imoveis-page *')
+            allElements.forEach((el) => {
+              try {
+                const htmlEl = el as HTMLElement
+                if (htmlEl && htmlEl.style) {
+                  htmlEl.style.filter = 'none'
+                  htmlEl.style.webkitFilter = 'none'
+                }
+              } catch (e) {}
+            })
+            if (document.body && document.body.style) {
+              document.body.style.filter = 'none'
+              document.body.style.webkitFilter = 'none'
+            }
+          })
         }
       }
     }
@@ -433,7 +482,7 @@ export default function PropertiesPage() {
     return () => {
       cancelled = true
     }
-  }, [purpose, typeFilter, codeFilter, searchNonce])
+  }, [purpose, typeFilter, codeFilter, bairroFilter, valorMinFilter, valorMaxFilter, searchNonce])
 
   // Busca dedicada por código: traz o imóvel direto da API e mostra imediatamente
   useEffect(() => {
@@ -442,7 +491,7 @@ export default function PropertiesPage() {
     let cancelled = false
     async function fetchByCode() {
       try {
-        // Loader DESATIVADO - não ativa blur
+        // Loader já está ativo quando usuário clica em buscar
         const dto = await fetchImoviewByCode(code)
         if (cancelled) return
         if (dto) {
@@ -479,10 +528,38 @@ export default function PropertiesPage() {
             setCards([])
             setApiPage(0)
             setApiTotal(0)
+            // Mostra notificação quando não encontrar imóvel
+            setNotification({ message: "Imóvel não encontrado. Por favor, verifique o código e tente novamente.", type: 'error' })
+            // Remove notificação após 5 segundos
+            setTimeout(() => setNotification(null), 5000)
           }
         }
       } finally {
-        if (!cancelled) setIsBootLoading(false)
+        if (!cancelled) {
+          // Limpa timeout de segurança se busca terminou antes
+          if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current)
+            searchTimeoutRef.current = null
+          }
+          setIsBootLoading(false)
+          // Remove blur quando loader sumir
+          requestAnimationFrame(() => {
+            const allElements = document.querySelectorAll('.imoveis-page *')
+            allElements.forEach((el) => {
+              try {
+                const htmlEl = el as HTMLElement
+                if (htmlEl && htmlEl.style) {
+                  htmlEl.style.filter = 'none'
+                  htmlEl.style.webkitFilter = 'none'
+                }
+              } catch (e) {}
+            })
+            if (document.body && document.body.style) {
+              document.body.style.filter = 'none'
+              document.body.style.webkitFilter = 'none'
+            }
+          })
+        }
       }
     }
     fetchByCode()
@@ -517,22 +594,51 @@ export default function PropertiesPage() {
           .replace(/\p{Diacritic}/gu, "")
 
     return cards.filter((c) => {
+      // Filtro por finalidade
       if (purpose && ((purpose === "comprar" && c.purpose !== "venda") || (purpose === "alugar" && c.purpose !== "aluguel"))) {
         return false
       }
+      
+      // Filtro por tipo
       if (typeFilter) {
         const t = normalize(c.type)
         const f = normalize(typeFilter)
         if (!t.includes(f)) return false
       }
+      
+      // Filtro por código
       if (codeFilter) {
         const a = normalizeCodeStr(c.code)
         const b = normalizeCodeStr(codeFilter)
         if (a !== b) return false
       }
+      
+      // Filtro por bairro (busca no início da string location, antes da vírgula)
+      if (bairroFilter) {
+        const bairroNormalizado = normalize(bairroFilter)
+        // O location está no formato "Bairro, Cidade-Estado", então pegamos a parte antes da vírgula
+        const locationParts = c.location.split(",")
+        const bairroCard = locationParts[0] || c.location
+        const bairroCardNormalizado = normalize(bairroCard)
+        if (!bairroCardNormalizado.includes(bairroNormalizado)) return false
+      }
+      
+      // Filtro por valor mínimo e máximo
+      if (valorMinFilter !== null || valorMaxFilter !== null) {
+        // Extrai o valor numérico do preço (remove R$, pontos, vírgulas, etc.)
+        const priceNumber = Number(c.price.replace(/\D/g, ""))
+        
+        if (valorMinFilter !== null && priceNumber < valorMinFilter) {
+          return false
+        }
+        if (valorMaxFilter !== null && priceNumber > valorMaxFilter) {
+          return false
+        }
+      }
+      
       return true
     })
-  }, [cards, purpose, typeFilter, codeFilter])
+  }, [cards, purpose, typeFilter, codeFilter, bairroFilter, valorMinFilter, valorMaxFilter])
 
   const sortedCards = useMemo(() => {
     const list = [...filtered]
@@ -580,22 +686,114 @@ export default function PropertiesPage() {
   }, [cards])
 
   const handleHeroSearch = (values: { searchCode: string; purpose: "comprar" | "alugar"; propertyType: string }) => {
-    setCodeFilter(values.searchCode?.trim())
+    // Limpa timeout anterior se existir
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current)
+      searchTimeoutRef.current = null
+    }
+    
+    // Limpa notificação anterior
+    setNotification(null)
+    
+    // Se código estiver vazio E não houver outros filtros, limpa tudo e recarrega lista completa
+    const codeTrimmed = values.searchCode?.trim() || ""
+    if (!codeTrimmed && !values.purpose && !values.propertyType) {
+      // Limpa todos os filtros
+      setCodeFilter("")
+      setPurpose("")
+      setTypeFilter("")
+      
+      // Força recarregamento da lista padrão (vai acionar o useEffect que carrega da API)
+      setSearchNonce((n) => n + 1)
+      
+      // Carrega lista padrão do JSON local como fallback imediato
+      const fallbackCards = (propertiesData as unknown as Property[]).map(mapPropertyToCardData)
+      setCards(fallbackCards)
+      
+      // Carrega da API em background para atualizar
+      async function reloadDefault() {
+        try {
+          const perPage = 20
+          const page = 1
+          const { list, total } = await fetchImoview({ page, perPage })
+          const mapped = list.map((dto) => mapImoviewToProperty(dto)) as unknown as Property[]
+          if (mapped.length > 0) {
+            setCards(mapped.map(mapPropertyToCardData))
+            setApiPage(1)
+            if (typeof total === "number") setApiTotal(total)
+          }
+        } catch (e) {
+          console.log('Erro ao recarregar:', e)
+        }
+      }
+      reloadDefault()
+      
+      return
+    }
+    
+    // Ativa loader ao clicar em buscar
+    setIsBootLoading(true)
+    setCodeFilter(codeTrimmed)
     setPurpose(values.purpose)
     setTypeFilter(values.propertyType)
     setSearchNonce((n) => n + 1)
+    
+    // Timer de segurança: garante que loader suma após 5 segundos no máximo
+    searchTimeoutRef.current = setTimeout(() => {
+      setIsBootLoading(false)
+      searchTimeoutRef.current = null
+      // Remove blur
+      requestAnimationFrame(() => {
+        const allElements = document.querySelectorAll('.imoveis-page *')
+        allElements.forEach((el) => {
+          try {
+            const htmlEl = el as HTMLElement
+            if (htmlEl && htmlEl.style) {
+              htmlEl.style.filter = 'none'
+              htmlEl.style.webkitFilter = 'none'
+            }
+          } catch (e) {}
+        })
+        if (document.body && document.body.style) {
+          document.body.style.filter = 'none'
+          document.body.style.webkitFilter = 'none'
+        }
+      })
+    }, 5000) // 5 segundos máximo para busca
   }
 
   return (
     <div className="min-h-screen imoveis-page" data-loading={isBootLoading ? "true" : "false"}>
+      {/* Header SEMPRE visível - fora do container de blur */}
+      <Header appearance="dark" />
+      
       {/* PageLoader: aparece durante carregamento inicial */}
       {isBootLoading && <PageLoader label="Carregando imóveis..." />}
+      
+      {/* Notificação de erro/sucesso */}
+      {notification && (
+        <div className={`fixed top-24 left-1/2 transform -translate-x-1/2 z-[10000] px-6 py-4 rounded-lg shadow-2xl transition-all duration-300 animate-in slide-in-from-top-5 ${
+          notification.type === 'error' 
+            ? 'bg-red-600/95 backdrop-blur-sm text-white border-2 border-red-700' 
+            : 'bg-green-600/95 backdrop-blur-sm text-white border-2 border-green-700'
+        }`}>
+          <div className="flex items-center gap-3 max-w-md">
+            <span className="font-medium text-sm">{notification.message}</span>
+            <button
+              onClick={() => setNotification(null)}
+              className="ml-auto text-white hover:text-gray-200 font-bold text-xl leading-none flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors"
+              aria-label="Fechar notificação"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
       
       <div 
         className={isBootLoading ? "opacity-0 pointer-events-none" : "opacity-100 imoveis-content-fade-in transition-opacity duration-300"}
         style={isBootLoading ? { filter: 'blur(8px)' } : { filter: 'none' }}
       >
-        <Header appearance="dark" />
 
         <HeroSearch onSearch={handleHeroSearch} variant="minimal" />
 
