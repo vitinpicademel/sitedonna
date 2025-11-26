@@ -91,41 +91,53 @@ function mapPropertyToCardData(property: Property): CardData {
   }
 }
 
+// Helper: fetch com timeout de 3 segundos
+async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 3000) {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    })
+    clearTimeout(timeoutId)
+    return response
+  } catch (error) {
+    clearTimeout(timeoutId)
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Request timeout')
+    }
+    throw error
+  }
+}
+
 async function fetchImoview({ page, perPage, finalidade }: { page: number; perPage: number; finalidade?: number }) {
-  // Try POST primary endpoint
+  // Try POST primary endpoint com timeout
   try {
     const payload: Record<string, any> = { numeroPagina: page, numeroRegistros: perPage }
     // Não enviar finalidade quando não for 1 (Aluguel) ou 2 (Venda).
     if (finalidade === 1 || finalidade === 2) payload.finalidade = finalidade
-    const resp = await fetch(`/api/imoview/properties`, {
+    const resp = await fetchWithTimeout(`/api/imoview/properties`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
       cache: "no-store",
-    })
+    }, 3000) // Timeout de 3 segundos
     if (resp.ok) {
       const json = await resp.json()
       const { list, total } = extractListAndTotal(json)
       return { list, total }
     }
-  } catch {}
+  } catch (e) {
+    console.log('POST endpoint falhou ou timeout:', e)
+  }
 
-  // Fallback to GET-compatible endpoints via route GET handler
+  // Fallback to GET-compatible endpoints via route GET handler (com timeout)
   const candidates = [
     "/Imovel/RetornarImovelPorCodigo",
     "/Imovel/Retornar",
     "/Imovel/Consultar",
-    "/Imovel/Detalhes",
-    "/Imovel/RetornarImovel",
-    "/imovel/retornarimovelporcodigo",
-    "/imovel/retornar",
-    "/imovel/consultar",
-    "/imovel/detalhes",
-    "/imoveis/listar",
-    "/imoveis/paginado",
-    "/imoveis/v2",
-    "/imoveis/consulta",
-  ]
+  ] // Reduzido para apenas 3 endpoints principais para não demorar
   for (const path of candidates) {
     try {
       const url = new URL(`/api/imoview/properties`, window.location.origin)
@@ -135,17 +147,21 @@ async function fetchImoview({ page, perPage, finalidade }: { page: number; perPa
       if (finalidade === 1 || finalidade === 2) {
         url.searchParams.set("finalidade", String(finalidade))
       }
-      const resp = await fetch(url.toString(), { cache: "no-store" })
+      const resp = await fetchWithTimeout(url.toString(), { cache: "no-store" }, 2000) // Timeout de 2s por endpoint
       if (!resp.ok) continue
       const json = await resp.json()
       const { list, total } = extractListAndTotal(json)
       if (Array.isArray(list) && list.length > 0) return { list, total }
-    } catch {}
+    } catch (e) {
+      // Timeout ou erro - continua para próximo endpoint
+      continue
+    }
   }
   return { list: [], total: 0 }
 }
 
 async function fetchImoviewByCode(code: string) {
+  // Usa fetchWithTimeout para evitar travamento
   // Principais endpoints conhecidos para busca por código
   const candidates = [
     "/Imovel/RetornarImovelPorCodigo",
@@ -166,14 +182,17 @@ async function fetchImoviewByCode(code: string) {
       url.searchParams.set("codigo", code)
       url.searchParams.set("numeroPagina", "1")
       url.searchParams.set("numeroRegistros", "1")
-      const resp = await fetch(url.toString(), { cache: "no-store" })
+      const resp = await fetchWithTimeout(url.toString(), { cache: "no-store" }, 2000) // Timeout de 2s
       if (!resp.ok) continue
       const json = await resp.json()
       const { list } = extractListAndTotal(json)
       if (Array.isArray(list) && list.length > 0) return list[0]
       // Algumas instalações retornam um único objeto
       if (json && !Array.isArray(json) && !Array.isArray(json?.data) && json?.codigo) return json
-    } catch {}
+    } catch (e) {
+      // Timeout ou erro - continua para próximo endpoint
+      continue
+    }
   }
   return undefined
 }
@@ -192,12 +211,53 @@ export default function PropertiesPage() {
   const [apiPage, setApiPage] = useState<number>(0)
   const [apiTotal, setApiTotal] = useState<number | null>(null)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
-  const [isBootLoading, setIsBootLoading] = useState(true)
+  const [isBootLoading, setIsBootLoading] = useState(true) // Ativa loader ao carregar a página
   const sentReadyRef = useRef(false)
+  
+  // Controla o loader: aparece no início e some após máximo 3 segundos OU quando dados carregarem
+  useEffect(() => {
+    const maxLoadTime = 3000 // Máximo 3 segundos
+    
+    // Timer de segurança: garante que loader suma após 3 segundos
+    const timeoutId = setTimeout(() => {
+      setIsBootLoading(false)
+      
+      // Remove blur quando loader sumir
+      requestAnimationFrame(() => {
+        const allElements = document.querySelectorAll('.imoveis-page *')
+        allElements.forEach((el) => {
+          try {
+            const htmlEl = el as HTMLElement
+            if (htmlEl && htmlEl.style) {
+              htmlEl.style.filter = 'none'
+              htmlEl.style.webkitFilter = 'none'
+            }
+          } catch (e) {
+            // Ignora erros
+          }
+        })
+        if (document.body && document.body.style) {
+          document.body.style.filter = 'none'
+          document.body.style.webkitFilter = 'none'
+        }
+      })
+    }, maxLoadTime)
+    
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [])
 
   // Try to load first page from IMOVIEW API; keep local JSON as fallback
   useEffect(() => {
     let cancelled = false
+    const maxLoadTime = 3000 // Máximo 3 segundos para loader
+    
+    // Carrega dados locais IMEDIATAMENTE (fallback rápido)
+    const fallbackCards = (propertiesData as unknown as Property[]).map(mapPropertyToCardData)
+    setCards(fallbackCards)
+    
+    // Tenta carregar da API em background
     async function loadFromApi() {
       try {
         const perPage = 20
@@ -208,41 +268,82 @@ export default function PropertiesPage() {
           setCards(mapped.map(mapPropertyToCardData))
           setApiPage(1)
           if (typeof total === "number") setApiTotal(total)
-        } else if (!cancelled && list.length === 0) {
-          // Se a API retornar vazio, usa dados locais como fallback
-          const fallbackCards = (propertiesData as unknown as Property[]).map(mapPropertyToCardData)
-          setCards(fallbackCards)
         }
       } catch (e) {
-        // Se a API falhar completamente, usa dados locais como fallback
+        console.log('API falhou, usando dados locais')
+      } finally {
+        // Esconde loader quando dados carregarem
         if (!cancelled) {
-          const fallbackCards = (propertiesData as unknown as Property[]).map(mapPropertyToCardData)
-          setCards(fallbackCards)
+          setIsBootLoading(false)
+          // Remove blur quando loader sumir
+          requestAnimationFrame(() => {
+            const allElements = document.querySelectorAll('.imoveis-page *')
+            allElements.forEach((el) => {
+              try {
+                const htmlEl = el as HTMLElement
+                if (htmlEl && htmlEl.style) {
+                  htmlEl.style.filter = 'none'
+                  htmlEl.style.webkitFilter = 'none'
+                }
+              } catch (e) {}
+            })
+            if (document.body && document.body.style) {
+              document.body.style.filter = 'none'
+              document.body.style.webkitFilter = 'none'
+            }
+          })
         }
       }
-      setIsBootLoading(false)
     }
+    
+    // Timer de segurança: garante que loader suma após 3 segundos no máximo
+    const timeoutId = setTimeout(() => {
+      if (!cancelled) {
+        setIsBootLoading(false)
+        // Remove blur
+        requestAnimationFrame(() => {
+          const allElements = document.querySelectorAll('.imoveis-page *')
+          allElements.forEach((el) => {
+            try {
+              const htmlEl = el as HTMLElement
+              if (htmlEl && htmlEl.style) {
+                htmlEl.style.filter = 'none'
+                htmlEl.style.webkitFilter = 'none'
+              }
+            } catch (e) {}
+          })
+          if (document.body && document.body.style) {
+            document.body.style.filter = 'none'
+            document.body.style.webkitFilter = 'none'
+          }
+        })
+      }
+    }, maxLoadTime)
+    
+    // Carrega API em background
     loadFromApi()
+    
     return () => {
       cancelled = true
+      clearTimeout(timeoutId)
     }
   }, [])
 
-  // Emite evento global para o IntroLoader assim que terminar o boot
+  // Emite eventos globais quando loader terminar
   useEffect(() => {
     if (!isBootLoading && !sentReadyRef.current) {
       sentReadyRef.current = true
+      
+      // Dispara eventos que podem remover loaders globais
       try {
         window.dispatchEvent(new Event("app-ready"))
-      } catch {}
+        window.dispatchEvent(new Event("launches-ready"))
+      } catch (e) {
+        // Ignora erros de eventos
+      }
     }
   }, [isBootLoading])
 
-  // Safety: nunca deixe o loader travado em tela
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsBootLoading(false), 8000)
-    return () => clearTimeout(timeout)
-  }, [])
 
   // Initialize filters from URL query string (coming from home search)
   useEffect(() => {
@@ -271,7 +372,7 @@ export default function PropertiesPage() {
       let cancelled = false
       async function loadDefault() {
         try {
-          setIsBootLoading(true)
+          // Loader DESATIVADO - não ativa blur
           const perPage = 20
           const page = 1
           const { list, total } = await fetchImoview({ page, perPage })
@@ -281,9 +382,11 @@ export default function PropertiesPage() {
             setApiPage(1)
             if (typeof total === "number") setApiTotal(total)
           }
-        } finally {
-          if (!cancelled) setIsBootLoading(false)
+        } catch (e) {
+          console.log('Erro ao carregar:', e)
         }
+        // Garante que loader está desativado
+        if (!cancelled) setIsBootLoading(false)
       }
       loadDefault()
       return () => { cancelled = true }
@@ -291,6 +394,7 @@ export default function PropertiesPage() {
     let cancelled = false
     async function fetchAllForFilters() {
       try {
+        // Loader DESATIVADO - não ativa blur durante busca
         const perPage = 20
         let page = 1
         let total = Infinity
@@ -316,9 +420,14 @@ export default function PropertiesPage() {
         setApiTotal(aggregated.length)
         }
       } catch (e) {
+        console.log('Erro ao buscar filtros:', e)
         // keep current cards
+      } finally {
+        // GARANTE que o blur sempre seja removido, mesmo se der erro ou timeout
+        if (!cancelled) {
+          setIsBootLoading(false)
+        }
       }
-      setIsBootLoading(false)
     }
     fetchAllForFilters()
     return () => {
@@ -333,7 +442,7 @@ export default function PropertiesPage() {
     let cancelled = false
     async function fetchByCode() {
       try {
-        setIsBootLoading(true)
+        // Loader DESATIVADO - não ativa blur
         const dto = await fetchImoviewByCode(code)
         if (cancelled) return
         if (dto) {
@@ -478,13 +587,19 @@ export default function PropertiesPage() {
   }
 
   return (
-    <div className="min-h-screen imoveis-page">
-      {isBootLoading && <PageLoader />}
-      <Header appearance="dark" />
+    <div className="min-h-screen imoveis-page" data-loading={isBootLoading ? "true" : "false"}>
+      {/* PageLoader: aparece durante carregamento inicial */}
+      {isBootLoading && <PageLoader label="Carregando imóveis..." />}
+      
+      <div 
+        className={isBootLoading ? "opacity-0 pointer-events-none" : "opacity-100 imoveis-content-fade-in transition-opacity duration-300"}
+        style={isBootLoading ? { filter: 'blur(8px)' } : { filter: 'none' }}
+      >
+        <Header appearance="dark" />
 
-      <HeroSearch onSearch={handleHeroSearch} variant="minimal" />
+        <HeroSearch onSearch={handleHeroSearch} variant="minimal" />
 
-      <main className="container mx-auto px-4 py-12" id="property-results">
+        <main className="container mx-auto px-4 py-12" id="property-results">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
           {sortedCards.map((p) => (
@@ -501,8 +616,9 @@ export default function PropertiesPage() {
             )}
       </main>
 
-      <Footer />
-      <WhatsAppButton />
+        <Footer />
+        <WhatsAppButton />
+      </div>
     </div>
   )
 }

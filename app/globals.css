@@ -758,6 +758,845 @@
     }
   }
 
+  /* REMOVE INTRO OVERLAY E BLUR COMPLETAMENTE */
+  .intro-overlay,
+  .intro-overlay * {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  
+  /* FORÇA REMOÇÃO TOTAL DE BLUR - SEMPRE */
+  .imoveis-page *,
+  .imoveis-page *::before,
+  .imoveis-page *::after,
+  body * {
+    filter: none !important;
+    -webkit-filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Remove blur da página de imóveis quando loader terminar */
+  .imoveis-page:not([data-loading="true"]) *,
+  .imoveis-page[data-loading="false"] *,
+  .imoveis-page[data-loading=""] * {
+    filter: none !important;
+    -webkit-filter: none !important;
+  }
+  
+  /* Força remoção de blur em todos os elementos */
+  .imoveis-page .reveal,
+  .imoveis-page section,
+  .imoveis-page article,
+  .imoveis-page main,
+  .imoveis-page div,
+  .imoveis-page header,
+  .imoveis-page body {
+    filter: none !important;
+    -webkit-filter: none !important;
+    transition: none !important;
+  }
+  
+  /* PageLoader - aparece apenas quando data-loading="true" */
+  .imoveis-page[data-loading="false"] .fixed.inset-0.z-\\[9999\\] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  
+  /* PageLoader visível quando data-loading="true" */
+  .imoveis-page[data-loading="true"] .fixed.inset-0.z-\\[9999\\] {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Fade-in suave para conteúdo da página de imóveis após loader */
+  .imoveis-content-fade-in {
+    animation: imoveisFadeIn 0.8s ease-out forwards;
+  }
+
+  @keyframes imoveisFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stagger effect para os cards aparecerem gradualmente */
+  .imoveis-page[data-loading="false"] .grid > * {
+    animation: cardFadeIn 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  .imoveis-page[data-loading="false"] .grid > *:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .imoveis-page[data-loading="false"] .grid > *:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .imoveis-page[data-loading="false"] .grid > *:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  .imoveis-page[data-loading="false"] .grid > *:nth-child(4) {
+    animation-delay: 0.25s;
+  }
+  .imoveis-page[data-loading="false"] .grid > *:nth-child(5) {
+    animation-delay: 0.3s;
+  }
+  .imoveis-page[data-loading="false"] .grid > *:nth-child(6) {
+    animation-delay: 0.35s;
+  }
+  .imoveis-page[data-loading="false"] .grid > *:nth-child(n+7) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes cardFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ===== REFINAMENTO LUXO - PÁGINA DE IMÓVEIS (DESKTOP) ===== */
+  
+  /* 1. MOLDURA ELEGANTE DO CONTAINER DA BARRA DE BUSCA - EQUILIBRADO */
+  .imoveis-page .glass-warm.search-elevated.search-refined,
+  .imoveis-page .rounded-3xl.glass-warm,
+  .imoveis-page div.rounded-3xl.p-6 {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: 1px solid #c89968 !important; /* Borda fina dourada */
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #c89968 !important;
+    border-radius: 12px !important;
+    padding: 24px 32px !important;
+    box-shadow: none !important;
+    max-width: 1100px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 20px !important; /* Espaço equilibrado - nem muito nem pouco */
+    margin-bottom: 60px !important;
+  }
+  
+  /* CORREÇÃO DEFINITIVA: Padding-top no container principal do conteúdo */
+  .imoveis-page main,
+  .imoveis-page main.container,
+  .imoveis-page div[id="property-results"] {
+    padding-top: 0 !important; /* Removido padding excessivo */
+  }
+  
+  /* Section da busca - espaçamento equilibrado */
+  .imoveis-page section.relative.z-\\[200\\],
+  .imoveis-page section.relative:first-of-type {
+    margin-top: 0 !important;
+    padding-top: 80px !important; /* Espaço confortável sem exagero (70px-90px) */
+  }
+  
+  /* Wrapper do conteúdo fade-in */
+  .imoveis-page .imoveis-content-fade-in {
+    padding-top: 0 !important;
+  }
+  
+  /* Ajustar padding interno em telas menores */
+  @media (max-width: 768px) {
+    .imoveis-page .glass-warm.search-elevated.search-refined {
+      padding: 16px 20px !important;
+    }
+  }
+  
+  /* 2. MOLDURA/BORDAS NA BARRA DE PESQUISA - Finas e Elegantes */
+  .imoveis-page .glass-warm input[type="text"],
+  .imoveis-page .glass-warm input[type="number"],
+  .imoveis-page .glass-warm input,
+  .imoveis-page .search-elevated input {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: 1px solid #c89968 !important;
+    border-width: 1px !important;
+    border-radius: 4px !important;
+    color: #f5f5f5 !important;
+    transition: all 0.3s ease;
+  }
+  
+  /* Container do toggle Comprar/Alugar - Borda Dourada Fina */
+  .imoveis-page .glass-warm .flex.rounded-xl,
+  .imoveis-page .search-elevated .flex.rounded-xl,
+  .imoveis-page div.flex.rounded-xl.border {
+    border: 1px solid #c89968 !important;
+    border-width: 1px !important;
+    background-color: transparent !important;
+    background: transparent !important;
+    border-radius: 4px !important;
+  }
+  
+  /* Dropdown - Borda Dourada */
+  .imoveis-page .glass-warm button.w-full.h-12,
+  .imoveis-page .search-elevated button.w-full.h-12 {
+    background-color: transparent !important;
+    border: 1px solid #c89968 !important;
+    border-width: 1px !important;
+    border-radius: 4px !important;
+    color: #f5f5f5 !important;
+  }
+
+  .imoveis-page .glass-warm input::placeholder,
+  .imoveis-page .search-elevated input::placeholder {
+    color: rgba(245, 245, 245, 0.6) !important;
+  }
+
+  .imoveis-page .glass-warm input:focus,
+  .imoveis-page .search-elevated input:focus {
+    border-color: #c89968 !important;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(200, 153, 104, 0.2) !important;
+  }
+
+  /* Labels da barra de busca - BRANCO ou DOURADO, LEGÍVEIS */
+  .imoveis-page .glass-warm label,
+  .imoveis-page .search-elevated label,
+  .imoveis-page .glass-warm .space-y-3 label,
+  .imoveis-page .search-elevated .space-y-3 label,
+  .imoveis-page label[for="search-code"],
+  .imoveis-page label {
+    color: #ffffff !important; /* Branco para máxima legibilidade */
+    font-size: 0.9rem !important; /* 14.4px */
+    font-weight: 500 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Sobrescrever qualquer classe de cor nos labels */
+  .imoveis-page label[class*="text-"],
+  .imoveis-page .glass-warm label[class*="text-"],
+  .imoveis-page .search-elevated label[class*="text-"] {
+    color: #ffffff !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* Dropdown de tipo de imóvel - botão do dropdown */
+  .imoveis-page .glass-warm button[type="button"].w-full.h-12,
+  .imoveis-page .search-elevated button[type="button"].w-full.h-12 {
+    background-color: transparent !important;
+    border: 1px solid #c89968 !important;
+    color: #f5f5f5 !important;
+  }
+
+  /* Dropdown menu (opções) */
+  .imoveis-page .glass-warm div[class*="absolute"] button,
+  .imoveis-page .search-elevated div[class*="absolute"] button {
+    color: #3d2f28 !important;
+  }
+
+  /* 3. BOTÕES - Design Premium com gradiente */
+  
+  /* Botão BUSCAR - Gradiente dourado luxuoso */
+  .imoveis-page .glass-warm button.w-full.h-12:has(svg):not(.flex-1),
+  .imoveis-page .search-elevated button.w-full.h-12:has(svg):not(.flex-1),
+  .imoveis-page button:has(svg[data-lucide="search"]) {
+    background: linear-gradient(135deg, #c89968 0%, #d4a574 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    box-shadow: 0 4px 12px rgba(200, 153, 104, 0.35) !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .imoveis-page button:has(svg[data-lucide="search"]):hover {
+    background: linear-gradient(135deg, #d4a574 0%, #c89968 100%) !important;
+    box-shadow: 0 6px 16px rgba(200, 153, 104, 0.45) !important;
+    transform: translateY(-2px) !important;
+  }
+  
+  /* Botão VER DETALHES nos cards - Premium */
+  .imoveis-page .card-noble .btn-elegant,
+  .imoveis-page .card-noble button.btn-elegant,
+  .imoveis-page .card-noble button.w-full {
+    background: linear-gradient(135deg, #3d2f28 0%, #5a4a3f 100%) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 14px 24px !important;
+    box-shadow: 0 4px 12px rgba(61, 47, 40, 0.3) !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .imoveis-page .card-noble .btn-elegant:hover,
+  .imoveis-page .card-noble button.btn-elegant:hover,
+  .imoveis-page .card-noble button.w-full:hover {
+    background: linear-gradient(135deg, #2c211d 0%, #3d2f28 100%) !important;
+    box-shadow: 0 6px 16px rgba(61, 47, 40, 0.4) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  /* Toggle Comprar/Alugar - texto claro para não selecionado */
+  .imoveis-page .glass-warm button.flex-1.h-10,
+  .imoveis-page .search-elevated button.flex-1.h-10 {
+    color: #f5f5f5 !important;
+  }
+
+  /* Toggle Comprar/Alugar - ativo com fundo dourado */
+  .imoveis-page .glass-warm button.flex-1.bg-\\[\\#938666\\],
+  .imoveis-page .search-elevated button.flex-1.bg-\\[\\#938666\\] {
+    background-color: #c89968 !important;
+    color: #ffffff !important;
+  }
+  
+  /* Garantir que todos os botões toggle usem cor clara */
+  .imoveis-page .glass-warm button.flex-1:not(.bg-\\[\\#938666\\]),
+  .imoveis-page .search-elevated button.flex-1:not(.bg-\\[\\#938666\\]) {
+    color: #f5f5f5 !important;
+    background-color: transparent !important;
+  }
+
+  /* 3. CONTRASTE CRÍTICO NOS CARDS - Ícones e labels quase pretos (FORÇADO) */
+  
+  /* Ícones SVGs - TODOS os ícones dentro dos cards em Dark Brown */
+  .imoveis-page .card-noble .property-detail-icon,
+  .imoveis-page .card-noble .property-details-grid svg,
+  .imoveis-page .card-noble .property-details-grid .property-detail-icon,
+  .imoveis-page .card-noble .property-detail-item svg,
+  .imoveis-page .card-noble .property-detail-item .property-detail-icon {
+    color: #3d2f28 !important;
+    fill: #3d2f28 !important;
+    stroke: #3d2f28 !important;
+  }
+  
+  /* Força cor em TODOS os paths e elementos SVG dentro dos cards */
+  .imoveis-page .card-noble .property-details-grid svg path,
+  .imoveis-page .card-noble .property-details-grid svg *,
+  .imoveis-page .card-noble .property-detail-icon path,
+  .imoveis-page .card-noble .property-detail-icon * {
+    fill: #3d2f28 !important;
+    stroke: #3d2f28 !important;
+    color: #3d2f28 !important;
+  }
+
+  /* Labels pequenos "QUARTOS", "SUÍTES", "ÁREA" - Dark Brown com peso maior */
+  .imoveis-page .card-noble .property-detail-label,
+  .imoveis-page .card-noble .property-details-grid .property-detail-label,
+  .imoveis-page .card-noble .property-detail-item .property-detail-label,
+  .imoveis-page .card-noble .property-detail-item span.property-detail-label {
+    color: #3d2f28 !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Valores dos detalhes - Dark Brown forte */
+  .imoveis-page .card-noble .property-detail-value,
+  .imoveis-page .card-noble .property-details-grid .property-detail-value,
+  .imoveis-page .card-noble .property-detail-item .property-detail-value,
+  .imoveis-page .card-noble .property-detail-item span.property-detail-value {
+    color: #3d2f28 !important;
+    font-weight: 700 !important;
+  }
+
+  /* Título do imóvel - Tipografia premium */
+  .imoveis-page .card-noble .property-title,
+  .imoveis-page .card-noble h3.property-title,
+  .imoveis-page .card-noble h3.text-balance {
+    color: #2c211d !important; /* Quase preto para impacto */
+    font-weight: 700 !important;
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Preço - SERÁ SOBRESCRITO ABAIXO */
+
+  /* 4. ESPAÇAMENTO E PADDING DOS CARDS - Sem gaps entre imagem e conteúdo */
+  
+  /* Card principal - sem gaps */
+  .imoveis-page .card-noble {
+    padding: 0 !important; /* Sem padding no card principal */
+    gap: 0 !important; /* Sem gap entre elementos */
+  }
+  
+  /* Container de conteúdo - padding generoso em todos os lados */
+  .imoveis-page .card-noble .p-6,
+  .imoveis-page .card-noble [class*="CardContent"],
+  .imoveis-page .card-noble > div:last-child {
+    padding: 24px !important; /* Padding igual em todos os lados */
+    padding-bottom: 28px !important; /* Padding inferior extra */
+    margin: 0 !important;
+    background: #ffffff !important; /* Fundo branco para consistência */
+    border: none !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: auto !important; /* Remove altura mínima fixa */
+    overflow: visible !important;
+    border-radius: 0 0 20px 20px !important;
+  }
+  
+  /* Eliminar gaps entre imagem e conteúdo */
+  .imoveis-page .card-noble > div.relative.overflow-hidden {
+    margin-bottom: 0 !important;
+  }
+  
+  .imoveis-page .card-noble .relative.overflow-hidden + * {
+    margin-top: 0 !important;
+  }
+  
+  /* Garantir que o último elemento (botão) tenha espaço e seja visível */
+  .imoveis-page .card-noble .mt-auto,
+  .imoveis-page .card-noble > div:last-child > div:last-child {
+    margin-top: auto !important;
+    padding-top: 20px !important;
+    padding-bottom: 8px !important; /* Espaço extra abaixo do botão */
+  }
+  
+  /* Botão VER DETALHES - dentro do card, sem ultrapassar */
+  .imoveis-page .card-noble button.w-full,
+  .imoveis-page .card-noble .btn-elegant,
+  .imoveis-page .card-noble button {
+    margin: 0 !important;
+    margin-top: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    position: relative !important; /* Não absolute */
+  }
+  
+  /* Container do botão - margin-top auto para empurrar para baixo */
+  .imoveis-page .card-noble .mt-auto {
+    margin-top: auto !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+  
+  /* Espaçamento entre elementos do card */
+  .imoveis-page .card-noble h3 {
+    margin-bottom: 12px !important;
+    margin-top: 0 !important;
+  }
+  
+  .imoveis-page .card-noble .property-location {
+    margin-bottom: 20px !important;
+  }
+  
+  .imoveis-page .card-noble .property-details-grid {
+    margin: 24px 0 !important;
+  }
+
+  /* 4. CARDS PREMIUM - Design Sofisticado e Elegante */
+  .imoveis-page .card-noble,
+  .imoveis-page .overflow-hidden.card-noble,
+  .imoveis-page article.card-noble,
+  .imoveis-page div.card-noble,
+  .imoveis-page [class*="card-noble"],
+  .imoveis-page .grid > .overflow-hidden {
+    background: #ffffff !important;
+    box-shadow: 
+      0 20px 40px -10px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(200, 153, 104, 0.1) !important;
+    border: none !important;
+    border-radius: 20px !important;
+    overflow: hidden !important; /* Hidden para manter border-radius */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    will-change: transform, box-shadow;
+    padding: 0 !important;
+    gap: 0 !important;
+    height: auto !important;
+    min-height: fit-content !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .imoveis-page .card-noble:hover,
+  .imoveis-page .overflow-hidden.card-noble:hover,
+  .imoveis-page [class*="card-noble"]:hover {
+    box-shadow: 
+      0 30px 60px -10px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(200, 153, 104, 0.3),
+      0 0 40px rgba(200, 153, 104, 0.15) !important; /* Brilho dourado sutil */
+    transform: translateY(-10px) !important;
+  }
+
+  /* Título e textos principais dos cards - Dark Brown FORÇADO */
+  .imoveis-page .card-noble .text-slate-900,
+  .imoveis-page .card-noble h3,
+  .imoveis-page .card-noble h3.property-title {
+    color: #3d2f28 !important;
+  }
+
+  /* Location - Estilo sofisticado */
+  .imoveis-page .property-location {
+    display: flex !important;
+    align-items: center !important;
+    padding: 10px 0 !important;
+    margin-bottom: 20px !important;
+    border-bottom: 1px solid rgba(200, 153, 104, 0.15) !important;
+  }
+  
+  .imoveis-page .property-location svg,
+  .imoveis-page .property-location svg.text-amber-500,
+  .imoveis-page .card-noble svg[class*="MapPin"] {
+    color: #c89968 !important; /* Ícone dourado */
+    fill: #c89968 !important;
+    stroke: #c89968 !important;
+    width: 18px !important;
+    height: 18px !important;
+    margin-right: 8px !important;
+  }
+
+  .imoveis-page .property-location span {
+    color: #6b5e52 !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+  }
+  
+  /* Forçar contraste nos ícones de detalhes - seletores mais específicos */
+  .imoveis-page .card-noble .property-detail-item svg,
+  .imoveis-page .card-noble .property-detail-item path,
+  .imoveis-page .card-noble .property-details-grid svg,
+  .imoveis-page .card-noble .property-details-grid path {
+    color: #3d2f28 !important;
+    fill: #3d2f28 !important;
+    stroke: #3d2f28 !important;
+  }
+  
+  /* Forçar contraste nos labels de detalhes */
+  .imoveis-page .card-noble .property-detail-item .property-detail-label,
+  .imoveis-page .card-noble .property-details-grid .property-detail-label {
+    color: #3d2f28 !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Forçar contraste nos valores */
+  .imoveis-page .card-noble .property-detail-item .property-detail-value {
+    color: #3d2f28 !important;
+    font-weight: 700 !important;
+  }
+  
+  /* FORÇA ABSOLUTA - Todos os SVGs dentro dos cards em Dark Brown */
+  .imoveis-page .card-noble .property-details-grid svg,
+  .imoveis-page .card-noble .property-detail-item svg,
+  .imoveis-page .card-noble svg.property-detail-icon,
+  .imoveis-page .card-noble svg[data-lucide],
+  .imoveis-page .card-noble svg[class*="lucide"],
+  .imoveis-page .card-noble .property-details-grid svg *,
+  .imoveis-page .card-noble .property-detail-item svg * {
+    color: #3d2f28 !important;
+    fill: #3d2f28 !important;
+    stroke: #3d2f28 !important;
+  }
+  
+  /* Sobrescrever qualquer cor inline ou classe nos ícones */
+  .imoveis-page .card-noble .property-details-grid svg[style*="color"],
+  .imoveis-page .card-noble .property-detail-item svg[style*="color"] {
+    color: #3d2f28 !important;
+    fill: #3d2f28 !important;
+    stroke: #3d2f28 !important;
+  }
+  
+  /* 1. CONTRASTE CRÍTICO NOS CARDS - MÁXIMO (QUASE PRETO) */
+  
+  /* Ícones SVG - Design refinado com tamanho maior */
+  .imoveis-page .property-detail-icon {
+    color: #c89968 !important; /* Dourado para os ícones */
+    fill: #c89968 !important;
+    stroke: currentColor !important;
+    width: 24px !important;
+    height: 24px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  /* Labels pequenos - Tipografia refinada */
+  .imoveis-page .property-detail-label {
+    color: #6b5e52 !important; /* Marrom médio para não competir */
+    font-weight: 500 !important;
+    text-transform: uppercase;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.08em !important;
+    margin-top: 4px !important;
+  }
+  
+  /* Valores - Destaque em negrito escuro */
+  .imoveis-page .property-detail-value {
+    color: #2c211d !important; /* Quase preto */
+    font-weight: 700 !important;
+    font-size: 1.125rem !important; /* Maior */
+  }
+  
+  /* Título do imóvel - PRETO FORTE */
+  .imoveis-page .property-title {
+    color: #3d2f28 !important;
+    font-weight: 700 !important;
+  }
+  
+  /* Preço - SERÁ SOBRESCRITO ABAIXO com Dourado para destaque */
+  
+  /* Forçar todos os textos dentro de property-details-grid */
+  .imoveis-page .card-noble .property-details-grid *,
+  .imoveis-page .card-noble .property-detail-item * {
+    color: #3d2f28 !important;
+  }
+  
+  /* REGRA AGRESSIVA FINAL - Forçar cor em TODOS os elementos dos cards */
+  .imoveis-page .card-noble .property-details-grid .property-detail-item svg,
+  .imoveis-page .card-noble .property-details-grid .property-detail-item span,
+  .imoveis-page .card-noble .property-details-grid .property-detail-item .property-detail-icon,
+  .imoveis-page .card-noble .property-details-grid .property-detail-item .property-detail-value,
+  .imoveis-page .card-noble .property-details-grid .property-detail-item .property-detail-label {
+    color: #3d2f28 !important;
+  }
+  
+  /* Forçar fill e stroke em TODOS os SVGs dentro de property-details-grid */
+  .imoveis-page .card-noble .property-details-grid svg,
+  .imoveis-page .card-noble .property-details-grid svg path,
+  .imoveis-page .card-noble .property-details-grid svg line,
+  .imoveis-page .card-noble .property-details-grid svg rect,
+  .imoveis-page .card-noble .property-detail-item svg,
+  .imoveis-page .card-noble .property-detail-item svg path {
+    fill: none !important;
+    stroke: #c89968 !important; /* Ícones dourados */
+    color: #c89968 !important;
+    stroke-width: 2 !important;
+  }
+  
+  /* Forçar SVGs que usam fill ao invés de stroke */
+  .imoveis-page .card-noble .property-details-grid svg[fill],
+  .imoveis-page .card-noble .property-detail-item svg[fill] {
+    fill: #c89968 !important;
+  }
+  
+  /* Efeito hover nos ícones */
+  .imoveis-page .card-noble:hover .property-detail-icon {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+  }
+  
+  /* Exceto ícones de ação (heart, eye) que ficam na imagem */
+  .imoveis-page .card-noble .absolute svg,
+  .imoveis-page .card-noble button:not(.btn-elegant) svg {
+    fill: inherit !important;
+    stroke: inherit !important;
+    color: inherit !important;
+  }
+
+  /* 2. GLASSMORPHISM NO HEADER - Efeito luxo premium */
+  .imoveis-page header,
+  .imoveis-page > div > div.fixed.top-0,
+  .imoveis-page div.fixed.top-0.left-0.right-0 {
+    position: fixed !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important;
+    background-color: rgba(61, 47, 40, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(200, 153, 104, 0.2) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  /* Forçar glassmorphism em desktop (lg: breakpoint) */
+  @media (min-width: 1024px) {
+    .imoveis-page div.fixed.top-0 {
+      background-color: rgba(61, 47, 40, 0.75) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+    }
+  }
+  
+  /* REFINAMENTO VISUAL DOS CARDS - Detalhes Premium */
+  
+  /* Badges (VENDA/ALUGUEL) - Luxuosos com gradiente */
+  .imoveis-page .property-badge,
+  .imoveis-page .card-noble .property-badge {
+    background: linear-gradient(135deg, #c89968 0%, #d4a574 100%) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.1em !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(200, 153, 104, 0.4) !important;
+    padding: 8px 16px !important;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  }
+  
+  /* Badge de código - minimalista elegante */
+  .imoveis-page .card-noble .absolute.top-4.right-4 {
+    background-color: rgba(61, 47, 40, 0.85) !important;
+    backdrop-filter: blur(8px) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    padding: 6px 10px !important;
+    font-size: 0.7rem !important;
+  }
+  
+  /* Área de detalhes - Design premium com fundo sutil */
+  .imoveis-page .property-details-grid {
+    background: linear-gradient(to bottom, rgba(200, 153, 104, 0.04), rgba(200, 153, 104, 0.08)) !important;
+    border: 1px solid rgba(200, 153, 104, 0.15) !important;
+    border-radius: 12px !important;
+    padding: 20px 16px !important;
+    margin: 24px 0 !important;
+  }
+  
+  .imoveis-page .property-detail-item {
+    border-right: 1px solid rgba(200, 153, 104, 0.2) !important;
+    padding: 0 12px !important;
+  }
+  
+  .imoveis-page .property-detail-item:last-child {
+    border-right: none !important;
+  }
+  
+  .imoveis-page .property-detail-item:first-child {
+    padding-left: 0 !important;
+  }
+  
+  /* PREÇO - Destaque máximo com gradiente dourado */
+  .imoveis-page .property-price,
+  .imoveis-page .card-noble .property-price,
+  .imoveis-page .card-noble div.property-price {
+    background: linear-gradient(135deg, #c89968 0%, #d4a574 100%);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    font-size: 2.25rem !important; /* Maior e mais impactante */
+    font-weight: 800 !important;
+    margin: 20px 0 16px 0 !important;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  
+  /* Container da imagem - ALTURA FIXA PADRONIZADA */
+  .imoveis-page .card-noble .relative.overflow-hidden,
+  .imoveis-page .card-noble > div.relative.overflow-hidden,
+  .imoveis-page .card-noble > div:first-child {
+    position: relative !important;
+    width: 100% !important;
+    height: 280px !important; /* ALTURA FIXA para padronização */
+    min-height: 280px !important;
+    max-height: 280px !important;
+    overflow: hidden !important; /* Overflow hidden APENAS no container da imagem */
+    border-radius: 20px 20px 0 0 !important;
+    z-index: 1 !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important; /* Não encolhe em flex layouts */
+  }
+  
+  /* Imagem - PREENCHE o container de 280px sem distorcer */
+  .imoveis-page .card-noble .relative.overflow-hidden img,
+  .imoveis-page .card-noble img.w-full,
+  .imoveis-page .card-noble > div:first-child img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important; /* Preenche os 280px do container */
+    object-fit: cover !important; /* Corta proporcionalmente sem distorcer */
+    object-position: center !important; /* Foco central da imagem */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    vertical-align: bottom !important;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    will-change: transform;
+  }
+  
+  .imoveis-page .card-noble:hover .relative.overflow-hidden img,
+  .imoveis-page .card-noble:hover img.w-full {
+    transform: scale(1.08) !important;
+    filter: brightness(1.05) !important;
+  }
+  
+  /* REMOVER TODOS os overlays que criam barras */
+  .imoveis-page .card-noble .absolute.inset-0,
+  .imoveis-page .card-noble div.absolute.inset-0 {
+    display: none !important;
+  }
+  
+  /* VIGNETTE LUXURY - Escurecimento SUAVE e TRANSPARENTE na base da foto */
+  .imoveis-page .card-noble .relative.overflow-hidden::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 50% !important; /* Metade inferior */
+    background: linear-gradient(to bottom, 
+      transparent 0%, 
+      rgba(61, 47, 40, 0.9) 100%) !important; /* Transparente → marrom escuro 90% */
+    pointer-events: none !important;
+    z-index: 2 !important;
+  }
+  
+  /* Badges ficam ACIMA do vignette */
+  .imoveis-page .card-noble .property-badge,
+  .imoveis-page .card-noble .absolute.top-4,
+  .imoveis-page .card-noble .absolute.top-14,
+  .imoveis-page .card-noble button {
+    position: absolute !important;
+    z-index: 10 !important;
+  }
+
+  /* TOQUES FINAIS DE LUXO NOS CARDS */
+  
+  /* Remover botão "Ver mais" que aparece sobre a imagem */
+  .imoveis-page .card-noble button.view-more-button,
+  .imoveis-page .card-noble .view-more-button {
+    display: none !important;
+  }
+  
+  /* Linha decorativa sutil acima do preço */
+  .imoveis-page .card-noble .mt-auto::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #c89968, transparent);
+    margin-bottom: 16px;
+  }
+  
+  /* Efeito de brilho sutil ao passar o mouse */
+  .imoveis-page .card-noble::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+    pointer-events: none;
+    z-index: 5;
+  }
+  
+  .imoveis-page .card-noble:hover::after {
+    left: 150%;
+  }
+  
+  /* Melhorar tipografia geral dos cards */
+  .imoveis-page .card-noble * {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  }
+  
+  /* Suavizar cantos da imagem */
+  .imoveis-page .card-noble img {
+    border-radius: 20px 20px 0 0 !important;
+  }
+
   /* Header compact on scroll */
   .header-compact { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); box-shadow: 0 6px 18px rgba(0,0,0,.15); }
 
