@@ -1,0 +1,155 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Paleta da home: marrom escuro + dourado */
+  --background: #342924;
+  --foreground: #a2a2a2;
+  --card: #332823;
+  --card-foreground: #a2a2a2;
+  --popover: #332823;
+  --popover-foreground: #a2a2a2;
+  --primary: #c89c69;
+  --primary-foreground: #1d2325;
+  --secondary: #352a25;
+  --secondary-foreground: #a2a2a2;
+  --muted: #352a25;
+  --muted-foreground: #a2a2a2;
+  --accent: #3a2e27;
+  --accent-foreground: #a2a2a2;
+  --destructive: #8a1c1c;
+  --destructive-foreground: #ffffff;
+  --border: #3a2e27;
+  --input: #3a2e27;
+  --ring: #c79b68;
+  --chart-1: #c89c69;
+  --chart-2: #a2a2a2;
+  --chart-3: #352a25;
+  --chart-4: #3a2e27;
+  --chart-5: #332823;
+  --radius: 0.625rem;
+  --sidebar: #342924;
+  --sidebar-foreground: #a2a2a2;
+  --sidebar-primary: #c89c69;
+  --sidebar-primary-foreground: #1d2325;
+  --sidebar-accent: #352a25;
+  --sidebar-accent-foreground: #a2a2a2;
+  --sidebar-border: #3a2e27;
+  --sidebar-ring: #c79b68;
+}
+
+.dark {
+  /* Mantém mesma paleta em modo escuro para consistência */
+  --background: #1f1713;
+  --foreground: #f5f5f5;
+  --card: #0f0f0f;
+  --card-foreground: #f5f5f5;
+  --popover: #0f0f0f;
+  --popover-foreground: #f5f5f5;
+  --primary: #f0d4b4;
+  --primary-foreground: #231812;
+  --secondary: #2b201a;
+  --secondary-foreground: #f5f5f5;
+  --muted: #2b201a;
+  --muted-foreground: #b8b8b8;
+  --accent: #2b201a;
+  --accent-foreground: #f5f5f5;
+  --destructive: #8a1c1c;
+  --destructive-foreground: #ffffff;
+  --border: #3a2a22;
+  --input: #3a2a22;
+  --ring: #f0d4b4;
+  --chart-1: #e5a93d;
+  --chart-2: #9c6e3e;
+  --chart-3: #5d3c24;
+  --chart-4: #f0c97a;
+  --chart-5: #6e533f;
+  --sidebar: #1f1713;
+  --sidebar-foreground: #f5f5f5;
+  --sidebar-primary: #f0d4b4;
+  --sidebar-primary-foreground: #231812;
+  --sidebar-accent: #2b201a;
+  --sidebar-accent-foreground: #f5f5f5;
+  --sidebar-border: #3a2a22;
+  --sidebar-ring: #e5a93d;
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Utilitário: esconder scrollbar horizontal nas miniaturas da galeria */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Garantir que o cursor fique visível na rota de detalhes,
+   mesmo que outros temas ocultem o ponteiro globalmente */
+.detalhes-route, .detalhes-route * {
+  cursor: auto !important;
+}
+
+/* Força a paleta específica apenas dentro da rota de detalhes,
+   garantindo que as variáveis prevaleçam sobre as globais da home */
+.detalhes-route {
+  /* Mantém a paleta global do site; apenas suaviza o fundo da página de detalhes */
+  background-color: var(--background);
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0) 18%, rgba(0,0,0,0) 82%, rgba(0,0,0,0.1)),
+    radial-gradient(120% 60% at 50% -10%, rgba(200,156,105,0.04) 0%, rgba(0,0,0,0) 60%),
+    radial-gradient(140% 70% at 40% 110%, rgba(200,156,105,0.03) 0%, rgba(0,0,0,0) 60%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0) 0 96px, rgba(200,156,105,0.028) 96px 97px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0) 0 96px, rgba(200,156,105,0.028) 96px 97px);
+  background-blend-mode: normal;
+  background-attachment: fixed;
+}

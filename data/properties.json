@@ -1,0 +1,114 @@
+[
+  {
+    "id": "1",
+    "slug": "casa-luxo-jockey-park",
+    "status": "Venda",
+    "type": "Casa em condomínio",
+    "title": "Casa de luxo no Jockey Park",
+    "code": "DON001",
+    "address": {
+      "street": "Rua das Palmeiras",
+      "number": "123",
+      "neighborhood": "Jockey Park",
+      "city": "Uberaba",
+      "state": "MG"
+    },
+    "areaPrivativa": 350,
+    "areaTotal": 500,
+    "bedrooms": 4,
+    "suites": 3,
+    "bathrooms": 5,
+    "parking": 3,
+    "priceSale": 1850000,
+    "condoFee": 850,
+    "iptu": 420,
+    "description": "Magnífica casa em condomínio fechado, com acabamentos de primeira linha e área de lazer completa.",
+    "amenities": ["Piscina", "Churrasqueira", "Varanda gourmet", "Jardim", "Portaria 24h"],
+    "media": [
+      { "url": "/placeholder.svg?height=400&width=600", "alt": "Fachada da casa" },
+      { "url": "/placeholder.svg?height=400&width=600", "alt": "Sala de estar" },
+      { "url": "/placeholder.svg?height=400&width=600", "alt": "Cozinha gourmet" }
+    ],
+    "isFeatured": true
+  },
+  {
+    "id": "2",
+    "slug": "apartamento-centro-uberaba",
+    "status": "Aluguel",
+    "type": "Apartamento",
+    "title": "Apartamento moderno no Centro",
+    "code": "DON002",
+    "address": {
+      "street": "Avenida Leopoldino de Oliveira",
+      "number": "456",
+      "neighborhood": "Centro",
+      "city": "Uberaba",
+      "state": "MG"
+    },
+    "areaPrivativa": 85,
+    "bedrooms": 2,
+    "suites": 1,
+    "bathrooms": 2,
+    "parking": 1,
+    "priceRent": 2200,
+    "condoFee": 320,
+    "iptu": 180,
+    "description": "Apartamento completamente reformado no coração da cidade, próximo a comércios e serviços.",
+    "amenities": ["Elevador", "Portaria 24h"],
+    "media": [
+      { "url": "/placeholder.svg?height=400&width=600", "alt": "Fachada do prédio" },
+      { "url": "/placeholder.svg?height=400&width=600", "alt": "Sala de estar" }
+    ],
+    "isFeatured": false
+  },
+  {
+    "id": "3",
+    "slug": "casa-jardim-europa",
+    "status": "Venda",
+    "type": "Casa",
+    "title": "Casa familiar no Jardim Europa",
+    "code": "DON003",
+    "address": {
+      "street": "Rua dos Ipês",
+      "number": "789",
+      "neighborhood": "Jardim Europa",
+      "city": "Uberaba",
+      "state": "MG"
+    },
+    "areaPrivativa": 180,
+    "areaTotal": 300,
+    "bedrooms": 3,
+    "suites": 1,
+    "bathrooms": 3,
+    "parking": 2,
+    "priceSale": 650000,
+    "iptu": 280,
+    "description": "Casa espaçosa em bairro residencial tranquilo, ideal para famílias.",
+    "amenities": ["Churrasqueira", "Jardim"],
+    "media": [
+      { "url": "/placeholder.svg?height=400&width=600", "alt": "Fachada da casa" },
+      { "url": "/placeholder.svg?height=400&width=600", "alt": "Quintal" }
+    ],
+    "isFeatured": true
+  },
+  {
+    "id": "4",
+    "slug": "terreno-residencial-2000",
+    "status": "Venda",
+    "type": "Terreno em condomínio",
+    "title": "Terreno no Residencial 2000",
+    "code": "DON004",
+    "address": {
+      "street": "Rua das Acácias",
+      "neighborhood": "Residencial 2000",
+      "city": "Uberaba",
+      "state": "MG"
+    },
+    "areaTotal": 450,
+    "priceSale": 280000,
+    "description": "Excelente terreno em condomínio fechado, pronto para construir.",
+    "amenities": ["Portaria 24h", "Área verde"],
+    "media": [{ "url": "/placeholder.svg?height=400&width=600", "alt": "Terreno" }],
+    "isFeatured": false
+  }
+]
