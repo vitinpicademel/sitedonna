@@ -83,11 +83,13 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Vídeo desativado temporariamente para troca - mantendo fade-in */}
         <IntroLoader 
-          videoSrc="/SITE.mp4" 
+          minDurationMs={800}
           hideUi={true}
-          waitVideoEnd={true}
+          waitVideoEnd={false}
           oncePerSession={false}
+          hideOnEvent="launches-ready"
         />
         <Script id="gtm-base" strategy="afterInteractive">
           {`(function(w,d,s,l,i){try{w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -105,7 +107,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         <RevealProvider />
-        <Suspense fallback={null}>{children}</Suspense>
+        <div className="page-fade-in">
+          <Suspense fallback={null}>{children}</Suspense>
+        </div>
         <Analytics />
       </body>
     </html>
