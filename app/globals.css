@@ -1068,14 +1068,20 @@
 
   /* Toggle Comprar/Alugar - ativo com fundo dourado */
   .imoveis-page .glass-warm button.flex-1.bg-\\[\\#938666\\],
-  .imoveis-page .search-elevated button.flex-1.bg-\\[\\#938666\\] {
+  .imoveis-page .search-elevated button.flex-1.bg-\\[\\#938666\\],
+  .imoveis-page .glass-warm button.flex-1.bg-\\[\\#c89968\\],
+  .imoveis-page .search-elevated button.flex-1.bg-\\[\\#c89968\\],
+  .imoveis-page button.flex-1.bg-\\[\\#c89968\\] {
     background-color: #c89968 !important;
+    background: linear-gradient(135deg, #c89968 0%, #d4a574 100%) !important;
     color: #ffffff !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(200, 153, 104, 0.3) !important;
   }
   
-  /* Garantir que todos os botões toggle usem cor clara */
-  .imoveis-page .glass-warm button.flex-1:not(.bg-\\[\\#938666\\]),
-  .imoveis-page .search-elevated button.flex-1:not(.bg-\\[\\#938666\\]) {
+  /* Garantir que todos os botões toggle usem cor clara quando não selecionados */
+  .imoveis-page .glass-warm button.flex-1:not(.bg-\\[\\#938666\\]):not(.bg-\\[\\#c89968\\]),
+  .imoveis-page .search-elevated button.flex-1:not(.bg-\\[\\#938666\\]):not(.bg-\\[\\#c89968\\]) {
     color: #f5f5f5 !important;
     background-color: transparent !important;
   }

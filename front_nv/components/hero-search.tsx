@@ -75,7 +75,7 @@ export function HeroSearch({
                     }}
                     className={`flex-1 h-10 text-sm rounded-lg font-medium transition-all duration-200 ${
                       purpose === "comprar"
-                        ? "bg-[#938666] text-white shadow-sm"
+                        ? "bg-[#c89968] text-white shadow-sm"
                         : "bg-transparent text-[#3A3A3A] hover:bg-white/60"
                     }`}
                   >
@@ -89,7 +89,7 @@ export function HeroSearch({
                     }}
                     className={`flex-1 h-10 text-sm rounded-lg font-medium transition-all duration-200 ${
                       purpose === "alugar"
-                        ? "bg-[#938666] text-white shadow-sm"
+                        ? "bg-[#c89968] text-white shadow-sm"
                         : "bg-transparent text-[#3A3A3A] hover:bg-white/60"
                     }`}
                   >
