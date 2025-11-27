@@ -14,6 +14,7 @@ import { Button } from "@nv/components/ui/button"
 import { formatCurrency } from "@/lib/utils/currency"
 import { PageLoader } from "@/components/ui/page-loader"
 import { useRef } from "react"
+import Image from "next/image"
 
 type CardData = {
   id: string
@@ -214,7 +215,8 @@ export default function PropertiesPage() {
   const [apiPage, setApiPage] = useState<number>(0)
   const [apiTotal, setApiTotal] = useState<number | null>(null)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
-  const [isBootLoading, setIsBootLoading] = useState(true) // Ativa loader ao carregar a página
+  const [isBootLoading, setIsBootLoading] = useState(true) // Loader global (overlay)
+  const [isResultsLoading, setIsResultsLoading] = useState(true) // Loader da LISTA de imóveis (UX de busca)
   const [notification, setNotification] = useState<{ message: string; type: 'error' | 'success' } | null>(null)
   const sentReadyRef = useRef(false)
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -386,33 +388,38 @@ export default function PropertiesPage() {
     if (!hasActive) {
       // Usuário clicou em buscar sem filtros: recarrega listagem padrão
       if (searchNonce === 0) return
-    let cancelled = false
-    async function loadDefault() {
-      try {
-        // Loader já está ativo quando usuário clica em buscar
-        const perPage = 20
-        const page = 1
-        const { list, total } = await fetchImoview({ page, perPage })
-        const mapped = list.map((dto) => mapImoviewToProperty(dto)) as unknown as Property[]
-        if (!cancelled) {
-          setCards(mapped.map(mapPropertyToCardData))
-          setApiPage(1)
-          if (typeof total === "number") setApiTotal(total)
+      let cancelled = false
+      async function loadDefault() {
+        try {
+          // Inicia estado de carregamento de resultados
+          setIsResultsLoading(true)
+          const perPage = 20
+          const page = 1
+          const { list, total } = await fetchImoview({ page, perPage })
+          const mapped = list.map((dto) => mapImoviewToProperty(dto)) as unknown as Property[]
+          if (!cancelled) {
+            setCards(mapped.map(mapPropertyToCardData))
+            setApiPage(1)
+            if (typeof total === "number") setApiTotal(total)
+          }
+        } catch (e) {
+          console.log('Erro ao carregar:', e)
+        } finally {
+          // Esconde loader quando busca terminar
+          if (!cancelled) {
+            setIsBootLoading(false)
+            setIsResultsLoading(false)
+          }
         }
-      } catch (e) {
-        console.log('Erro ao carregar:', e)
-      } finally {
-        // Esconde loader quando busca terminar
-        if (!cancelled) setIsBootLoading(false)
       }
-    }
       loadDefault()
       return () => { cancelled = true }
     }
     let cancelled = false
     async function fetchAllForFilters() {
       try {
-        // Loader já está ativo quando usuário clica em buscar
+        // Inicia estado de carregamento de resultados
+        setIsResultsLoading(true)
         const perPage = 20
         let page = 1
         let total = Infinity
@@ -458,6 +465,7 @@ export default function PropertiesPage() {
             searchTimeoutRef.current = null
           }
           setIsBootLoading(false)
+          setIsResultsLoading(false)
           // Remove blur quando loader sumir
           requestAnimationFrame(() => {
             const allElements = document.querySelectorAll('.imoveis-page *')
@@ -491,7 +499,8 @@ export default function PropertiesPage() {
     let cancelled = false
     async function fetchByCode() {
       try {
-        // Loader já está ativo quando usuário clica em buscar
+        // Inicia estado de carregamento de resultados
+        setIsResultsLoading(true)
         const dto = await fetchImoviewByCode(code)
         if (cancelled) return
         if (dto) {
@@ -542,6 +551,7 @@ export default function PropertiesPage() {
             searchTimeoutRef.current = null
           }
           setIsBootLoading(false)
+          setIsResultsLoading(false)
           // Remove blur quando loader sumir
           requestAnimationFrame(() => {
             const allElements = document.querySelectorAll('.imoveis-page *')
@@ -732,6 +742,7 @@ export default function PropertiesPage() {
     }
     
     // Ativa loader ao clicar em buscar
+    setIsResultsLoading(true)
     setIsBootLoading(true)
     setCodeFilter(codeTrimmed)
     setPurpose(values.purpose)
@@ -799,20 +810,65 @@ export default function PropertiesPage() {
 
         <main className="container mx-auto px-4 py-12" id="property-results">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
-          {sortedCards.map((p) => (
-            <NvPropertyCard key={p.id} {...p} code={p.code} />
-                    ))}
-                  </div>
-
-        {(apiTotal === null || cards.length < apiTotal) && (
-          <div className="flex justify-center">
-            <Button onClick={loadMoreFromApi} disabled={isLoadingMore} className="h-12 px-6 btn-elegant">
-              {isLoadingMore ? "Carregando..." : "Carregar mais imóveis"}
-                </Button>
+          {/* ESTADO 1: Carregando resultados da API */}
+          {isResultsLoading && (
+            <div className="flex flex-col items-center justify-center py-24">
+              {/* Container do ícone girando com logo */}
+              <div className="relative">
+                <div className="h-24 w-24 rounded-full border-4 border-[#c89968]/40 border-t-[#c89968] animate-spin" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Image 
+                    src="/logoprincipal.png" 
+                    alt="Donna Imobiliária" 
+                    width={56} 
+                    height={56} 
+                    className="opacity-90" 
+                  />
+                </div>
               </div>
-            )}
-      </main>
+              {/* Texto abaixo do ícone com espaçamento */}
+              <p className="text-sm font-medium text-white/90 mt-6">Carregando imóveis...</p>
+            </div>
+          )}
+
+          {/* ESTADO 2: Resultados encontrados */}
+          {!isResultsLoading && sortedCards.length > 0 && (
+            <>
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
+                {sortedCards.map((p) => (
+                  <NvPropertyCard key={p.id} {...p} code={p.code} />
+                ))}
+              </div>
+
+              {(apiTotal === null || cards.length < apiTotal) && (
+                <div className="flex justify-center">
+                  <Button
+                    onClick={loadMoreFromApi}
+                    disabled={isLoadingMore}
+                    className="h-12 px-6 btn-elegant"
+                  >
+                    {isLoadingMore ? "Carregando..." : "Carregar mais imóveis"}
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* ESTADO 3: Nenhum imóvel encontrado */}
+          {!isResultsLoading && sortedCards.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
+              <div className="h-16 w-16 rounded-full border border-[#c89968]/50 flex items-center justify-center">
+                <span className="text-2xl">🔍</span>
+              </div>
+              <h2 className="text-xl font-semibold text-white">
+                Nenhum imóvel encontrado
+              </h2>
+              <p className="max-w-md text-sm text-white/80">
+                Nenhum imóvel corresponde aos filtros selecionados. Ajuste os campos de busca ou tente uma nova combinação.
+              </p>
+            </div>
+          )}
+        </main>
 
         <Footer />
         <WhatsAppButton />

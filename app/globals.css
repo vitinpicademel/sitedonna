@@ -810,8 +810,25 @@
   /* PageLoader visível quando data-loading="true" */
   .imoveis-page[data-loading="true"] .fixed.inset-0.z-\\[9999\\] {
     display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     opacity: 1 !important;
     visibility: visible !important;
+  }
+  
+  /* Garantir layout vertical do loader com ícone e texto */
+  .fixed.inset-0.z-\\[9999\\] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Espaçamento entre ícone e texto do loader */
+  .fixed.inset-0.z-\\[9999\\] p {
+    margin-top: 1.5rem !important; /* 24px */
+    margin-bottom: 0 !important;
   }
 
   /* Fade-in suave para conteúdo da página de imóveis após loader */
