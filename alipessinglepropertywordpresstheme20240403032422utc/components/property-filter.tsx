@@ -162,6 +162,7 @@ export default function PropertyFilter() {
   // Estados para autocomplete de cada campo
   const [bairroSuggestions, setBairroSuggestions] = useState<string[]>([])
   const [showBairroSuggestions, setShowBairroSuggestions] = useState(false)
+  const [isLoadingBairros, setIsLoadingBairros] = useState(false)
   const [codigoSuggestions, setCodigoSuggestions] = useState<string[]>([])
   const [showCodigoSuggestions, setShowCodigoSuggestions] = useState(false)
   
@@ -169,27 +170,277 @@ export default function PropertyFilter() {
   const codigoInputRef = useRef<HTMLInputElement>(null)
   const bairroSuggestionsRef = useRef<HTMLDivElement>(null)
   const codigoSuggestionsRef = useRef<HTMLDivElement>(null)
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
   
-  // Carrega TODAS as opções do CRM ao montar
+  // Função de debounce para busca de bairros
+  const debounceSearchBairros = (query: string) => {
+    console.log('🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵')
+    console.log('🔵 FUNÇÃO DEBOUNCESEARCHBAIRROS FOI CHAMADA 🔵')
+    console.log('🔵 Query recebida:', query)
+    console.log('🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵')
+    console.log("[DEBUG] debounceSearchBairros chamada com query:", query)
+    
+    // Cancela requisição anterior se existir
+    if (abortControllerRef.current) {
+      console.log("[DEBUG] Cancelando requisição anterior")
+      abortControllerRef.current.abort()
+    }
+
+    // Limpa timer anterior
+    if (debounceTimerRef.current) {
+      console.log("[DEBUG] Limpando timer anterior")
+      clearTimeout(debounceTimerRef.current)
+    }
+
+    // Se query estiver vazia, limpa sugestões
+    if (!query.trim()) {
+      console.log("[DEBUG] Query vazia, limpando sugestões")
+      setBairroSuggestions([])
+      setShowBairroSuggestions(false)
+      setIsLoadingBairros(false)
+      return
+    }
+
+    // Configura loading state
+    console.log("[DEBUG] Configurando loading state como true")
+    setIsLoadingBairros(true)
+
+    // Cria novo timer de debounce (500ms)
+    console.log("[DEBUG] Criando timer de debounce de 500ms")
+    debounceTimerRef.current = setTimeout(async () => {
+      try {
+        console.log("[DEBUG] Timer executado, iniciando busca para query:", query)
+        
+        // Cria novo AbortController para esta requisição
+        const controller = new AbortController()
+        abortControllerRef.current = controller
+
+        const apiUrl = `/api/bairros/search?q=${encodeURIComponent(query)}&limit=10`
+        console.log('🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢')
+        console.log('🟢 INICIANDO FETCH DE BAIRROS 🟢')
+        console.log('🟢 URL:', apiUrl)
+        console.log('🟢 Signal abortado?', controller.signal.aborted)
+        console.log('🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢')
+        console.log("[DEBUG] Chamando API de bairros:", apiUrl)
+        
+        let response: Response | null = null
+        
+        try {
+          // Faz requisição para API de busca de bairros
+          console.log('⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪')
+          console.log('⚪ ANTES DO FETCH - INICIANDO REQUISIÇÃO ⚪')
+          console.log('⚪ URL completa:', window.location.origin + apiUrl)
+          console.log('⚪ Signal abortado antes do fetch?', controller.signal.aborted)
+          console.log('⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪')
+          console.log("[DEBUG] Antes do fetch - iniciando requisição...")
+          
+          const fetchStartTime = Date.now()
+          response = await fetch(apiUrl, {
+            signal: controller.signal,
+            cache: "no-store",
+          })
+          
+          // CORREÇÃO: Verifica AbortError IMEDIATAMENTE após o fetch
+          if (controller.signal.aborted) {
+            console.log('🟡 Requisição foi abortada imediatamente após fetch - ignorando')
+            return // PARE AQUI! Não atualiza estados, não faz nada!
+          }
+          
+          const fetchEndTime = Date.now()
+          const fetchDuration = fetchEndTime - fetchStartTime
+          
+          console.log('⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪')
+          console.log('⚪ FETCH CONCLUÍDO COM SUCESSO! ⚪')
+          console.log('⚪ Tempo de resposta:', fetchDuration + 'ms')
+          console.log('⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪')
+          console.log("[DEBUG] Fetch concluído com sucesso!")
+          console.log("[DEBUG] Resposta recebida - Status:", response.status, "OK:", response.ok, "StatusText:", response.statusText)
+        } catch (fetchError: any) {
+          // CORREÇÃO CRÍTICA: Se for AbortError, simplesmente retorna sem fazer nada
+          if (fetchError?.name === 'AbortError') {
+            console.log('🟡 Requisição cancelada (digitação continua) - ignorando silenciosamente')
+            return // PARE AQUI! Não desligue loading, não limpe nada, não faça nada!
+          }
+          
+          console.error('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴')
+          console.error('🔴 ERRO REAL NA CHAMADA FETCH DA API DE BAIRROS 🔴')
+          console.error('🔴 Tipo do erro:', fetchError?.name || 'Unknown')
+          console.error('🔴 Mensagem do erro:', fetchError?.message || 'Sem mensagem')
+          console.error('🔴 Erro completo:', fetchError)
+          console.error('🔴 Stack:', fetchError?.stack)
+          console.error('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴')
+          
+          // Re-lança o erro para ser capturado pelo catch externo (só se não for AbortError)
+          throw fetchError
+        }
+
+        if (!response) {
+          console.error('🔴 Resposta é null ou undefined!')
+          throw new Error('Resposta da API é null')
+        }
+
+        // CORREÇÃO: Verifica AbortError antes de processar a resposta
+        if (controller.signal.aborted) {
+          console.log('🟡 Requisição foi abortada antes de processar resposta - ignorando')
+          return // PARE AQUI! Não atualiza estados!
+        }
+
+        if (!response.ok) {
+          console.error('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴')
+          console.error('🔴 ERRO NA RESPOSTA DA API DE BAIRROS 🔴')
+          console.error('🔴 Status:', response.status)
+          console.error('🔴 StatusText:', response.statusText)
+          console.error('🔴 URL:', response.url)
+          console.error('🔴 Headers:', Object.fromEntries(response.headers.entries()))
+          
+          // Tenta ler o texto da resposta para ver o erro
+          try {
+            const errorText = await response.text()
+            console.error('🔴 Corpo da resposta de erro:', errorText)
+          } catch (e) {
+            console.error('🔴 Não foi possível ler o corpo da resposta')
+          }
+          
+          console.error('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴')
+          throw new Error(`Erro ao buscar bairros: ${response.status} ${response.statusText}`)
+        }
+
+        // CORREÇÃO: Verifica AbortError antes de fazer parse do JSON
+        if (controller.signal.aborted) {
+          console.log('🟡 Requisição foi abortada antes do parse JSON - ignorando')
+          return // PARE AQUI!
+        }
+        
+        let suggestions: any = null
+        
+        try {
+          console.log("[DEBUG] Tentando fazer parse do JSON da resposta...")
+          suggestions = await response.json()
+          
+          // CORREÇÃO: Verifica AbortError após o parse também
+          if (controller.signal.aborted) {
+            console.log('🟡 Requisição foi abortada após parse JSON - ignorando')
+            return // PARE AQUI!
+          }
+          
+          console.log("[DEBUG] Parse JSON concluído com sucesso!")
+          console.log("[DEBUG] Dados JSON recebidos da API:", suggestions)
+          console.log("[DEBUG] Tipo dos dados:", typeof suggestions, "É array?", Array.isArray(suggestions))
+        } catch (parseError: any) {
+          // CORREÇÃO: Verifica AbortError no erro de parse também
+          if (parseError?.name === 'AbortError' || controller.signal.aborted) {
+            console.log('🟡 Erro de parse foi causado por abort - ignorando')
+            return // PARE AQUI!
+          }
+          console.error('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴')
+          console.error('🔴 ERRO AO FAZER PARSE DO JSON 🔴')
+          console.error('🔴 Erro:', parseError)
+          console.error('🔴 Status da resposta:', response.status)
+          
+          // Tenta ler como texto para ver o que veio
+          try {
+            const textResponse = await response.clone().text()
+            console.error('🔴 Resposta como texto:', textResponse)
+          } catch (e) {
+            console.error('🔴 Não foi possível ler a resposta como texto')
+          }
+          
+          console.error('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴')
+          throw parseError
+        }
+
+        // CORREÇÃO: Verifica AbortError uma última vez antes de atualizar estados
+        if (controller.signal.aborted) {
+          console.log('🟡 Requisição foi abortada antes de atualizar estados - ignorando silenciosamente')
+          return // PARE AQUI! Não atualiza estados, não desliga loading, não faz nada!
+        }
+
+        const results = Array.isArray(suggestions) ? suggestions : []
+        console.log("[DEBUG] Bairros encontrados:", results, "| Quantidade:", results.length, "| Para query:", query)
+        
+        // CORREÇÃO: Só atualiza estados se NÃO foi abortado (verificação dupla para segurança)
+        if (!controller.signal.aborted) {
+          setBairroSuggestions(results)
+          // Sempre mostra sugestões quando há resposta (mesmo se vazia, para mostrar "Nenhum encontrado")
+          setShowBairroSuggestions(true)
+          setIsLoadingBairros(false) // Desliga loading apenas em caso de sucesso
+          console.log("[DEBUG] Estados atualizados - Sugestões:", results.length, "| Mostrar:", true, "| Loading:", false)
+        } else {
+          console.log('🟡 Requisição foi abortada no último momento - ignorando atualização de estados')
+          return // PARE AQUI também!
+        }
+      } catch (error: any) {
+        // CORREÇÃO CRÍTICA: Se for AbortError, simplesmente retorna SEM FAZER NADA
+        if (error?.name === "AbortError") {
+          console.log('🟡 Requisição cancelada (digitação continua) - ignorando silenciosamente')
+          // NÃO faz NADA: não atualiza estados, não desliga loading, não limpa sugestões
+          // Apenas retorna e deixa a nova requisição (que já está em andamento) fazer seu trabalho
+          return
+        }
+
+        // Se chegou aqui, é um erro REAL (não AbortError)
+        console.error('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴')
+        console.error('🔴 ERRO REAL AO BUSCAR BAIRROS (não é AbortError) 🔴')
+        console.error('🔴 Nome do erro:', error?.name || 'Unknown')
+        console.error('🔴 Mensagem do erro:', error?.message || 'Sem mensagem')
+        console.error('🔴 Erro completo:', error)
+        console.error('🔴 Stack trace:', error?.stack)
+        console.error('🔴 Tipo:', typeof error)
+        console.error('🔴 É instância de Error?', error instanceof Error)
+        if (error.cause) {
+          console.error('🔴 Causa do erro:', error.cause)
+        }
+        console.error('🔴 Query que causou o erro:', query)
+        console.error('🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴')
+        console.error("[DEBUG] Erro ao buscar bairros:", error)
+        console.error("[DEBUG] Tipo do erro:", error.name, "| Mensagem:", error.message)
+        
+        // Só atualiza estados em caso de erro REAL (não AbortError)
+        setBairroSuggestions([])
+        // Mostra a lista mesmo em caso de erro (para mostrar "Nenhum encontrado")
+        setShowBairroSuggestions(true)
+        setIsLoadingBairros(false)
+      }
+    }, 500) // 500ms de debounce
+  }
+
+  // Carrega TODAS as opções do CRM ao montar (para outros campos)
   useEffect(() => {
     fetchFilterOptionsFromAPI().then(setFilterOptions)
   }, [])
-  
-  // Filtra sugestões de bairros conforme o usuário digita
+
+  // Busca bairros em tempo real com debounce
   useEffect(() => {
-    if (!filters.bairro) {
-      setBairroSuggestions([])
-      setShowBairroSuggestions(false)
-      return
+    console.log('🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡')
+    console.log('🟡 useEffect DE BUSCA DE BAIRROS EXECUTADO 🟡')
+    console.log('🟡 filters.bairro mudou para:', filters.bairro)
+    console.log('🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡')
+    console.log("[DEBUG] useEffect executado - filters.bairro mudou para:", filters.bairro)
+    debounceSearchBairros(filters.bairro || "")
+
+    // Cleanup: cancela requisições pendentes e timers ao desmontar ou mudar query
+    return () => {
+      console.log("[DEBUG] useEffect cleanup - cancelando timers e requisições")
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
     }
-    
-    const normalized = filters.bairro.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "")
-    const filtered = filterOptions.bairros.filter((b) =>
-      b.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").includes(normalized)
-    )
-    setBairroSuggestions(filtered.slice(0, 10)) // Máximo 10 sugestões
-    setShowBairroSuggestions(filtered.length > 0)
-  }, [filters.bairro, filterOptions.bairros])
+  }, [filters.bairro])
+
+  // Log quando estado de sugestões mudar
+  useEffect(() => {
+    console.log("[DEBUG] Estado de sugestões de bairros atualizado:", {
+      sugestoes: bairroSuggestions,
+      quantidade: bairroSuggestions.length,
+      mostrar: showBairroSuggestions,
+      loading: isLoadingBairros,
+      filtroBairro: filters.bairro
+    })
+  }, [bairroSuggestions, showBairroSuggestions, isLoadingBairros, filters.bairro])
   
   // Filtra sugestões de códigos conforme o usuário digita
   useEffect(() => {
@@ -363,36 +614,82 @@ export default function PropertyFilter() {
                     </SelectContent>
                   </Select>
                 ) : field.key === "bairro" ? (
-                  <div className="relative w-full">
+                  <div className="relative w-full" style={{ zIndex: 1000 }}>
                     <Input
                       ref={bairroInputRef}
                       type="text"
                       placeholder={field.placeholder}
                       value={filters.bairro}
-                      onChange={(e) => setFilters({ ...filters, bairro: e.target.value })}
+                      onChange={(e) => {
+                        console.log('=== === === === === === === === === === === === === === === === === === === ===')
+                        console.log('=== FUNÇÃO ONCHANGE DO BAIRRO FOI CHAMADA ===')
+                        console.log('=== === === === === === === === === === === === === === === === === === === ===')
+                        const value = e.target.value
+                        console.log("[DEBUG] Input Bairro alterado - Valor digitado:", value, "| Tamanho:", value.length)
+                        setFilters({ ...filters, bairro: value })
+                        // Mostra sugestões automaticamente quando há texto
+                        if (value.trim().length > 0) {
+                          console.log("[DEBUG] Valor não vazio, mostrando sugestões")
+                          setShowBairroSuggestions(true)
+                        } else {
+                          console.log("[DEBUG] Valor vazio, escondendo sugestões")
+                          setShowBairroSuggestions(false)
+                          setBairroSuggestions([])
+                        }
+                      }}
                       onFocus={() => {
-                        if (bairroSuggestions.length > 0) setShowBairroSuggestions(true)
+                        console.log("[DEBUG] Input Bairro recebeu foco - Valor atual:", filters.bairro)
+                        // Mostra sugestões sempre que houver texto no campo
+                        if (filters.bairro.trim().length > 0) {
+                          console.log("[DEBUG] Campo tem valor, mostrando sugestões")
+                          setShowBairroSuggestions(true)
+                        } else {
+                          console.log("[DEBUG] Campo está vazio, não mostrando sugestões")
+                        }
                       }}
                       className="w-full h-[60px] rounded-[6px] border border-[#86674a] bg-transparent text-white placeholder:text-white text-base px-4 hover:bg-white/5 transition-all focus-visible:ring-2 focus-visible:ring-[#c89968]/40 focus-visible:ring-offset-0 lg:border-[#c89968]/30 lg:text-sm lg:h-11 lg:rounded-lg"
                     />
-                    {showBairroSuggestions && bairroSuggestions.length > 0 && (
+                    {/* Indicador de loading */}
+                    {isLoadingBairros && filters.bairro.trim().length > 0 && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#c89968]/40 border-t-[#c89968]" />
+                      </div>
+                    )}
+                    {/* Lista de sugestões */}
+                    {showBairroSuggestions && filters.bairro.trim().length > 0 && (
                       <div
                         ref={bairroSuggestionsRef}
-                        className="absolute z-50 w-full mt-1 bg-[#3d2f28] border border-[#c89968]/30 rounded-lg shadow-lg max-h-48 overflow-y-auto"
+                        className="absolute z-[9999] w-full mt-1 bg-[#3d2f28] border border-[#c89968]/30 rounded-lg shadow-xl max-h-48 overflow-y-auto"
+                        style={{ top: "100%" }}
+                        onLoad={() => console.log("[DEBUG] Container de sugestões renderizado")}
                       >
-                        {bairroSuggestions.map((bairro) => (
-                          <button
-                            key={bairro}
-                            type="button"
-                            onClick={() => {
-                              setFilters({ ...filters, bairro })
-                              setShowBairroSuggestions(false)
-                            }}
-                            className="w-full text-left px-4 py-2 text-white hover:bg-[#c89968]/20 transition-colors text-sm"
-                          >
-                            {bairro}
-                          </button>
-                        ))}
+                        {isLoadingBairros ? (
+                          <div className="px-4 py-3 text-white/70 text-sm text-center flex items-center justify-center gap-2">
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#c89968]/40 border-t-[#c89968]" />
+                            Buscando bairros...
+                          </div>
+                        ) : bairroSuggestions.length > 0 ? (
+                          bairroSuggestions.map((bairro) => (
+                            <button
+                              key={bairro}
+                              type="button"
+                              onClick={() => {
+                                setFilters({ ...filters, bairro })
+                                setShowBairroSuggestions(false)
+                                setIsLoadingBairros(false)
+                                // Foca de volta no input após selecionar
+                                bairroInputRef.current?.blur()
+                              }}
+                              className="w-full text-left px-4 py-2 text-white hover:bg-[#c89968]/20 transition-colors text-sm first:rounded-t-lg last:rounded-b-lg cursor-pointer"
+                            >
+                              {bairro}
+                            </button>
+                          ))
+                        ) : (
+                          <div className="px-4 py-3 text-white/70 text-sm text-center">
+                            Nenhum bairro encontrado
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
