@@ -6,7 +6,7 @@ export function HistorySection() {
       {/* Coluna da Esquerda - Imagem */}
       <div className="w-full lg:w-1/2 relative h-[400px] lg:h-auto lg:min-h-[700px]">
         <Image
-          src="/modern-luxury-apartment-living-room-interior.jpg"
+          src="/fachada.jpeg"
           alt="Interior luxuoso da Donna Imobiliária"
           fill
           className="object-cover"
