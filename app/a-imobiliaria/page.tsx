@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/footer"
 import { WhatsAppButton } from "@/components/layout/whatsapp-button"
 import { AboutHero } from "@/components/sections/about-hero"
 import { RevealProvider } from "@/components/reveal-provider"
+import { HistorySection } from "@/components/sections/history-section"
 import { MissionSection } from "@/components/sections/mission-section"
 import { TeamSection } from "@/components/sections/team-section"
 import { CompanyTestimonialsSection } from "@/components/sections/company-testimonials-section"
@@ -21,6 +22,9 @@ export default function AboutPage() {
       <main>
         <div className="reveal">
           <AboutHero />
+        </div>
+        <div className="reveal">
+          <HistorySection />
         </div>
         <div className="reveal">
           <MissionSection />

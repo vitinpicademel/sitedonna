@@ -1,5 +1,4 @@
 import { Star } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
 
 const companyTestimonials = [
   {
@@ -28,33 +27,118 @@ const companyTestimonials = [
 ]
 
 export function CompanyTestimonialsSection() {
-  return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white font-serif mb-4 underline-gold">Depoimentos</h2>
-          <p className="text-[#e6d6c8] max-w-2xl mx-auto">
-            Histórias reais de clientes que confiaram na Donna Imobiliária para realizar seus projetos.
-          </p>
-        </div>
+  // Paleta de cores
+  const primaryColor = "#423229" // Marrom Café/Expresso
+  const accentColor = "#d4a574" // Dourado quente
+  const textColor = "#f7f4ed" // Creme/Off-white para texto corrido
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {companyTestimonials.map((testimonial) => (
-            <Card key={testimonial.id} className="card-lux animate-fade-up" style={{ backgroundColor: '#d4a574', color: '#3d2f28', border: '4px solid #816347' }}>
-              <CardContent className="p-6">
-                <div className="flex justify-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5" style={{ fill: "var(--lux-gold)", color: "var(--lux-gold)" }} />
-                  ))}
+  return (
+    <section 
+      className="py-20 lg:py-24"
+      style={{
+        background: `radial-gradient(circle at center, ${primaryColor} 0%, ${primaryColor}dd 60%, #2a1f1a 100%)`
+      }}
+    >
+      <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto">
+          {/* Título da Seção */}
+          <div className="text-center mb-16">
+            <h2 
+              className="text-4xl lg:text-5xl font-serif font-bold mb-6"
+              style={{ 
+                color: accentColor,
+                fontFamily: 'Playfair Display, serif'
+              }}
+            >
+              Depoimentos
+            </h2>
+            <p 
+              className="text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed"
+              style={{ color: textColor }}
+            >
+              Histórias reais de clientes que confiaram na Donna Imobiliária para realizar seus projetos.
+            </p>
+          </div>
+
+          {/* Grid dos Depoimentos - Layout limpo sem cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12 max-w-6xl mx-auto">
+            {companyTestimonials.map((testimonial) => (
+              <div
+                key={testimonial.id}
+                className="flex flex-col items-center text-center relative py-8"
+              >
+                {/* Container relativo para posicionar aspas */}
+                <div className="relative w-full px-6">
+                  {/* Aspas Gigantes de Abertura - Posicionada no topo esquerdo */}
+                  <div 
+                    className="absolute -top-4 -left-2 text-7xl lg:text-8xl font-serif leading-none"
+                    style={{ 
+                      color: accentColor,
+                      fontFamily: 'Playfair Display, serif',
+                      lineHeight: '1',
+                      opacity: 0.4
+                    }}
+                  >
+                    "
+                  </div>
+
+                  {/* Estrelas de Avaliação - Cor Dourada */}
+                  <div className="flex justify-center gap-1 mb-6 relative z-10">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className="h-5 w-5 lg:h-6 lg:w-6" 
+                        style={{ 
+                          fill: accentColor, 
+                          color: accentColor 
+                        }} 
+                      />
+                    ))}
+                  </div>
+
+                  {/* Texto do Depoimento - Cor Creme */}
+                  <blockquote 
+                    className="text-base lg:text-lg leading-relaxed mb-6 italic relative z-10 px-4"
+                    style={{ color: textColor }}
+                  >
+                    {testimonial.content}
+                  </blockquote>
+
+                  {/* Aspas Gigantes de Fechamento - Posicionada no canto inferior direito */}
+                  <div 
+                    className="absolute -bottom-8 -right-2 text-7xl lg:text-8xl font-serif leading-none"
+                    style={{ 
+                      color: accentColor,
+                      fontFamily: 'Playfair Display, serif',
+                      lineHeight: '1',
+                      opacity: 0.4
+                    }}
+                  >
+                    "
+                  </div>
                 </div>
-                <blockquote className="text-brown-gray mb-4 italic leading-7">"{testimonial.content}"</blockquote>
-                <div className="text-center">
-                  <p className="font-semibold text-brown">{testimonial.name}</p>
-                  <p className="text-sm text-[#666]">{testimonial.year}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+
+                {/* Nome do Autor - Cor Dourada */}
+                <p 
+                  className="text-lg lg:text-xl font-bold mb-2"
+                  style={{ 
+                    color: accentColor,
+                    fontFamily: 'Playfair Display, serif'
+                  }}
+                >
+                  {testimonial.name}
+                </p>
+
+                {/* Ano - Cor Dourada mais suave */}
+                <p 
+                  className="text-sm lg:text-base opacity-80"
+                  style={{ color: accentColor }}
+                >
+                  {testimonial.year}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
