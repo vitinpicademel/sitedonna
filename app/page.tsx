@@ -10,6 +10,7 @@ import Testimonials from "@alipes/components/testimonials"
 // import LatestNews from "@alipes/components/latest-news"
 import ContactSection from "@alipes/components/contact-section"
 import Footer from "@alipes/components/footer"
+import { WhatsAppButton } from "@/components/layout/whatsapp-button"
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
       {/* <LatestNews /> */}
       <ContactSection />
       <Footer />
+      <WhatsAppButton />
     </div>
   )
 }
