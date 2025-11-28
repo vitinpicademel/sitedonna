@@ -1,14 +1,24 @@
 "use client"
 
-import { Check } from "lucide-react"
+import { useState } from "react"
+import { Check, Play } from "lucide-react"
+import Image from "next/image"
 
 export default function VideoSection() {
+  const [videoStarted, setVideoStarted] = useState(false)
   const amenities = [
     { name: "Atendimento personalizado", checked: true },
     { name: "Equipe especialista no mercado local", checked: true },
     { name: "Soluções digitais que facilitam sua jornada", checked: true },
     { name: "Parcerias sólidas com construtoras e investidores", checked: true },
   ]
+
+  const videoId = "EzMZ05gp-TE"
+  const thumbnailUrl = "/thumb.jpeg" // Imagem local da pasta public
+  
+  const handlePlayClick = () => {
+    setVideoStarted(true)
+  }
 
   return (
     <section className="relative py-20 overflow-hidden">
@@ -51,12 +61,62 @@ export default function VideoSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-stretch">
           <div className="relative w-full h-full justify-self-center">
             <div className="relative w-full h-full overflow-hidden shadow-2xl rounded-sm mx-auto">
+              {/* Thumbnail overlay - aparece antes do vídeo ser iniciado */}
+              {!videoStarted && (
+                <div
+                  className="absolute inset-0 w-full h-full cursor-pointer group"
+                  onClick={handlePlayClick}
+                  style={{ zIndex: 10 }}
+                >
+                  {/* Imagem da thumbnail */}
+                  <img
+                    src={thumbnailUrl}
+                    alt="Thumbnail do vídeo institucional"
+                    className="absolute inset-0 w-full h-full"
+                    style={{ 
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%'
+                    }}
+                  />
+                  {/* Overlay escuro para melhorar contraste do botão */}
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300 pointer-events-none" />
+                  
+                  {/* Botão de Play centralizado */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="relative">
+                      <button
+                        className="group/btn flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/90 hover:bg-white transition-all duration-300 shadow-2xl hover:scale-110 hover:shadow-[0_0_40px_rgba(255,255,255,0.5)]"
+                        aria-label="Reproduzir vídeo"
+                      >
+                        <Play className="w-10 h-10 md:w-12 md:h-12 text-[#c89968] ml-1 group-hover/btn:text-[#d4a574] transition-colors duration-300" fill="currentColor" />
+                      </button>
+                      
+                      {/* Anel pulsante ao redor do botão */}
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-white/50 animate-ping" style={{ animation: 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite' }} />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Texto "INSTITUCIONAL" sobre a thumbnail */}
+                  <div className="absolute bottom-4 left-4 px-4 py-2 bg-black/60 backdrop-blur-sm rounded-md">
+                    <span className="text-white font-semibold text-sm">INSTITUCIONAL</span>
+                  </div>
+                </div>
+              )}
+              
+              {/* Iframe do vídeo - aparece após clicar na thumbnail */}
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/EzMZ05gp-TE?rel=0&modestbranding=1&playsinline=1"
+                src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1${videoStarted ? '&autoplay=1' : ''}`}
                 title="Donna Imobiliária - Vídeo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                style={{ zIndex: videoStarted ? 5 : 1 }}
               />
             </div>
           </div>
