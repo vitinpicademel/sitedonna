@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { buscarContratos, buscarBoletos } from '@/app/actions/imoview'; 
-// Ícones para deixar bonito (se der erro de ícone, remova os imports e os componentes Icon)
+import { Header } from '@/components/layout/header';
 import { FileText, CheckCircle, Calendar, Download } from 'lucide-react';
 
 const formatMoney = (val: number) => 
@@ -57,6 +57,7 @@ export default function AreaCliente() {
   if (!dados) {
     return (
       <div className="min-h-screen bg-[#121212] flex items-center justify-center p-4">
+        <Header appearance="dark" />
         <div className="w-full max-w-md bg-[#1e1e1e] p-8 rounded-2xl border border-[#d4a574]/30 shadow-[0_0_30px_rgba(212,165,116,0.1)]">
           <div className="text-center mb-8">
             <h2 className="text-[#d4a574] text-xs tracking-[0.2em] uppercase font-bold mb-2">Donna Imobiliária</h2>
@@ -90,8 +91,9 @@ export default function AreaCliente() {
 
   // DASHBOARD
   return (
-    <div className="min-h-screen bg-[#121212] text-gray-200">
-      <header className="bg-[#1e1e1e] border-b border-[#d4a574]/20 p-6 sticky top-0 z-10">
+    <div className="min-h-screen bg-[#121212] text-gray-200 pt-4">
+      <Header appearance="dark" />
+      <header className="bg-[#1e1e1e] border-b border-[#d4a574]/20 p-6 relative z-10">
         <div className="max-w-5xl mx-auto flex justify-between items-center">
           <div>
             <p className="text-[#d4a574] text-xs uppercase tracking-widest">Bem-vindo(a)</p>
