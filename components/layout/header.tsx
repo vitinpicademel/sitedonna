@@ -14,9 +14,9 @@ const leftNavigation = [
 ]
 
 const rightNavigation = [
+  { name: "ÁREA DO CLIENTE", href: "/area-do-cliente" },
   { name: "CONDOMÍNIOS", href: "/condominios" },
   { name: "CONTATO", href: "/contato" },
-  { name: "ÁREA DO CLIENTE", href: "/area-do-cliente" },
 ]
 
 type HeaderProps = {

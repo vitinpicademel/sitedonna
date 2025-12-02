@@ -130,14 +130,14 @@ export default function Header() {
               </li>
               <li>
                 <Link 
-                  href="/condominios" 
+                  href="/area-do-cliente" 
                   className="text-white hover:text-[#c89968] transition-all duration-300 font-bold text-sm tracking-wider px-3 py-2 rounded-lg hover:bg-white/10 hover:shadow-lg relative group"
                   style={{ 
                     textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
                     WebkitTextStroke: '0.5px rgba(0,0,0,0.3)'
                   }}
                 >
-                  CONDOMÍNIOS
+                  ÁREA DO CLIENTE
                   <div className="absolute inset-0 bg-gradient-to-r from-[#c89968]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
                 </Link>
               </li>
@@ -242,14 +242,14 @@ export default function Header() {
               <div className="absolute inset-0 bg-gradient-to-r from-[#c89968]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
             </Link>
             <Link 
-              href="/condominios" 
+              href="/area-do-cliente" 
               className="text-white hover:text-[#c89968] transition-all duration-300 font-bold text-sm tracking-wider px-4 py-3 rounded-lg hover:bg-white/10 hover:shadow-lg relative group"
               style={{ 
                 textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
                 WebkitTextStroke: '0.5px rgba(0,0,0,0.3)'
               }}
             >
-              CONDOMÍNIOS
+              ÁREA DO CLIENTE
               <div className="absolute inset-0 bg-gradient-to-r from-[#c89968]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
             </Link>
             <Link 
